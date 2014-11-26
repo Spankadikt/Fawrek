@@ -10,29 +10,20 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="Include\pr_mesh.h" />
-    <ClInclude Include="Include\pr_model.h" />
-    <ClInclude Include="Include\pr_maths.h" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="Src\pr_mesh.cpp" />
-    <ClCompile Include="Src\pr_model.cpp" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>{7AF32C56-454B-4311-B259-0B02B54C9359}</ProjectGuid>
+    <ProjectGuid>{EE97C6D0-05B5-442D-A79E-E2C5149B53F8}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>PinkSpring</RootNamespace>
+    <RootNamespace>PinkWheelbarrow</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
-    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v110</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
@@ -62,17 +53,18 @@
       </PrecompiledHeader>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;PINKSPRING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)PINKSPRING\Include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(ProjectDir)Lib</AdditionalLibraryDirectories>
+      <AdditionalDependencies>glew32.lib;PinkSpring.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)PINKWHEELBARROW\DLLs"
-xcopy /d /y "$(OutDir)*.lib" "$(SolutionDir)PINKWHEELBARROW\Lib"</Command>
-    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy /d /y "$(ProjectDir)DLLs\*.*" "$(OutDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -82,19 +74,23 @@ xcopy /d /y "$(OutDir)*.lib" "$(SolutionDir)PINKWHEELBARROW\Lib"</Command>
       <Optimization>MaxSpeed</Optimization>
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
-      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;_USRDLL;PINKSPRING_EXPORTS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir)Include</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)Include;$(SolutionDir)PINKSPRING\Include;</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
+      <AdditionalLibraryDirectories>$(ProjectDir)Lib</AdditionalLibraryDirectories>
     </Link>
-    <PostBuildEvent>
-      <Command>xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)PINKWHEELBARROW\DLLs"</Command>
-    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>xcopy /d /y "$(ProjectDir)DLLs\*.*" "$(OutDir)"</Command>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

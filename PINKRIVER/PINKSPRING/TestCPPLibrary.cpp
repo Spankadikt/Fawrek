@@ -1,18 +1,29 @@
 #include "TestCPPLibrary.h"
 
+
 extern "C" {
-    float TestMultiply(float a, float b)
+
+	float GetTest(float val)
+	{
+		CUnmanagedTestClass testClass = CUnmanagedTestClass::CUnmanagedTestClass(val);
+		
+
+		return testClass.CUnmanagedTestClassFunction();
+	}
+
+    CUnmanagedTestClass::CUnmanagedTestClass(float val)
     {
-        return a * b;
+        n = val;
     }
 
-    float TestDivide(float a, float b)
+	CUnmanagedTestClass::~CUnmanagedTestClass()
     {
-        if (b == 0) {
-            return 0;
-            //throw invalid_argument("b cannot be zero!");
-        }
-
-        return a / b;
     }
+
+
+    float CUnmanagedTestClass::CUnmanagedTestClassFunction()
+    {
+        return n * 2;
+    }
+
 }

@@ -5,6 +5,18 @@
 #endif
 
 extern "C" {
-    TESTFUNCDLL_API float TestMultiply(float a, float b);
-    TESTFUNCDLL_API float TestDivide(float a, float b);
+
+	TESTFUNCDLL_API float GetTest(float);
+
+    class TESTFUNCDLL_API CUnmanagedTestClass
+    {
+    public:
+        CUnmanagedTestClass(float);
+		~CUnmanagedTestClass();
+        float CUnmanagedTestClassFunction();
+
+         // TODO: add your methods here.
+    private:
+        float n;
+    };
 }

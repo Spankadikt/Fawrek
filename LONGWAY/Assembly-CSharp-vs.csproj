@@ -47,8 +47,8 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Test.cs" />
- <Reference Include="PinkCreek">
- <HintPath>J:/Taf/Dropbox/CG_THE_DREAM/#AIIIIGHT/LONGWAY/Assets/Plugins/PinkCreek.dll</HintPath>
+ <Reference Include="PinkBrook">
+ <HintPath>J:/Taf/Dropbox/CG_THE_DREAM/#AIIIIGHT/LONGWAY/Assets/Plugins/PinkBrook.dll</HintPath>
  </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
