@@ -11,13 +11,18 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Include\pr_matrix.h" />
     <ClInclude Include="Include\pr_mesh.h" />
     <ClInclude Include="Include\pr_model.h" />
-    <ClInclude Include="Include\pr_maths.h" />
+    <ClInclude Include="Include\pr_utils.h" />
+    <ClInclude Include="Include\pr_vector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Src\pr_matrix.cpp" />
     <ClCompile Include="Src\pr_mesh.cpp" />
     <ClCompile Include="Src\pr_model.cpp" />
+    <ClCompile Include="Src\pr_utils.cpp" />
+    <ClCompile Include="Src\pr_vector3.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{7AF32C56-454B-4311-B259-0B02B54C9359}</ProjectGuid>

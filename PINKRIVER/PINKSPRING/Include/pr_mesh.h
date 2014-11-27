@@ -1,24 +1,30 @@
-#if defined(PR_LIBRARY_EXPORT) // inside DLL
+#if defined(PR_LIBRARY_EXPORT)
 #   define PR_LIBRARY_EXPORT   __declspec(dllexport)
-#else // outside DLL
+#else
 #   define PR_LIBRARY_EXPORT   __declspec(dllimport)
-#endif  // XYZLIBRARY_EXPORT
+#endif
 
-#include "pr_maths.h"
+#ifndef MESH_H
+#define MESH_H
+
+#include "pr_vector3.h"
 
 extern "C"
 {
-PR_LIBRARY_EXPORT class Mesh
-{
-public:
-	PR_LIBRARY_EXPORT Mesh();
-	PR_LIBRARY_EXPORT ~Mesh();
+	PR_LIBRARY_EXPORT class Mesh
+	{
+	public:
+		PR_LIBRARY_EXPORT Mesh();
+		PR_LIBRARY_EXPORT ~Mesh();
 
-	PR_LIBRARY_EXPORT Vector3 *getVertices();
+		PR_LIBRARY_EXPORT Vector3 *getVertices();
+		PR_LIBRARY_EXPORT unsigned int *getIndices();
 
-private:
-	Vector3 vertices[3];
-};
+	private:
+		Vector3 vertices[4];
+		unsigned int indices[12];
+	};
 }
 
+#endif //MESH_H
 

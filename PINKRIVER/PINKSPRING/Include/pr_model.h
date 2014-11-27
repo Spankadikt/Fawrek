@@ -1,20 +1,28 @@
-#if defined(PR_LIBRARY_EXPORT) // inside DLL
+#if defined(PR_LIBRARY_EXPORT)
 #   define PR_LIBRARY_EXPORT   __declspec(dllexport)
-#else // outside DLL
+#else
 #   define PR_LIBRARY_EXPORT   __declspec(dllimport)
-#endif  // XYZLIBRARY_EXPORT
+#endif
+
+#ifndef MODEL_H
+#define MODEL_H
 
 #include "pr_mesh.h"
 
-PR_LIBRARY_EXPORT class Model
+extern "C"
 {
-public:
-	PR_LIBRARY_EXPORT Model();
-	PR_LIBRARY_EXPORT ~Model();
+	PR_LIBRARY_EXPORT class Model
+	{
+	public:
+		PR_LIBRARY_EXPORT Model();
+		PR_LIBRARY_EXPORT ~Model();
 
-	PR_LIBRARY_EXPORT Mesh *getMesh();
+		PR_LIBRARY_EXPORT Mesh *getMesh();
 
-private:
-	Mesh mesh;
-};
+	private:
+		Mesh mesh;
+	};
+}
+
+#endif //MESH_H
 
