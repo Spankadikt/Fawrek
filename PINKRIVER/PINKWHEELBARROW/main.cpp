@@ -67,7 +67,7 @@ static void CreateVertexBuffer(Vector3 *Vertices)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3)*4, Vertices, GL_STATIC_DRAW);
 }
 
-static void CreateIndexBuffer()
+static void CreateIndexBuffer(unsigned int *Indices)
 {
     /*unsigned int Indices[] = { 0, 3, 1,
                                1, 3, 2,
@@ -76,7 +76,7 @@ static void CreateIndexBuffer()
 
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(Indices), Indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*12, Indices, GL_STATIC_DRAW);
 }
 
 static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
@@ -178,7 +178,7 @@ int main(int argc, char *argv[])
 	Mesh mesh = *model.getMesh();
 
 	CreateVertexBuffer(mesh.getVertices());
-	CreateIndexBuffer();
+	CreateIndexBuffer(mesh.getIndices());
 
 	CompileShaders();
 
