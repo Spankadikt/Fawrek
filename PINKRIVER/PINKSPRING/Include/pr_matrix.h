@@ -16,6 +16,17 @@ extern "C"
 
 		PR_LIBRARY_EXPORT Matrix();
 		PR_LIBRARY_EXPORT Matrix(const float m[16]);
+
+		PR_LIBRARY_EXPORT static Matrix *Identity();
+		PR_LIBRARY_EXPORT static Matrix *Zero();
+
+		void SetMatrix(float _m[16]);
+
+		PR_LIBRARY_EXPORT Matrix operator* (const Matrix &_m);
+
+		PR_LIBRARY_EXPORT void Scale(float x,float y, float z);
+		PR_LIBRARY_EXPORT void Rotate(float x, float y, float z);
+		PR_LIBRARY_EXPORT void Translate(float x, float y, float z);
 	};
 }
 

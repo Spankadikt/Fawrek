@@ -10,13 +10,21 @@
 #include "pr_matrix.h"
 #include "pr_model.h"
 #include "pr_utils.h"
+#include "camera.h"
+#include "scene.h"
 
 GLuint VBO;
 GLuint IBO;
-GLuint gWorldLocation;
+GLuint gWVPLocation;
 
 const char* pVSFileName = "shader.vs";
 const char* pFSFileName = "shader.fs";
+
+const float windowWidth = 1024;
+const float windowHeight = 768;
+
+Camera cam;
+Scene scene;
 
 static void RenderSceneCB()
 {
@@ -26,15 +34,25 @@ static void RenderSceneCB()
 
 	Scale += 0.01f;
 	//float test[16] = {1,0,0,sinf(Scale),0,1,0,0,0,0,1,0,0,0,0,1};
-	float test[16] = {  cosf(Scale),0,-sinf(Scale),0,
-						0,1,0,0,
-						sinf(Scale),0,cosf(Scale),0,
-						0,0,0,1
-	};
+	//float test[16] = {  cosf(Scale),0,-sinf(Scale),0,
+	//					0,1,0,0,
+	//					sinf(Scale),0,cosf(Scale),0,
+	//					0,0,0,1
+	//};
 
-	Matrix World(test);
+	//Matrix World(test);
 
-	glUniformMatrix4fv(gWorldLocation, 1, GL_TRUE, &World.m[0]);
+	Scene s;
+    //s.Scale(sinf(Scale * 0.1f), sinf(Scale * 0.1f), sinf(Scale * 0.1f));
+    //s.WorldPos(0.0f, 0.0f, 0.0f);
+    //s.Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
+	s.Scale(0.1f, 0.1f, 0.1f);
+    s.WorldPos(0.0f, 0.0f, 0.0f);
+    s.Rotate(0, 0, 0);
+
+	Matrix test = s.GetWorldTrans().m;
+
+	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, &s.GetWorldTrans().m[0]);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -57,11 +75,6 @@ static void InitializeGlutCallbacks()
 
 static void CreateVertexBuffer(Vector3 *Vertices)
 {
-    //Vector3 Verticesb[3];
-    //Verticesb[0] = Vector3(-1.0f, -1.0f, 0.0f);
-    //Verticesb[1] = Vector3(1.0f, -1.0f, 0.0f);
-    //Verticesb[2] = Vector3(0.0f, 1.0f, 0.0f);
-
  	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3)*4, Vertices, GL_STATIC_DRAW);
@@ -69,11 +82,6 @@ static void CreateVertexBuffer(Vector3 *Vertices)
 
 static void CreateIndexBuffer(unsigned int *Indices)
 {
-    /*unsigned int Indices[] = { 0, 3, 1,
-                               1, 3, 2,
-                               2, 3, 0,
-                               0, 1, 2 };*/
-
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*12, Indices, GL_STATIC_DRAW);
@@ -149,19 +157,29 @@ static void CompileShaders()
 
     glUseProgram(ShaderProgram);
 
-	gWorldLocation = glGetUniformLocation(ShaderProgram, "gWorld");
-    assert(gWorldLocation != 0xFFFFFFFF);
+	gWVPLocation = glGetUniformLocation(ShaderProgram, "gWVP");
+    assert(gWVPLocation != 0xFFFFFFFF);
 }
 
 int main(int argc, char *argv[])
 {
     glutInit(&argc, argv);
     glutInitDisplayMode(GLUT_DOUBLE|GLUT_RGBA);
-    glutInitWindowSize(1024, 768);
+	glutInitWindowSize(windowWidth, windowHeight);
     glutInitWindowPosition(100, 100);
     glutCreateWindow("Pink Wheelbarrow");
 
     InitializeGlutCallbacks();
+
+	Vector3 pos          = Vector3(0.0f, 0.0f, -3.0f);
+    Vector3 target       = Vector3(0.0f, 0.0f, 0.0f);
+    Vector3 up           = Vector3(0.0f, 1.0f, 0.0f);
+
+	cam.Set(pos,target,up);
+	cam.LookAt(cam.GetPos(),cam.GetTarget(),cam.GetUp());
+	//cam.PerspectiveFOV(100.0f, windowWidth/windowHeight, 1.0f, 1000.f);
+	//gluLookAt(cam.GetPos().x,cam.GetPos().y,cam.GetPos().z,cam.GetTarget().x,cam.GetTarget().y,cam.GetTarget().z,cam.GetUp().x,cam.GetUp().y,cam.GetUp().z);
+	//gluPerspective(0.4f * 3.14f,windowWidth/windowHeight, 1.0f,  1000.0f);
 
     // Must be done after glut is initialized!
     GLenum res = glewInit();
