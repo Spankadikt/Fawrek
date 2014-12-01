@@ -47,9 +47,6 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Test.cs" />
- <Reference Include="PinkBrook">
- <HintPath>J:/Taf/Dropbox/CG_THE_DREAM/#AIIIIGHT/LONGWAY/Assets/Plugins/PinkBrook.dll</HintPath>
- </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

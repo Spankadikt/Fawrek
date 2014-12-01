@@ -18,10 +18,10 @@ extern "C"
 		PR_LIBRARY_EXPORT Vector3();
 		PR_LIBRARY_EXPORT Vector3(float _x, float _y, float _z);
 
-		PR_LIBRARY_EXPORT Vector3 &operator+ (const Vector3 &_v);
-		PR_LIBRARY_EXPORT Vector3 &operator- (const Vector3 &_v);
-		PR_LIBRARY_EXPORT Vector3 &operator* (const Vector3 &_v);
-		PR_LIBRARY_EXPORT Vector3 &operator/ (const Vector3 &_v);
+		PR_LIBRARY_EXPORT Vector3 operator+ (const Vector3 &_v);
+		PR_LIBRARY_EXPORT Vector3 operator- (const Vector3 &_v);
+		PR_LIBRARY_EXPORT Vector3 operator* (const Vector3 &_v);
+		PR_LIBRARY_EXPORT Vector3 operator/ (const Vector3 &_v);
 
 		PR_LIBRARY_EXPORT static Vector3 *Cross(const Vector3 &_u, const Vector3 &_v);
 		PR_LIBRARY_EXPORT Vector3 Normalize() const;

@@ -6,8 +6,11 @@ using System.IO;
 public class Test : MonoBehaviour {
 
 	// Straight From the c++ Dll (unmanaged)
-	[DllImport("PinkSpring", EntryPoint="GetTest")]
-	public static extern float StraightFromDllTest(float a);
+	[DllImport("PinkSpring")]
+    public static extern float PopulateVertices([In, Out] Vector3[] verts);
+
+	[DllImport("PinkSpring")]
+	public static extern float PopulateIndices([In, Out] int[] indices);
 
 	// Use this for initialization
 	void Start () {
@@ -15,9 +18,15 @@ public class Test : MonoBehaviour {
 		gameObject.AddComponent<SkinnedMeshRenderer>();
 		SkinnedMeshRenderer renderer = GetComponent<SkinnedMeshRenderer>();
 		Mesh mesh = new Mesh();
-		mesh.vertices = new Vector3[] {new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(-1, 5, 0), new Vector3(1, 5, 0)};
-		mesh.uv = new Vector2[] {new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1)};
-		mesh.triangles = new int[] {0, 1, 2, 1, 3, 2};
+		Vector3[] verts = new Vector3[20];
+		PopulateVertices(verts);
+		//mesh.vertices = new Vector3[] {new Vector3(-1, 0, 0), new Vector3(1, 0, 0), new Vector3(-1, 5, 0), new Vector3(1, 5, 0)};
+		mesh.vertices = verts;
+		//mesh.uv = new Vector2[] {new Vector2(0, 0), new Vector2(1, 0), new Vector2(0, 1), new Vector2(1, 1)};
+		int[] indices = new int[20];
+		PopulateIndices(indices);
+		mesh.triangles = indices;
+		//mesh.triangles = new int[] {0, 1, 2, 1, 3, 2};
 		mesh.RecalculateNormals();
 		renderer.material = new Material(Shader.Find("Diffuse"));
 		BoneWeight[] weights = new BoneWeight[4];
@@ -53,9 +62,9 @@ public class Test : MonoBehaviour {
 		animation.Play("test");
 
 
-		float straightFromDllDivideResult = StraightFromDllTest(20);
+//		float straightFromDllDivideResult = StraightFromDllTest(20);
 
-		Debug.Log(straightFromDllDivideResult);
+//		Debug.Log(straightFromDllDivideResult);
 		
 
 	}

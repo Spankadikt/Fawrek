@@ -21,14 +21,19 @@ public:
 	void Rotate(float rotateX, float rotateY, float rotateZ);
 	void Rotate(const Vector3 &r);
 
-	const Matrix &GetWorldTrans();
+	const Matrix &GetWorldTrans(Camera cam);
+	//const Matrix &GetWPTrans(Camera cam);
+	const Matrix &GetVPTrans(Camera cam);
+	const Matrix &GetWVPTrans(Camera cam);
 
 private:
 	Vector3 scale;
 	Vector3 worldPos;
 	Vector3 rotateInfo;
 
+	Matrix VPtransformation;
 	Matrix Wtransformation;
+	Matrix WVPtransformation;
 };
 
 #endif	/* CAMERA_H */

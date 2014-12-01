@@ -32,7 +32,7 @@ static void RenderSceneCB()
 
 	static float Scale = 0.0f;
 
-	Scale += 0.01f;
+	Scale += 0.1f;
 	//float test[16] = {1,0,0,sinf(Scale),0,1,0,0,0,0,1,0,0,0,0,1};
 	//float test[16] = {  cosf(Scale),0,-sinf(Scale),0,
 	//					0,1,0,0,
@@ -47,12 +47,17 @@ static void RenderSceneCB()
     //s.WorldPos(0.0f, 0.0f, 0.0f);
     //s.Rotate(sinf(Scale) * 90.0f, sinf(Scale) * 90.0f, sinf(Scale) * 90.0f);
 	s.Scale(0.1f, 0.1f, 0.1f);
-    s.WorldPos(0.0f, 0.0f, 0.0f);
-    s.Rotate(0, 0, 0);
+	s.Rotate(0.0f, Scale, 0.0f);
+    s.WorldPos(0.0f, 0.0f, 3.0f);
+	Vector3 pos(1.0f, 1.0f, -3.0f);
+    Vector3 target(0.45f, 0.0f, 1.0f);
+    Vector3 up(0.0f, 1.0f, 0.0f);
 
-	Matrix test = s.GetWorldTrans().m;
+	cam.Set(pos,target,up);
 
-	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, &s.GetWorldTrans().m[0]);
+	Matrix test = s.GetWorldTrans(cam).m;
+
+	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, &s.GetWorldTrans(cam).m[0]);//&s.GetWorldTrans().m[0]
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -80,7 +85,7 @@ static void CreateVertexBuffer(Vector3 *Vertices)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3)*4, Vertices, GL_STATIC_DRAW);
 }
 
-static void CreateIndexBuffer(unsigned int *Indices)
+static void CreateIndexBuffer(int *Indices)
 {
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
@@ -171,13 +176,9 @@ int main(int argc, char *argv[])
 
     InitializeGlutCallbacks();
 
-	Vector3 pos          = Vector3(0.0f, 0.0f, -3.0f);
-    Vector3 target       = Vector3(0.0f, 0.0f, 0.0f);
-    Vector3 up           = Vector3(0.0f, 1.0f, 0.0f);
 
-	cam.Set(pos,target,up);
-	cam.LookAt(cam.GetPos(),cam.GetTarget(),cam.GetUp());
-	//cam.PerspectiveFOV(100.0f, windowWidth/windowHeight, 1.0f, 1000.f);
+	//cam.LookAt(cam.GetPos(),cam.GetTarget(),cam.GetUp());
+	//cam.PerspectiveFOV(30.0f, windowWidth/windowHeight, 1.0f, 1000.f);
 	//gluLookAt(cam.GetPos().x,cam.GetPos().y,cam.GetPos().z,cam.GetTarget().x,cam.GetTarget().y,cam.GetTarget().z,cam.GetUp().x,cam.GetUp().y,cam.GetUp().z);
 	//gluPerspective(0.4f * 3.14f,windowWidth/windowHeight, 1.0f,  1000.0f);
 

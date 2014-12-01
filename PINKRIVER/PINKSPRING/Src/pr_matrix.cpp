@@ -76,50 +76,43 @@ Matrix Matrix::operator*(const Matrix &_m)
 
 void Matrix::Scale(float ScaleX, float ScaleY, float ScaleZ)
 {
-    m[0] = ScaleX; m[1] = 0.0f;   m[2] = 0.0f;   m[3] = 0.0f;
-    m[4] = 0.0f;   m[5] = ScaleY; m[6] = 0.0f;   m[7] = 0.0f;
-    m[8] = 0.0f;   m[9] = 0.0f;   m[10] = ScaleZ; m[11] = 0.0f;
-    m[12] = 0.0f;   m[13] = 0.0f;   m[14] = 0.0f;   m[15] = 1.0f;
-}
-
-void Matrix::SetMatrix(float _m[16])
-{
-	m[0] = _m[0]; m[1] = _m[1]   ; m[2] = _m[2]    ; m[3] = _m[3];
-    m[4] = _m[4]; m[5] = _m[5]; m[6] = _m[6]; m[7] = _m[7];
-    m[8] = _m[8]; m[9] = _m[9]; m[10] = _m[10] ; m[11] = _m[11];
-    m[12] = _m[12]; m[13] = _m[13]   ; m[14] = _m[14]    ; m[15] = _m[15];
+    m[0] = ScaleX; m[4] = 0.0f;   m[8] = 0.0f;   m[12] = 0.0f;
+    m[1] = 0.0f;   m[5] = ScaleY; m[9] = 0.0f;   m[13] = 0.0f;
+    m[2] = 0.0f;   m[6] = 0.0f;   m[10] = ScaleZ; m[14] = 0.0f;
+    m[3] = 0.0f;   m[7] = 0.0f;   m[11] = 0.0f;   m[15] = 1.0f;
 }
 
 void Matrix::Rotate(float RotateX, float RotateY, float RotateZ)
 {
     Matrix rx, ry, rz;
 
-    float x = RotateX * 3.14f / 180.0f;
-    float y = RotateY * 3.14f / 180.0f;
-    float z = RotateZ * 3.14f / 180.0f;
+    float x = tanf(RotateX * 3.14159265359f / 180);
+    float y = tanf(RotateY * 3.14159265359f / 180);
+    float z = tanf(RotateZ * 3.14159265359f / 180);
 
-    rx.m[0] = 1.0f; rx.m[1] = 0.0f   ; rx.m[2] = 0.0f    ; rx.m[3] = 0.0f;
-    rx.m[4] = 0.0f; rx.m[5] = cosf(x); rx.m[6] = -sinf(x); rx.m[7] = 0.0f;
-    rx.m[8] = 0.0f; rx.m[9] = sinf(x); rx.m[10] = cosf(x) ; rx.m[11] = 0.0f;
-    rx.m[12] = 0.0f; rx.m[13] = 0.0f   ; rx.m[14] = 0.0f    ; rx.m[15] = 1.0f;
+    rx.m[0] = 1.0f; rx.m[4] = 0.0f   ; rx.m[8] = 0.0f    ; rx.m[12] = 0.0f;
+    rx.m[1] = 0.0f; rx.m[5] = cosf(x); rx.m[9] = -sinf(x); rx.m[13] = 0.0f;
+    rx.m[2] = 0.0f; rx.m[6] = sinf(x); rx.m[10] = cosf(x) ; rx.m[14] = 0.0f;
+    rx.m[3] = 0.0f; rx.m[7] = 0.0f   ; rx.m[11] = 0.0f    ; rx.m[15] = 1.0f;
 
-    ry.m[0] = cosf(y); ry.m[1] = 0.0f; ry.m[2] = -sinf(y); ry.m[3] = 0.0f;
-    ry.m[4] = 0.0f   ; ry.m[5] = 1.0f; ry.m[6] = 0.0f    ; ry.m[7] = 0.0f;
-    ry.m[8] = sinf(y); ry.m[9] = 0.0f; ry.m[10] = cosf(y) ; ry.m[11] = 0.0f;
-    ry.m[12] = 0.0f   ; ry.m[13] = 0.0f; ry.m[14] = 0.0f    ; ry.m[15] = 1.0f;
+    ry.m[0] = cosf(y); ry.m[4] = 0.0f; ry.m[8] = sinf(y); ry.m[12] = 0.0f;
+    ry.m[1] = 0.0f   ; ry.m[5] = 1.0f; ry.m[9] = 0.0f    ; ry.m[13] = 0.0f;
+    ry.m[2] = -sinf(y); ry.m[6] = 0.0f; ry.m[10] = cosf(y) ; ry.m[14] = 0.0f;
+    ry.m[3] = 0.0f   ; ry.m[7] = 0.0f; ry.m[11] = 0.0f    ; ry.m[15] = 1.0f;
 
-    rz.m[0] = cosf(z); rz.m[1] = -sinf(z); rz.m[2] = 0.0f; rz.m[3] = 0.0f;
-    rz.m[4] = sinf(z); rz.m[5] = cosf(z) ; rz.m[6] = 0.0f; rz.m[7] = 0.0f;
-    rz.m[8] = 0.0f   ; rz.m[9] = 0.0f    ; rz.m[10] = 1.0f; rz.m[11] = 0.0f;
-    rz.m[12] = 0.0f   ; rz.m[13] = 0.0f    ; rz.m[14] = 0.0f; rz.m[15] = 1.0f;
+    rz.m[0] = cosf(z); rz.m[4] = -sinf(z); rz.m[8] = 0.0f; rz.m[12] = 0.0f;
+    rz.m[1] = sinf(z); rz.m[5] = cosf(z) ; rz.m[9] = 0.0f; rz.m[13] = 0.0f;
+    rz.m[2] = 0.0f   ; rz.m[6] = 0.0f    ; rz.m[10] = 1.0f; rz.m[14] = 0.0f;
+    rz.m[3] = 0.0f   ; rz.m[7] = 0.0f    ; rz.m[11] = 0.0f; rz.m[15] = 1.0f;
 
-	SetMatrix((rz * ry * rx).m);
+	//SetMatrix((rz * ry * rx).m);
+	*this = rz * ry * rx;
 }
 
 void Matrix::Translate(float x, float y, float z)
 {
-    m[0] = 1.0f; m[1] = 0.0f; m[2] = 0.0f; m[3] = x;
-    m[4] = 0.0f; m[5] = 1.0f; m[6] = 0.0f; m[7] = y;
-    m[8] = 0.0f; m[9] = 0.0f; m[10] = 1.0f; m[11] = z;
-    m[12] = 0.0f; m[13] = 0.0f; m[14] = 0.0f; m[15] = 1.0f;
+    m[0] = 1.0f; m[4] = 0.0f; m[8] = 0.0f; m[12] = x;
+    m[1] = 0.0f; m[5] = 1.0f; m[9] = 0.0f; m[13] = y;
+    m[2] = 0.0f; m[6] = 0.0f; m[10] = 1.0f; m[14] = z;
+    m[3] = 0.0f; m[7] = 0.0f; m[11] = 0.0f; m[15] = 1.0f;
 }

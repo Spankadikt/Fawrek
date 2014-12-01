@@ -13,22 +13,22 @@ Vector3::Vector3(float _x, float _y, float _z)
 	z = _z;
 }
 
-Vector3 &Vector3::operator+(const Vector3 &_v)
+Vector3 Vector3::operator+(const Vector3 &_v)
 {
 	return Vector3(x + _v.x, y + _v.y, z + _v.z);
 }
 
-Vector3 &Vector3::operator-(const Vector3 &_v)
+Vector3 Vector3::operator-(const Vector3 &_v)
 {
 	return Vector3(x - _v.x, y - _v.y, z - _v.z);
 }
 
-Vector3 &Vector3::operator*(const Vector3 &_v)
+Vector3 Vector3::operator*(const Vector3 &_v)
 {
 	return Vector3(x * _v.x, y * _v.y, z * _v.z);
 }
 
-Vector3 &Vector3::operator/(const Vector3 &_v)
+Vector3 Vector3::operator/(const Vector3 &_v)
 {
 	return Vector3(x / _v.x, y / _v.y, z / _v.z);
 }
