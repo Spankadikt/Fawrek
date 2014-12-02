@@ -29,14 +29,14 @@ void Scene::Scale(float ScaleX, float ScaleY, float ScaleZ)
     scale.z = ScaleZ;
 }
 
-void Scene::WorldPos(float x, float y, float z)
+void Scene::Translate(float x, float y, float z)
 {
     worldPos.x = x;
     worldPos.y = y;
     worldPos.z = z;
 }
     
-void Scene::WorldPos(const Vector3 &Pos)
+void Scene::Translate(const Vector3 &Pos)
 {
     worldPos = Pos;
 }
@@ -53,9 +53,9 @@ void Scene::Rotate(const Vector3 &r)
     Rotate(r.x, r.y, r.z);
 }
 
-const Matrix &Scene::GetWorldTrans(Camera cam)
+const Matrix Scene::GetWVPTrans(Camera cam)
 {
-    Matrix ScaleTrans, RotateTrans, TranslationTrans, CameraTranslationTrans, CameraRotateTrans, PersProjTrans;
+    Matrix ScaleTrans, RotateTrans, TranslationTrans, CameraTranslationTrans;
 
     ScaleTrans.Scale(scale.x, scale.y, scale.z);
     RotateTrans.Rotate(rotateInfo.x, rotateInfo.y, rotateInfo.z);
@@ -63,42 +63,8 @@ const Matrix &Scene::GetWorldTrans(Camera cam)
 	
 	CameraTranslationTrans.Translate(-cam.GetPos().x, -cam.GetPos().y, -cam.GetPos().z);  
 	cam.LookAt(cam.GetPos(), cam.GetTarget(), cam.GetUp());
-	CameraRotateTrans = cam.view;
-	cam.PerspectiveFOV(90.0f, 1024/768, 1.0f, 100.f);
-	PersProjTrans = cam.projection;
+	cam.PerspectiveFOV(120.0f, 1024.0f/768.0f, 40.0f, 400.f);
 
-	Wtransformation = cam.projection * cam.view * CameraTranslationTrans * TranslationTrans * RotateTrans * ScaleTrans;
-    return Wtransformation;
-}
-
-/*const Matrix &Scene::GetWPTrans(Camera cam)
-{
-    Matrix ScaleTrans, RotateTrans, TranslationTrans;
-
-    ScaleTrans.Scale(scale.x, scale.y, scale.z);
-    RotateTrans.Rotate(rotateInfo.x, rotateInfo.y, rotateInfo.z);
-    TranslationTrans.Translate(worldPos.x, worldPos.y, worldPos.z);
-
-	Wtransformation = cam.projection * TranslationTrans * RotateTrans * ScaleTrans;
-    return Wtransformation;
-}*/
-
-const Matrix &Scene::GetVPTrans(Camera cam)
-{
-    Matrix CameraTranslationTrans, CameraRotateTrans, PersProjTrans;
-
-	CameraTranslationTrans.Translate(-cam.GetPos().x, -cam.GetPos().y, -cam.GetPos().z);
-	//CameraRotateTrans.InitCameraTransform(cam.GetTarget(), cam.GetUp());
-    
-	VPtransformation = cam.projection * cam.view * CameraTranslationTrans;
-    return VPtransformation;
-}
-
-const Matrix &Scene::GetWVPTrans(Camera cam)
-{
-    //GetWorldTrans();
-    GetVPTrans(cam);
-
-    WVPtransformation = VPtransformation * Wtransformation;
+	WVPtransformation = TranslationTrans * RotateTrans * ScaleTrans;//cam.projection * cam.view * CameraTranslationTrans * 
     return WVPtransformation;
 }

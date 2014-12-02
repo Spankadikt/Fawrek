@@ -35,11 +35,11 @@ Vector3 Vector3::operator/(const Vector3 &_v)
 
 Vector3 *Vector3::Cross(const Vector3 &_u,const Vector3 &_v)
 {
-    float _x = _u.y * _v.z - _u.z * _v.y;
-    float _y = _u.z * _v.x - _u.x * _v.z;
-    float _z = _u.x * _v.y - _u.y * _v.x;
+	Vector3 result;
 
-	Vector3 result = Vector3(_x,_y,_z);
+    result.x = _u.y * _v.z - _u.z * _v.y;
+    result.y = _u.z * _v.x - _u.x * _v.z;
+    result.z = _u.x * _v.y - _u.y * _v.x;
 
     return &result;
 }

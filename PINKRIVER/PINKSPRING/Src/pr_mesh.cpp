@@ -27,15 +27,3 @@ int *Mesh::getIndices()
 {
 	return indices;
 }
-
-PR_LIBRARY_EXPORT void PopulateVertices(Vector3 *_Vertices)
-{
-	Mesh mesh;
-	_Vertices = mesh.getVertices();
-}
-
-PR_LIBRARY_EXPORT void PopulateIndices(int *_Indices)
-{
-	Mesh mesh;
-	_Indices = mesh.getIndices();
-}

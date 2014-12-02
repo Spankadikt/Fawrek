@@ -2,9 +2,6 @@
 
 #include "pr_matrix.h"
 
-#define ToRadian(x) ((x) * 3.14f / 180.0f)
-#define ToDegree(x) ((x) * 180.0f / 3.14f)
-
 Matrix::Matrix()
 {
 	// identity
@@ -76,36 +73,35 @@ Matrix Matrix::operator*(const Matrix &_m)
 
 void Matrix::Scale(float ScaleX, float ScaleY, float ScaleZ)
 {
-    m[0] = ScaleX; m[4] = 0.0f;   m[8] = 0.0f;   m[12] = 0.0f;
-    m[1] = 0.0f;   m[5] = ScaleY; m[9] = 0.0f;   m[13] = 0.0f;
-    m[2] = 0.0f;   m[6] = 0.0f;   m[10] = ScaleZ; m[14] = 0.0f;
-    m[3] = 0.0f;   m[7] = 0.0f;   m[11] = 0.0f;   m[15] = 1.0f;
+    m[0] = ScaleX;	m[4] = 0.0f;	m[8] = 0.0f;	m[12] = 0.0f;
+    m[1] = 0.0f;	m[5] = ScaleY;	m[9] = 0.0f;	m[13] = 0.0f;
+    m[2] = 0.0f;	m[6] = 0.0f;	m[10] = ScaleZ;	m[14] = 0.0f;
+    m[3] = 0.0f;	m[7] = 0.0f;	m[11] = 0.0f;	m[15] = 1.0f;
 }
 
 void Matrix::Rotate(float RotateX, float RotateY, float RotateZ)
 {
     Matrix rx, ry, rz;
 
-    float x = tanf(RotateX * 3.14159265359f / 180);
-    float y = tanf(RotateY * 3.14159265359f / 180);
-    float z = tanf(RotateZ * 3.14159265359f / 180);
+	float x = tanf(ToRadian(RotateX));
+    float y = tanf(ToRadian(RotateY));
+    float z = tanf(ToRadian(RotateZ));
 
-    rx.m[0] = 1.0f; rx.m[4] = 0.0f   ; rx.m[8] = 0.0f    ; rx.m[12] = 0.0f;
-    rx.m[1] = 0.0f; rx.m[5] = cosf(x); rx.m[9] = -sinf(x); rx.m[13] = 0.0f;
-    rx.m[2] = 0.0f; rx.m[6] = sinf(x); rx.m[10] = cosf(x) ; rx.m[14] = 0.0f;
-    rx.m[3] = 0.0f; rx.m[7] = 0.0f   ; rx.m[11] = 0.0f    ; rx.m[15] = 1.0f;
+    rx.m[0] = 1.0f;			rx.m[4] = 0.0f   ;		rx.m[8] = 0.0f    ;		rx.m[12] = 0.0f;
+    rx.m[1] = 0.0f;			rx.m[5] = cosf(x);		rx.m[9] = -sinf(x);		rx.m[13] = 0.0f;
+    rx.m[2] = 0.0f;			rx.m[6] = sinf(x);		rx.m[10] = cosf(x) ;	rx.m[14] = 0.0f;
+    rx.m[3] = 0.0f;			rx.m[7] = 0.0f   ;		rx.m[11] = 0.0f    ;	rx.m[15] = 1.0f;
 
-    ry.m[0] = cosf(y); ry.m[4] = 0.0f; ry.m[8] = sinf(y); ry.m[12] = 0.0f;
-    ry.m[1] = 0.0f   ; ry.m[5] = 1.0f; ry.m[9] = 0.0f    ; ry.m[13] = 0.0f;
-    ry.m[2] = -sinf(y); ry.m[6] = 0.0f; ry.m[10] = cosf(y) ; ry.m[14] = 0.0f;
-    ry.m[3] = 0.0f   ; ry.m[7] = 0.0f; ry.m[11] = 0.0f    ; ry.m[15] = 1.0f;
+    ry.m[0] = cosf(y);		ry.m[4] = 0.0f;			ry.m[8] = sinf(y);		ry.m[12] = 0.0f;
+    ry.m[1] = 0.0f   ;		ry.m[5] = 1.0f;			ry.m[9] = 0.0f    ;		ry.m[13] = 0.0f;
+    ry.m[2] = -sinf(y);		ry.m[6] = 0.0f;			ry.m[10] = cosf(y) ;	ry.m[14] = 0.0f;
+    ry.m[3] = 0.0f   ;		ry.m[7] = 0.0f;			ry.m[11] = 0.0f    ;	ry.m[15] = 1.0f;
 
-    rz.m[0] = cosf(z); rz.m[4] = -sinf(z); rz.m[8] = 0.0f; rz.m[12] = 0.0f;
-    rz.m[1] = sinf(z); rz.m[5] = cosf(z) ; rz.m[9] = 0.0f; rz.m[13] = 0.0f;
-    rz.m[2] = 0.0f   ; rz.m[6] = 0.0f    ; rz.m[10] = 1.0f; rz.m[14] = 0.0f;
-    rz.m[3] = 0.0f   ; rz.m[7] = 0.0f    ; rz.m[11] = 0.0f; rz.m[15] = 1.0f;
+    rz.m[0] = cosf(z);		rz.m[4] = -sinf(z);		rz.m[8] = 0.0f;			rz.m[12] = 0.0f;
+    rz.m[1] = sinf(z);		rz.m[5] = cosf(z) ;		rz.m[9] = 0.0f;			rz.m[13] = 0.0f;
+    rz.m[2] = 0.0f   ;		rz.m[6] = 0.0f    ;		rz.m[10] = 1.0f;		rz.m[14] = 0.0f;
+    rz.m[3] = 0.0f   ;		rz.m[7] = 0.0f    ;		rz.m[11] = 0.0f;		rz.m[15] = 1.0f;
 
-	//SetMatrix((rz * ry * rx).m);
 	*this = rz * ry * rx;
 }
 

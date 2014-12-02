@@ -7,6 +7,8 @@
 #ifndef MATRIX_H
 #define MATRIX_H
 
+#include "pr_utils.h"
+
 extern "C"
 {
 	PR_LIBRARY_EXPORT class Matrix
