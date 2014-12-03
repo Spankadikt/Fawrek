@@ -180,6 +180,7 @@ cmake_install.cmake
 Resources/
 Plugins/
 Data/
-Lib/
+[Ll]ib/
 Library/
 DLLs/
+dll/
