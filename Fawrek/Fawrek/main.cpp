@@ -35,16 +35,20 @@ static void RenderSceneCB()
 	Scale += 0.1f;
 
 	Matrix modelMatrix = Matrix::Identity;
+
 	Vector3 scale = Vector3(0.1f,0.1f,0.1f);
 	Quaternion rotate = Quaternion(0.5f,0.3f,0.0f,0.8f);
 	Vector3 translate = Vector3(5.0f,10.0f,0.0f);
 
 	//modelMatrix.Scale(scale);
 	//modelMatrix.Rotate(rotate);
-	modelMatrix.Translate(translate);
+	//modelMatrix.Translate(translate);
+
+	Matrix modelView = cam.view * modelMatrix;
+	Matrix viewProjection = cam.projection * modelView;
 
 
-	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, &modelMatrix.m[0]);
+	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, &viewProjection.m[0]);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -173,6 +177,9 @@ int main(int argc, char *argv[])
 	printf("GL version: %s\n", glGetString(GL_VERSION));
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+
+	cam.PerspectiveFOV(90.0f,windowWidth/windowHeight,30.0f,1000.0f);
+	cam.LookAt(cam.pos,cam.target,cam.up);
 
 	CreateVertexBuffer(model.mesh.vertices);
 	CreateIndexBuffer(model.mesh.indices);
