@@ -32,30 +32,31 @@ static void RenderSceneCB()
 
 	static float Scale = 0.0f;
 
-	Scale += 0.1f;
+	Scale += 0.01f;
 
 	Matrix modelMatrix = Matrix::Identity;
 
-	Vector3 scale = Vector3(0.1f,0.1f,0.1f);
-	Quaternion rotate = Quaternion(0.5f,0.3f,0.0f,0.8f);
-	Vector3 translate = Vector3(5.0f,10.0f,0.0f);
+	float n = 2 * cos(Scale);
+	Vector3 scale = Vector3(0.5f,0.5f,0.5f);
+	Quaternion rotate = Quaternion(0.0f,n,0.0f,1.0f);
+	Vector3 translate = Vector3(0.5f,0.0f,0.0f);
 
-	//modelMatrix.Scale(scale);
-	//modelMatrix.Rotate(rotate);
-	//modelMatrix.Translate(translate);
-
+	modelMatrix.Scale(scale);
+	modelMatrix.Rotate(rotate);
+	modelMatrix.Translate(translate);
+		
 	Matrix modelView = cam.view * modelMatrix;
 	Matrix viewProjection = cam.projection * modelView;
 
 
-	glUniformMatrix4fv(gWVPLocation, 1, GL_TRUE, &viewProjection.m[0]);
+	glUniformMatrix4fv(gWVPLocation, 1, GL_FALSE, &viewProjection.m[0]);
 
     glEnableVertexAttribArray(0);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
 
-    glDrawElements(GL_TRIANGLES, 12, GL_UNSIGNED_INT, 0);
+    glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
     glDisableVertexAttribArray(0);
 
@@ -73,14 +74,14 @@ static void CreateVertexBuffer(Vector3 *Vertices)
 {
  	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3)*4, Vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3)*8, Vertices, GL_STATIC_DRAW);
 }
 
 static void CreateIndexBuffer(int *Indices)
 {
     glGenBuffers(1, &IBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*12, Indices, GL_STATIC_DRAW);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*36, Indices, GL_STATIC_DRAW);
 }
 
 static void AddShader(GLuint ShaderProgram, const char* pShaderText, GLenum ShaderType)
@@ -178,7 +179,7 @@ int main(int argc, char *argv[])
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
-	cam.PerspectiveFOV(90.0f,windowWidth/windowHeight,30.0f,1000.0f);
+	cam.PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 	cam.LookAt(cam.pos,cam.target,cam.up);
 
 	CreateVertexBuffer(model.mesh.vertices);

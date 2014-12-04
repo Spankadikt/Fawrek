@@ -9,8 +9,8 @@ public:
 	Mesh();
 	~Mesh();
 
-	Vector3 vertices[4];
-	int indices[12];
+	Vector3 vertices[8];
+	int indices[36];
 
 };
 
