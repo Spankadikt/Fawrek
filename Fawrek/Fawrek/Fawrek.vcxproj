@@ -58,7 +58,7 @@
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalLibraryDirectories>$(ProjectDir)lib</AdditionalLibraryDirectories>
-      <AdditionalDependencies>freeglut.lib;glew32.lib;glew32mx.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>freeglut.lib;glew32.lib;kernel32.lib;user32.lib;gdi32.lib;winspool.lib;comdlg32.lib;advapi32.lib;shell32.lib;ole32.lib;oleaut32.lib;uuid.lib;odbc32.lib;odbccp32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
       <Command>xcopy /d /y "$(ProjectDir)dll\*.*" "$(OutDir)"</Command>
@@ -88,8 +88,11 @@
     <ClCompile Include="src\mesh.cpp" />
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\quaternion.cpp" />
+    <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\utils.cpp" />
+    <ClCompile Include="src\vector2.cpp" />
     <ClCompile Include="src\vector3.cpp" />
+    <ClCompile Include="src\vertex.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\camera.h" />
@@ -97,8 +100,11 @@
     <ClInclude Include="include\mesh.h" />
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\quaternion.h" />
+    <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\utils.h" />
+    <ClInclude Include="include\vector2.h" />
     <ClInclude Include="include\vector3.h" />
+    <ClInclude Include="include\vertex.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.fs" />

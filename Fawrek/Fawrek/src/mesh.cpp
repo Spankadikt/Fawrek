@@ -2,14 +2,14 @@
 
 Mesh::Mesh()
 {
-	vertices[0] = Vector3(-1.0f, 1.0f, -1.0f);
-    vertices[1] = Vector3(1.0f, 1.0f, -1.0f);
-    vertices[2] = Vector3(1.0f, 1.0f, 1.0f);
-    vertices[3] = Vector3(-1.0f, 1.0f, 1.0f);
-	vertices[4] = Vector3(-1.0f, -1.0f, -1.0f);
-    vertices[5] = Vector3(1.0f, -1.0f, -1.0f);
-    vertices[6] = Vector3(1.0f, -1.0f, 1.0f);
-    vertices[7] = Vector3(-1.0f, -1.0f, 1.0f);
+	vertices[0] = Vertex(Vector3(-1.0f, 1.0f, -1.0f),Vector2(0.0f,1.0f));
+    vertices[1] = Vertex(Vector3(1.0f, 1.0f, -1.0f),Vector2(1.0f,1.0f));
+    vertices[2] = Vertex(Vector3(1.0f, 1.0f, 1.0f),Vector2(1.0f,0.0f));
+    vertices[3] = Vertex(Vector3(-1.0f, 1.0f, 1.0f),Vector2(0.0f,0.0f));
+	vertices[4] = Vertex(Vector3(-1.0f, -1.0f, -1.0f),Vector2(0.0f,1.0f));
+    vertices[5] = Vertex(Vector3(1.0f, -1.0f, -1.0f),Vector2(1.0f,1.0f));
+    vertices[6] = Vertex(Vector3(1.0f, -1.0f, 1.0f),Vector2(1.0f,0.0f));
+    vertices[7] = Vertex(Vector3(-1.0f, -1.0f, 1.0f),Vector2(0.0f,0.0f));
 
 	indices[ 0] = 0;		indices[ 1] = 1;		indices[ 2] = 2;//top
 	indices[ 3] = 2;		indices[ 4] = 3;		indices[ 5] = 0;

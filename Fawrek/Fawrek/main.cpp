@@ -12,19 +12,23 @@
 #include "model.h"
 #include "utils.h"
 #include "camera.h"
+#include "texture.h"
 
 GLuint VBO;
 GLuint IBO;
 GLuint gWVPLocation;
+GLuint gSampler;
 
 const char* pVSFileName = "shader.vs";
 const char* pFSFileName = "shader.fs";
+const char* pTextureFileName ="texture.raw";
 
 const float windowWidth = 1024;
 const float windowHeight = 768;
 
 Camera cam;
 Model model;
+Texture *texture;
 
 static void RenderSceneCB()
 {
@@ -52,13 +56,16 @@ static void RenderSceneCB()
 	glUniformMatrix4fv(gWVPLocation, 1, GL_FALSE, &viewProjection.m[0]);
 
     glEnableVertexAttribArray(0);
+	glEnableVertexAttribArray(1);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
+	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-
+	texture->Bind(GL_TEXTURE0);
     glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
 
     glDisableVertexAttribArray(0);
+	glDisableVertexAttribArray(1);
 
     glutSwapBuffers();
 }
@@ -70,11 +77,11 @@ static void InitializeGlutCallbacks()
 	glutIdleFunc(RenderSceneCB);
 }
 
-static void CreateVertexBuffer(Vector3 *Vertices)
+static void CreateVertexBuffer(Vertex *Vertices)
 {
  	glGenBuffers(1, &VBO);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(Vector3)*8, Vertices, GL_STATIC_DRAW);
+	glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*8, Vertices, GL_STATIC_DRAW);
 }
 
 static void CreateIndexBuffer(int *Indices)
@@ -156,6 +163,8 @@ static void CompileShaders()
 
 	gWVPLocation = glGetUniformLocation(ShaderProgram, "gWVP");
     assert(gWVPLocation != 0xFFFFFFFF);
+	gSampler = glGetUniformLocation(ShaderProgram, "gSampler");
+    assert(gSampler != 0xFFFFFFFF);
 }
 
 int main(int argc, char *argv[])
@@ -178,6 +187,10 @@ int main(int argc, char *argv[])
 	printf("GL version: %s\n", glGetString(GL_VERSION));
 
     glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+	glFrontFace(GL_CW);
+    glCullFace(GL_BACK);
+    glEnable(GL_CULL_FACE);
+	glEnable(GL_TEXTURE_2D);
 
 	cam.PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 	cam.LookAt(cam.pos,cam.target,cam.up);
@@ -186,6 +199,14 @@ int main(int argc, char *argv[])
 	CreateIndexBuffer(model.mesh.indices);
 
 	CompileShaders();
+
+	glUniform1i(gSampler, 0);
+
+    texture = new Texture("texture.raw",GL_TEXTURE_2D,TRUE);
+
+    if (!texture->LoadTextureRAW()) {
+        exit(1);
+    }
 
     glutMainLoop();
 

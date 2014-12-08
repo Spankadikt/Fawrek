@@ -1,7 +1,7 @@
 #ifndef MESH_H
 #define MESH_H
 
-#include "vector3.h"
+#include "vertex.h"
 
 class Mesh
 {
@@ -9,7 +9,7 @@ public:
 	Mesh();
 	~Mesh();
 
-	Vector3 vertices[8];
+	Vertex vertices[8];
 	int indices[36];
 
 };
