@@ -1,6 +1,7 @@
 #include "mesh.h"
+#include "glew.h"
 
-Mesh::Mesh()
+/*Mesh::Mesh()
 {
 	vertices[0] = Vertex(Vector3(-1.0f, 1.0f, -1.0f),Vector2(0.0f,1.0f));
     vertices[1] = Vertex(Vector3(1.0f, 1.0f, -1.0f),Vector2(1.0f,1.0f));
@@ -29,8 +30,132 @@ Mesh::Mesh()
 	indices[30] = 0;		indices[31] = 1;		indices[32] = 5;//back
 	indices[33] = 5;		indices[34] = 4;		indices[35] = 0;     
                                
+}*/
+Mesh::Mesh()
+{
 }
 
 Mesh::~Mesh()
 {
+	FreeMesh(pMesh);
+}
+
+ 
+int Mesh::mmReadCh (FILE **file)
+{
+	return fgetc(*file);
+}
+ 
+void Mesh::mmSkipLine (FILE **file)
+{
+	fgets(buffer, 128, *file);
+}
+ 
+// mmReadNextParam: reads the next parameter from a *.m file stream,
+// skips all unneeded characters
+float Mesh::mmReadNextParam (FILE **file)
+{
+	int ch = 0;
+	float f = 0;
+	bool legal = false;
+ 
+	while (true)
+	{
+		ch = mmReadCh(file);
+		
+                // EOF or error: set err to 1 and break out of the loop
+		if (ch == EOF)
+		{
+			printf("mmReadNextParam: unexpected EOF or parsing error\r\ncheck your *.m model file syntax");
+			break;
+		}
+ 
+                // skip spaces or any other misc. characters (, . etc)
+                // also; a vertex param. could be negative
+                // so look out for '-' (0x2d) while parsing
+ 
+		((ch >= 0x30  && ch <= 0x39) || ch == 0x2d) ? legal = true : legal = false;
+ 
+		if (legal)
+		{
+			// back up by one character
+			if (fseek(*file, (ftell(*file)- 1), SEEK_SET) != 0)
+				printf("mmReadNextParam: fseek failed, sorry; check your *.m model file syntax");
+ 
+			// read the floating-point parameter and return it
+			fscanf(*file, "%f", &f);
+			return f;
+		}
+	}
+ 
+	return 0; // EOF or error at this point
+}
+
+// LoadModel(); loads an m file format model into model_t *model
+void Mesh::LoadMesh (char *sFilename)
+{
+	FILE *file = fopen(sFilename, "r");
+	FILE *temp = file;
+	if (file)
+	{
+		// find the "vertices" tag
+		while (true)
+			if (strncmp(fgets(buffer, 128, file), "vertices", 8) == 0)
+				break;
+ 
+		// read the number of vertex in this model
+		sscanf(buffer, "vertices %d", &nVertices);
+ 
+		// allocate enough memory for this model
+		vertices = (Vertex*)malloc(nVertices * sizeof(Vertex));
+ 
+		// read all vertices
+		for (int i=0; i < nVertices; i++) {
+			vertices[i].pos.x = mmReadNextParam(&file);
+			vertices[i].pos.y = mmReadNextParam(&file);
+			vertices[i].pos.z = mmReadNextParam(&file);
+
+			vertices[i].uv.u = mmReadNextParam(&file);
+			vertices[i].uv.v = mmReadNextParam(&file);
+		}
+
+		file = temp;
+		// find the "vertices" tag
+		while (true)
+			if (strncmp(fgets(buffer, 128, file), "indices", 7) == 0)
+				break;
+
+		// read the number of indices in this model
+		sscanf(buffer, "indices %d", &nIndices);
+ 
+		// allocate enough memory for this model
+		indices = (int*)malloc(nIndices * sizeof(int));
+ 
+		// read all indices
+		for (int i=0; i < nIndices; i++) {
+			indices[i] = mmReadNextParam(&file);
+		}
+
+ 
+		fclose(file);
+	}
+	else
+	{
+		sprintf(buffer, "LoadModelM(): Cannot open file \"%s\"", sFilename);
+		printf(buffer);
+	}
+}
+
+void Mesh::FreeMesh (Mesh *mesh)
+{
+	if (mesh->vertices)
+	{
+		free(mesh->vertices);
+		mesh->vertices = NULL;
+	}
+	if (mesh->indices)
+	{
+		free(mesh->indices);
+		mesh->indices = NULL;
+	}
 }

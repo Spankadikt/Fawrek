@@ -27,7 +27,7 @@ const float windowWidth = 1024;
 const float windowHeight = 768;
 
 Camera cam;
-Model model;
+Mesh mesh;
 Texture *texture;
 
 static void RenderSceneCB()
@@ -195,8 +195,10 @@ int main(int argc, char *argv[])
 	cam.PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 	cam.LookAt(cam.pos,cam.target,cam.up);
 
-	CreateVertexBuffer(model.mesh.vertices);
-	CreateIndexBuffer(model.mesh.indices);
+	mesh.LoadMesh("model.m");
+
+	CreateVertexBuffer(mesh.vertices);
+	CreateIndexBuffer(mesh.indices);
 
 	CompileShaders();
 
