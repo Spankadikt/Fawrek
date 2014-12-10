@@ -111,15 +111,18 @@ void Mesh::LoadMesh (char *sFilename)
  
 		// read all vertices
 		for (int i=0; i < nVertices; i++) {
-			vertices[i].pos.x = mmReadNextParam(&file);
-			vertices[i].pos.y = mmReadNextParam(&file);
-			vertices[i].pos.z = mmReadNextParam(&file);
+			vertices[i].position.x = mmReadNextParam(&file);
+			vertices[i].position.y = mmReadNextParam(&file);
+			vertices[i].position.z = mmReadNextParam(&file);
 
 			vertices[i].uv.u = mmReadNextParam(&file);
 			vertices[i].uv.v = mmReadNextParam(&file);
+
+			vertices[i].normal.x = mmReadNextParam(&file);
+			vertices[i].normal.y = mmReadNextParam(&file);
+			vertices[i].normal.z = mmReadNextParam(&file);
 		}
 
-		file = temp;
 		// find the "vertices" tag
 		while (true)
 			if (strncmp(fgets(buffer, 128, file), "indices", 7) == 0)

@@ -4,8 +4,9 @@ Vertex::Vertex()
 {
 }
 
-Vertex::Vertex(Vector3 _pos, Vector2 _uv)
+Vertex::Vertex(Vector3 _position, Vector2 _uv, Vector3 _normal)
 {
-	pos = _pos;
+	position = _position;
 	uv = _uv;
+	normal = _normal;
 }

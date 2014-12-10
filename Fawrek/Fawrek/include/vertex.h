@@ -7,11 +7,12 @@
 class Vertex
 {
 public :
-	Vector3 pos;
+	Vector3 position;
 	Vector2 uv;
+	Vector3 normal;
 
 	Vertex();
-	Vertex(Vector3 _pos, Vector2 _uv);
+	Vertex(Vector3 _pos, Vector2 _uv, Vector3 _normal);
 };
 
 #endif //VERTEX_H
