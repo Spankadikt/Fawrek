@@ -4,12 +4,14 @@
 #include "glew.h"
 #include "stdio.h"
 #include "windows.h"
+#include "SOIL.h"
 
 class Texture
 {
 public:
 	Texture(const char *_filename,GLenum _textureTarget, int _wrap);
 
+	bool LoadTexture();
 	bool LoadTextureRAW();
 	void Bind(GLenum _textureUnit);
 

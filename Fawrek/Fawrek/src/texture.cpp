@@ -8,6 +8,27 @@ Texture::Texture(const char *_filename,GLenum _textureTarget, int _wrap )
 	wrap = _wrap;
 }
 
+bool Texture::LoadTexture()
+{
+	/* load an image file directly as a new OpenGL texture */
+	texture = SOIL_load_OGL_texture
+	(
+		filename,
+		SOIL_LOAD_AUTO,
+		SOIL_CREATE_NEW_ID,
+		SOIL_FLAG_MIPMAPS | SOIL_FLAG_INVERT_Y | SOIL_FLAG_NTSC_SAFE_RGB | SOIL_FLAG_COMPRESS_TO_DXT
+	);
+	
+	/* check for an error during the load process */
+	if( 0 == texture )
+	{
+		printf( "SOIL loading error: '%s'\n", SOIL_last_result() );
+		return false;
+	}
+
+	return true;
+}
+
 // load a 256x256 RGB .RAW file as a texture
 bool Texture::LoadTextureRAW()
 {

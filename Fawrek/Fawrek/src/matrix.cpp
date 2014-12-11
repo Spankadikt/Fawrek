@@ -59,47 +59,6 @@ Matrix Matrix::operator*(const Matrix &_m) const
 	return result;
 }
 
-/*Matrix Matrix::operator*(const Matrix &n) const
-{
-	Matrix result;
-
-	for(int i = 0; i < 4; ++i)
-	{
-		for(int j = 0; j < 4; ++j)
-		{
-			for(int k = 0; k < 4; ++k)
-				mn[i][j] += n[i][k] * (*this)[k][j];
-		}
-	}
-	return result;
-}*/
-
-/*void Matrix::Rotate(float RotateX, float RotateY, float RotateZ)
-{
-    Matrix rx, ry, rz;
-
-	float x = tanf(ToRadian(RotateX));
-    float y = tanf(ToRadian(RotateY));
-    float z = tanf(ToRadian(RotateZ));
-
-    rx.m[0] = 1.0f;			rx.m[4] = 0.0f   ;		rx.m[8] = 0.0f    ;		rx.m[12] = 0.0f;
-    rx.m[1] = 0.0f;			rx.m[5] = cosf(x);		rx.m[9] = -sinf(x);		rx.m[13] = 0.0f;
-    rx.m[2] = 0.0f;			rx.m[6] = sinf(x);		rx.m[10] = cosf(x) ;	rx.m[14] = 0.0f;
-    rx.m[3] = 0.0f;			rx.m[7] = 0.0f   ;		rx.m[11] = 0.0f    ;	rx.m[15] = 1.0f;
-
-    ry.m[0] = cosf(y);		ry.m[4] = 0.0f;			ry.m[8] = sinf(y);		ry.m[12] = 0.0f;
-    ry.m[1] = 0.0f   ;		ry.m[5] = 1.0f;			ry.m[9] = 0.0f    ;		ry.m[13] = 0.0f;
-    ry.m[2] = -sinf(y);		ry.m[6] = 0.0f;			ry.m[10] = cosf(y) ;	ry.m[14] = 0.0f;
-    ry.m[3] = 0.0f   ;		ry.m[7] = 0.0f;			ry.m[11] = 0.0f    ;	ry.m[15] = 1.0f;
-
-    rz.m[0] = cosf(z);		rz.m[4] = -sinf(z);		rz.m[8] = 0.0f;			rz.m[12] = 0.0f;
-    rz.m[1] = sinf(z);		rz.m[5] = cosf(z) ;		rz.m[9] = 0.0f;			rz.m[13] = 0.0f;
-    rz.m[2] = 0.0f   ;		rz.m[6] = 0.0f    ;		rz.m[10] = 1.0f;		rz.m[14] = 0.0f;
-    rz.m[3] = 0.0f   ;		rz.m[7] = 0.0f    ;		rz.m[11] = 0.0f;		rz.m[15] = 1.0f;
-
-	*this = rz * ry * rx;
-}*/
-
 Matrix Matrix::Translate(const Vector3 &_v)
 {
 	m[12] = m[0] * _v.x + m[4] * _v.y + m[ 8] * _v.z + m[12];

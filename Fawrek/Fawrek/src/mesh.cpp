@@ -41,19 +41,19 @@ Mesh::~Mesh()
 }
 
  
-int Mesh::mmReadCh (FILE **file)
+int Mesh::mmReadCh (FILE **_file)
 {
-	return fgetc(*file);
+	return fgetc(*_file);
 }
  
-void Mesh::mmSkipLine (FILE **file)
+void Mesh::mmSkipLine (FILE **_file)
 {
-	fgets(buffer, 128, *file);
+	fgets(buffer, 128, *_file);
 }
  
 // mmReadNextParam: reads the next parameter from a *.m file stream,
 // skips all unneeded characters
-float Mesh::mmReadNextParam (FILE **file)
+float Mesh::mmReadNextParam (FILE **_file)
 {
 	int ch = 0;
 	float f = 0;
@@ -61,7 +61,7 @@ float Mesh::mmReadNextParam (FILE **file)
  
 	while (true)
 	{
-		ch = mmReadCh(file);
+		ch = mmReadCh(_file);
 		
                 // EOF or error: set err to 1 and break out of the loop
 		if (ch == EOF)
@@ -79,11 +79,11 @@ float Mesh::mmReadNextParam (FILE **file)
 		if (legal)
 		{
 			// back up by one character
-			if (fseek(*file, (ftell(*file)- 1), SEEK_SET) != 0)
+			if (fseek(*_file, (ftell(*_file)- 1), SEEK_SET) != 0)
 				printf("mmReadNextParam: fseek failed, sorry; check your *.m model file syntax");
  
 			// read the floating-point parameter and return it
-			fscanf(*file, "%f", &f);
+			fscanf(*_file, "%f", &f);
 			return f;
 		}
 	}
@@ -92,9 +92,9 @@ float Mesh::mmReadNextParam (FILE **file)
 }
 
 // LoadModel(); loads an m file format model into model_t *model
-void Mesh::LoadMesh (char *sFilename)
+void Mesh::LoadMeshA (char *_sFilename)
 {
-	FILE *file = fopen(sFilename, "r");
+	FILE *file = fopen(_sFilename, "r");
 	FILE *temp = file;
 	if (file)
 	{
@@ -144,21 +144,21 @@ void Mesh::LoadMesh (char *sFilename)
 	}
 	else
 	{
-		sprintf(buffer, "LoadModelM(): Cannot open file \"%s\"", sFilename);
+		sprintf(buffer, "LoadModelM(): Cannot open file \"%s\"", _sFilename);
 		printf(buffer);
 	}
 }
 
-void Mesh::FreeMesh (Mesh *mesh)
+void Mesh::FreeMesh (Mesh *_mesh)
 {
-	if (mesh->vertices)
+	if (_mesh->vertices)
 	{
-		free(mesh->vertices);
-		mesh->vertices = NULL;
+		free(_mesh->vertices);
+		_mesh->vertices = NULL;
 	}
-	if (mesh->indices)
+	if (_mesh->indices)
 	{
-		free(mesh->indices);
-		mesh->indices = NULL;
+		free(_mesh->indices);
+		_mesh->indices = NULL;
 	}
 }

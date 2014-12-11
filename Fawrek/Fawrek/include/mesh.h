@@ -13,9 +13,9 @@ public:
 	Mesh();
 	~Mesh();
 
-	void LoadMesh (char *sFilename);	// loads a *.m mesh file
+	void LoadMeshA (char *_sFilename);	// loads a *.m mesh file
 	void DrawMesh();
-	void FreeMesh (Mesh *mesh);
+	void FreeMesh (Mesh *_mesh);
 
 	Vertex *vertices;//8
 	int *indices;//36
@@ -25,9 +25,9 @@ public:
 	int nIndices;
 
 protected:
-	int mmReadCh (FILE **file);
-	void mmSkipLine (FILE **file);
-	float mmReadNextParam (FILE **file);
+	int mmReadCh (FILE **_file);
+	void mmSkipLine (FILE **_file);
+	float mmReadNextParam (FILE **_file);
 	char buffer[4096];
 };
 
