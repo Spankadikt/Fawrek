@@ -13,6 +13,10 @@ public:
 	Vector3 operator- (const Vector3 &_v);
 	Vector3 operator* (const Vector3 &_v);
 	Vector3 operator/ (const Vector3 &_v);
+	Vector3 operator+= (const Vector3 &_v);
+	Vector3 operator-= (const Vector3 &_v);
+	Vector3 operator*= (const Vector3 &_v);
+	Vector3 operator/= (const Vector3 &_v);
 
 	static Vector3 Cross(const Vector3 &_u, const Vector3 &_v);
 	Vector3 Normalize() const;

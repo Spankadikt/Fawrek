@@ -121,6 +121,9 @@ void Mesh::LoadMeshA (char *_sFilename)
 			vertices[i].normal.x = mmReadNextParam(&file);
 			vertices[i].normal.y = mmReadNextParam(&file);
 			vertices[i].normal.z = mmReadNextParam(&file);
+			vertices[i].normal.x = 0.0f;
+			vertices[i].normal.y = 0.0f;
+			vertices[i].normal.z = 0.0f;
 		}
 
 		// find the "vertices" tag

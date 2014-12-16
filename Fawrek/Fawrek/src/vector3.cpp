@@ -33,6 +33,38 @@ Vector3 Vector3::operator/(const Vector3 &_v)
 	return Vector3(x / _v.x, y / _v.y, z / _v.z);
 }
 
+Vector3 Vector3::operator*=(const Vector3 &_v)
+{
+	x *= _v.x;
+	y *= _v.y;
+	z *= _v.z;
+	return *this;
+}
+
+Vector3 Vector3::operator/=(const Vector3 &_v)
+{
+	x /= _v.x;
+	y /= _v.y;
+	z /= _v.z;
+	return *this;
+}
+
+Vector3 Vector3::operator+=(const Vector3 &_v)
+{
+	x += _v.x;
+	y += _v.y;
+	z += _v.z;
+	return *this;
+}
+
+Vector3 Vector3::operator-=(const Vector3 &_v)
+{
+	x -= _v.x;
+	y -= _v.y;
+	z -= _v.z;
+	return *this;
+}
+
 Vector3 Vector3::Cross(const Vector3 &_u,const Vector3 &_v)
 {
 	Vector3 result;
