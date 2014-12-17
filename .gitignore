@@ -177,6 +177,9 @@ cmake_install.cmake
 *.mtl
 *.obj
 *.dds
+*.pcx
+*.md2
+*.png
 Resources/
 Plugins/
 Data/

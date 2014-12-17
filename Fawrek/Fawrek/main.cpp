@@ -24,18 +24,18 @@ public:
     Fawrek()
     {
 		camera;
-        pTexture;
+        //pTexture;
         pLight;
         directionalLight.Color = Vector3(1.0f, 1.0f, 1.0f);
-        directionalLight.AmbientIntensity = 0.05f;
+        directionalLight.AmbientIntensity = 0.75f;
         directionalLight.DiffuseIntensity = 0.2f;
-        directionalLight.Direction = Vector3(0.0f, 0.0f, 1.0f);        
+        directionalLight.Direction = Vector3(0.0f, 1.0f, 1.0f);        
     }
 
     ~Fawrek()
     {
         //delete pLight;
-        delete pTexture;
+        //delete pTexture;
     }
 
     bool Init()
@@ -43,10 +43,10 @@ public:
         camera.PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 		camera.LookAt(camera.pos,camera.target,camera.up);
 
-		mesh.LoadMeshA("model.m");
+		//mesh.LoadMeshA("model.m");
 
-		CreateVertexBuffer(mesh.vertices,mesh.indices,mesh.nIndices);
-		CreateIndexBuffer(mesh.indices);
+		//CreateVertexBuffer(mesh.vertices,mesh.indices,mesh.nIndices);
+		//CreateIndexBuffer(mesh.indices);
 
 		//pLight = new Light();
 
@@ -58,13 +58,17 @@ public:
 		pLight.Enable();
 		pLight.SetTextureUnit(0);
 
-		pTexture = new Texture("img_test.png",GL_TEXTURE_2D,TRUE);
+		/*pTexture = new Texture("img_test.png",GL_TEXTURE_2D,TRUE);
 
 		if (!pTexture->LoadTexture()) {
 			exit(1);
-		}
+		}*/
 
-        return true;
+		pMesh = new Mesh();
+
+        return pMesh->LoadMesh("phoenix_ugv.md2");
+
+        //return true;
     }
 
     void Run()
@@ -74,7 +78,7 @@ public:
 
 	void RenderSceneCB()
 	{
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		static float Scale = 0.0f;
 
@@ -83,8 +87,8 @@ public:
 		Matrix modelMatrix = Matrix::Identity;
 
 		float n = 2 * cos(Scale);
-		Vector3 scale = Vector3(1.0f,0.5f,1.0f);
-		Quaternion rotate = Quaternion(0.0f,n,0.0f,1.0f);
+		Vector3 scale = Vector3(0.1f,0.1f,0.1f);
+		Quaternion rotate = Quaternion(0.0f,0.0f,0.0f,1.0f);
 		Vector3 translate = Vector3(0.0f,0.0f,0.0f);
 
 		modelMatrix.Scale(scale);
@@ -101,7 +105,7 @@ public:
 		pLight.SetMatSpecularIntensity(1.0f);
 		pLight.SetMatSpecularPower(32);
 
-		glEnableVertexAttribArray(0);
+		/*glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		glEnableVertexAttribArray(2);
 		glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -114,7 +118,9 @@ public:
 
 		glDisableVertexAttribArray(0);
 		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);
+		glDisableVertexAttribArray(2);*/
+
+		pMesh->Render();
 
 		glutSwapBuffers();
 	}
@@ -167,15 +173,15 @@ private:
     GLuint VBO;
     GLuint IBO;
     Light pLight;
-    Texture *pTexture;
+    //Texture *pTexture;
     Camera camera;
-	Mesh mesh;
+	Mesh *pMesh;
     DirectionalLight directionalLight;
 };
 
 int main(int argc, char *argv[])
 {
-   	GLUTBackendInit(argc, argv, false, false);
+   	GLUTBackendInit(argc, argv, true, false);
 
     if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, "Fawrek")) {
         return 1;
