@@ -41,43 +41,43 @@ bool Shader::Init()
 }
 
 // Use this method to add shaders to the program. When finished - call finalize()
-bool Shader::AddShader(GLenum ShaderType, const char* pFilename)
+bool Shader::AddShader(GLenum _shaderType, const char *_pFilename)
 {
     string s;
     
-    if (!ReadFile(pFilename, s)) {
+    if (!ReadFile(_pFilename, s)) {
         return false;
     }
     
-    GLuint ShaderObj = glCreateShader(ShaderType);
+    GLuint shaderObj = glCreateShader(_shaderType);
 
-    if (ShaderObj == 0) {
-        fprintf(stderr, "Error creating shader type %d\n", ShaderType);
+    if (shaderObj == 0) {
+        fprintf(stderr, "Error creating shader type %d\n", _shaderType);
         return false;
     }
 
     // Save the shader object - will be deleted in the destructor
-    shaderObjList.push_back(ShaderObj);
+    shaderObjList.push_back(shaderObj);
 
     const GLchar* p[1];
     p[0] = s.c_str();
-    GLint Lengths[1] = { (GLint)s.size() };
+    GLint lengths[1] = { (GLint)s.size() };
 
-    glShaderSource(ShaderObj, 1, p, Lengths);
+    glShaderSource(shaderObj, 1, p, lengths);
 
-    glCompileShader(ShaderObj);
+    glCompileShader(shaderObj);
 
     GLint success;
-    glGetShaderiv(ShaderObj, GL_COMPILE_STATUS, &success);
+    glGetShaderiv(shaderObj, GL_COMPILE_STATUS, &success);
 
     if (!success) {
         GLchar InfoLog[1024];
-        glGetShaderInfoLog(ShaderObj, 1024, NULL, InfoLog);
-        fprintf(stderr, "Error compiling '%s': '%s'\n", pFilename, InfoLog);
+        glGetShaderInfoLog(shaderObj, 1024, NULL, InfoLog);
+        fprintf(stderr, "Error compiling '%s': '%s'\n", _pFilename, InfoLog);
         return false;
     }
 
-    glAttachShader(shaderProg, ShaderObj);
+    glAttachShader(shaderProg, shaderObj);
 
     return true;
 }
@@ -87,23 +87,23 @@ bool Shader::AddShader(GLenum ShaderType, const char* pFilename)
 // to link and validate the program.
 bool Shader::Finalize()
 {
-    GLint Success = 0;
-    GLchar ErrorLog[1024] = { 0 };
+    GLint success = 0;
+    GLchar errorLog[1024] = { 0 };
 
     glLinkProgram(shaderProg);
 
-    glGetProgramiv(shaderProg, GL_LINK_STATUS, &Success);
-	if (Success == 0) {
-		glGetProgramInfoLog(shaderProg, sizeof(ErrorLog), NULL, ErrorLog);
-		fprintf(stderr, "Error linking shader program: '%s'\n", ErrorLog);
+    glGetProgramiv(shaderProg, GL_LINK_STATUS, &success);
+	if (success == 0) {
+		glGetProgramInfoLog(shaderProg, sizeof(errorLog), NULL, errorLog);
+		fprintf(stderr, "Error linking shader program: '%s'\n", errorLog);
         return false;
 	}
 
     glValidateProgram(shaderProg);
-    glGetProgramiv(shaderProg, GL_VALIDATE_STATUS, &Success);
-    if (!Success) {
-        glGetProgramInfoLog(shaderProg, sizeof(ErrorLog), NULL, ErrorLog);
-        fprintf(stderr, "Invalid shader program: '%s'\n", ErrorLog);
+    glGetProgramiv(shaderProg, GL_VALIDATE_STATUS, &success);
+    if (!success) {
+        glGetProgramInfoLog(shaderProg, sizeof(errorLog), NULL, errorLog);
+        fprintf(stderr, "Invalid shader program: '%s'\n", errorLog);
      //   return false;
     }
 

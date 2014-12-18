@@ -23,12 +23,8 @@ public:
 	Mesh();
 	~Mesh();
 
-	bool LoadMesh(const std::string &Filename);
+	bool LoadMesh(const std::string &_filename);
 	void Render();
-
-	void LoadMeshA (char *_sFilename);	// loads a *.m mesh file
-	void DrawMesh();
-	void FreeMesh (Mesh *_mesh);
 
 	Vertex *vertices;//8
 	int *indices;//36
@@ -37,16 +33,10 @@ public:
 	int nVertices;
 	int nIndices;
 
-protected:
-	int mmReadCh (FILE **_file);
-	void mmSkipLine (FILE **_file);
-	float mmReadNextParam (FILE **_file);
-	char buffer[4096];
-
 private:
-	bool InitFromScene(const aiScene* pScene, const std::string& Filename);
-    void InitMesh(unsigned int Index, const aiMesh* paiMesh);
-    bool InitMaterials(const aiScene* pScene, const std::string& Filename);
+	bool InitFromScene(const aiScene *_pScene, const std::string &_filename);
+    void InitMesh(unsigned int _index, const aiMesh* _paiMesh);
+    bool InitMaterials(const aiScene *_pScene, const std::string &_filename);
     void Clear();
 
 	#define INVALID_MATERIAL 0xFFFFFFFF
@@ -56,8 +46,8 @@ private:
 
         ~MeshEntry();
 
-        void Init(const std::vector<Vertex>& Vertices,
-                  const std::vector<unsigned int>& Indices);
+        void Init(const std::vector<Vertex> &_vertices,
+                  const std::vector<unsigned int> &_indices);
 
         GLuint VB;
         GLuint IB;

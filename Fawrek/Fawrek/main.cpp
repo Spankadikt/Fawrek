@@ -23,52 +23,39 @@ public:
 
     Fawrek()
     {
-		camera;
-        //pTexture;
-        pLight;
         directionalLight.Color = Vector3(1.0f, 1.0f, 1.0f);
-        directionalLight.AmbientIntensity = 0.75f;
+        directionalLight.AmbientIntensity = 0.85f;
         directionalLight.DiffuseIntensity = 0.2f;
         directionalLight.Direction = Vector3(0.0f, 1.0f, 1.0f);        
     }
 
     ~Fawrek()
     {
-        //delete pLight;
-        //delete pTexture;
+		delete pCamera;
+        delete pLight;
+		delete pMesh;
     }
 
     bool Init()
     {
-        camera.PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
-		camera.LookAt(camera.pos,camera.target,camera.up);
+		pCamera = new Camera();
 
-		//mesh.LoadMeshA("model.m");
+        pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
+		pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
 
-		//CreateVertexBuffer(mesh.vertices,mesh.indices,mesh.nIndices);
-		//CreateIndexBuffer(mesh.indices);
+		pLight = new Light();
 
-		//pLight = new Light();
-
-		if (!pLight.Init())
+		if (!pLight->Init())
 		{
 			return false;
 		}
 
-		pLight.Enable();
-		pLight.SetTextureUnit(0);
-
-		/*pTexture = new Texture("img_test.png",GL_TEXTURE_2D,TRUE);
-
-		if (!pTexture->LoadTexture()) {
-			exit(1);
-		}*/
+		pLight->Enable();
+		pLight->SetTextureUnit(0);
 
 		pMesh = new Mesh();
 
         return pMesh->LoadMesh("phoenix_ugv.md2");
-
-        //return true;
     }
 
     void Run()
@@ -95,30 +82,15 @@ public:
 		modelMatrix.Rotate(rotate);
 		modelMatrix.Translate(translate);
 		
-		Matrix modelView = camera.view * modelMatrix;
-		Matrix viewProjection = camera.projection * modelView;
+		Matrix modelView = pCamera->view * modelMatrix;
+		Matrix viewProjection = pCamera->projection * modelView;
 		
-		pLight.SetWVP(viewProjection);
-        pLight.SetWorldMatrix(modelMatrix);
-		pLight.SetDirectionalLight(directionalLight);
-		pLight.SetEyeWorldPos(camera.pos);
-		pLight.SetMatSpecularIntensity(1.0f);
-		pLight.SetMatSpecularPower(32);
-
-		/*glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		glEnableVertexAttribArray(2);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), 0);
-		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)12);
-		glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(Vertex), (const GLvoid*)20);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		pTexture->Bind(GL_TEXTURE0);
-		glDrawElements(GL_TRIANGLES, 36, GL_UNSIGNED_INT, 0);
-
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
-		glDisableVertexAttribArray(2);*/
+		pLight->SetWVP(viewProjection);
+        pLight->SetWorldMatrix(modelMatrix);
+		pLight->SetDirectionalLight(directionalLight);
+		pLight->SetEyeWorldPos(pCamera->pos);
+		pLight->SetMatSpecularIntensity(1.0f);
+		pLight->SetMatSpecularPower(32);
 
 		pMesh->Render();
 
@@ -126,55 +98,10 @@ public:
 	}
 
 private:
-
-	void CalcNormals(int* pIndices, int IndexCount,
-                     Vertex* pVertices, int VertexCount)
-    {
-        // Accumulate each triangle normal into each of the triangle vertices
-        for (unsigned int i = 0 ; i < IndexCount ; i += 3) {
-            unsigned int Index0 = pIndices[i];
-            unsigned int Index1 = pIndices[i + 1];
-            unsigned int Index2 = pIndices[i + 2];
-			Vector3 v1 = pVertices[Index1].position - pVertices[Index0].position;
-            Vector3 v2 = pVertices[Index2].position - pVertices[Index0].position;
-			Vector3 Normal = Vector3::Cross(v1,v2);
-            Normal.Normalize();
-
-            pVertices[Index0].normal += Normal;
-            pVertices[Index1].normal += Normal;
-            pVertices[Index2].normal += Normal;
-        }
-
-        // Normalize all the vertex normals
-        for (unsigned int i = 0 ; i < VertexCount ; i++) {
-            pVertices[i].normal = pVertices[i].normal.Normalize();
-        }
-    }
-
-	void CreateVertexBuffer(Vertex *_vertices,int* _indices, int _indexCount)
-	{
-		//unsigned int sizeInBytes = ARRAY_SIZE_IN_ELEMENTS(_vertices);
-        CalcNormals(_indices, _indexCount, _vertices, 8);
-
- 		glGenBuffers(1, &VBO);
-		glBindBuffer(GL_ARRAY_BUFFER, VBO);
-		glBufferData(GL_ARRAY_BUFFER, sizeof(Vertex)*8, _vertices, GL_STATIC_DRAW);
-	}
-
-	void CreateIndexBuffer(int *_indices)
-	{
-		unsigned int sizeInBytes = ARRAY_SIZE_IN_ELEMENTS(_indices);
-		glGenBuffers(1, &IBO);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, IBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(int)*36, _indices, GL_STATIC_DRAW);
-	}
-
-
     GLuint VBO;
     GLuint IBO;
-    Light pLight;
-    //Texture *pTexture;
-    Camera camera;
+    Light *pLight;
+    Camera *pCamera;
 	Mesh *pMesh;
     DirectionalLight directionalLight;
 };

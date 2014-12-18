@@ -2,11 +2,11 @@
 
 Model::Model()
 {
-	mesh = Mesh();
+	pMesh = new Mesh();
 }
 
 Model::~Model()
 {
-
+	delete pMesh;
 }
 

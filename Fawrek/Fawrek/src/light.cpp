@@ -81,12 +81,12 @@ void Light::SetEyeWorldPos(const Vector3 _eyeWorldPos)
     glUniform3f(eyeWorldPosLocation, _eyeWorldPos.x, _eyeWorldPos.y, _eyeWorldPos.z);
 }
 
-void Light::SetMatSpecularIntensity(float Intensity)
+void Light::SetMatSpecularIntensity(float _intensity)
 {
-    glUniform1f(matSpecularIntensityLocation, Intensity);
+    glUniform1f(matSpecularIntensityLocation, _intensity);
 }
 
-void Light::SetMatSpecularPower(float Power)
+void Light::SetMatSpecularPower(float _power)
 {
-    glUniform1f(matSpecularPowerLocation, Power);
+    glUniform1f(matSpecularPowerLocation, _power);
 }

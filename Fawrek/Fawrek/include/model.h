@@ -9,7 +9,7 @@ public:
 	Model();
 	~Model();
 
-	Mesh mesh;
+	Mesh *pMesh;
 };
 
 #endif //MESH_H

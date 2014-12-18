@@ -2,17 +2,17 @@
 
 #include "utils.h"
 
-bool ReadFile(const char* pFileName, string& outFile)
+bool ReadFile(const char *_pFileName, string &_outFile)
 {
-    ifstream f(pFileName);
+    ifstream f(_pFileName);
     
     bool ret = false;
     
     if (f.is_open()) {
         string line;
         while (getline(f, line)) {
-            outFile.append(line);
-            outFile.append("\n");
+            _outFile.append(line);
+            _outFile.append("\n");
         }
         
         f.close();
@@ -20,7 +20,7 @@ bool ReadFile(const char* pFileName, string& outFile)
         ret = true;
     }
     else {
-        printf("error in : %s",pFileName);
+        printf("error in : %s",_pFileName);
     }
     
     return ret;

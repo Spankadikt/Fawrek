@@ -35,30 +35,30 @@ static void InitCallbacks()
 }
 
 
-void GLUTBackendInit(int argc, char** argv, bool WithDepth, bool WithStencil)
+void GLUTBackendInit(int _argc, char **_argv, bool _withDepth, bool _withStencil)
 {
-    sWithDepth = WithDepth;
-    sWithStencil = WithStencil;
+    sWithDepth = _withDepth;
+    sWithStencil = _withStencil;
 
-    glutInit(&argc, argv);
+    glutInit(&_argc, _argv);
 	
-    uint DisplayMode = GLUT_DOUBLE|GLUT_RGBA;
+    uint displayMode = GLUT_DOUBLE|GLUT_RGBA;
 
-    if (WithDepth) {
-        DisplayMode |= GLUT_DEPTH;
+    if (_withDepth) {
+        displayMode |= GLUT_DEPTH;
     }
 
-    if (WithStencil) {
-        DisplayMode |= GLUT_STENCIL;
+    if (_withStencil) {
+        displayMode |= GLUT_STENCIL;
     }
 
-    glutInitDisplayMode(DisplayMode);
+    glutInitDisplayMode(displayMode);
 
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 }
 
 
-bool GLUTBackendCreateWindow(unsigned int _width, unsigned int _height, bool _isFullScreen, const char* _pTitle)
+bool GLUTBackendCreateWindow(unsigned int _width, unsigned int _height, bool _isFullScreen, const char *_pTitle)
 {
     if (_isFullScreen) {
         char ModeString[64] = { 0 };

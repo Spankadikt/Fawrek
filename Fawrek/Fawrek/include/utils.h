@@ -10,4 +10,4 @@
 
 using namespace std;
 
-bool ReadFile(const char* fileName, string& outFile);
+bool ReadFile(const char *_fileName, string &_outFile);
