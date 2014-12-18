@@ -1,5 +1,7 @@
-#include "light.h"
+#include "assert.h"
 
+#include "light.h"
+#include "utils.h"
 
 Light::Light()
 {   
@@ -11,11 +13,11 @@ bool Light::Init()
         return false;
     }
 
-    if (!AddShader(GL_VERTEX_SHADER, "lighting.vs")) {
+    if (!AddShader(GL_VERTEX_SHADER, "skinning.vs")) {
         return false;
     }
 
-    if (!AddShader(GL_FRAGMENT_SHADER, "lighting.fs")) {
+    if (!AddShader(GL_FRAGMENT_SHADER, "skinning.fs")) {
         return false;
     }
 
@@ -44,6 +46,13 @@ bool Light::Init()
         matSpecularPowerLocation == 0xFFFFFFFF)
 	{
         return false;
+    }
+
+	for (unsigned int i = 0 ; i < ARRAY_SIZE_IN_ELEMENTS(boneLocation) ; i++) {
+        char Name[128];
+        memset(Name, 0, sizeof(Name));
+        SNPRINTF(Name, sizeof(Name), "gBones[%d]", i);
+        boneLocation[i] = GetUniformLocation(Name);
     }
 
     return true;
@@ -89,4 +98,10 @@ void Light::SetMatSpecularIntensity(float _intensity)
 void Light::SetMatSpecularPower(float _power)
 {
     glUniform1f(matSpecularPowerLocation, _power);
+}
+
+void Light::SetBoneTransform(uint _index, const Matrix &_transform)
+{
+    assert(_index < MAX_BONES);
+	glUniformMatrix4fv(boneLocation[_index], 1, GL_TRUE, (const GLfloat*)_transform.m);       
 }

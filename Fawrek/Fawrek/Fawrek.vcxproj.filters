@@ -57,6 +57,9 @@
     <ClCompile Include="src\light.cpp">
       <Filter>Fichiers sources</Filter>
     </ClCompile>
+    <ClCompile Include="src\engine.cpp">
+      <Filter>Fichiers sources</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\camera.h">
@@ -104,11 +107,16 @@
     <ClInclude Include="include\light.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
+    <ClInclude Include="include\engine.h">
+      <Filter>Fichiers d%27en-tête</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="shader.fs" />
     <None Include="shader.vs" />
     <None Include="lighting.fs" />
     <None Include="lighting.vs" />
+    <None Include="skinning.fs" />
+    <None Include="skinning.vs" />
   </ItemGroup>
 </Project>

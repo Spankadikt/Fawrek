@@ -12,12 +12,15 @@
 #include "camera.h"
 #include "texture.h"
 #include "window.h"
+#include "engine.h"
 #include "light.h"
+
+using namespace std;
 
 #define WINDOW_WIDTH  1024//1920
 #define WINDOW_HEIGHT 768//1200
 
-class Fawrek : public ICallbacks
+class Fawrek : public ICallbacks, public Engine
 {
 public:
 
@@ -31,9 +34,8 @@ public:
 
     ~Fawrek()
     {
-		delete pCamera;
-        delete pLight;
-		delete pMesh;
+        SAFE_DELETE(pLight);
+        SAFE_DELETE(pCamera);
     }
 
     bool Init()
@@ -53,9 +55,13 @@ public:
 		pLight->Enable();
 		pLight->SetTextureUnit(0);
 
-		pMesh = new Mesh();
+		//pMesh = new Mesh();
+		if (!mesh.LoadMesh("boblampclean.md5mesh")) {
+            printf("Mesh load failed\n");
+            return false;            
+        }
 
-        return pMesh->LoadMesh("phoenix_ugv.md2");
+        //return pMesh->LoadMesh("phoenix_ugv.md2");
     }
 
     void Run()
@@ -66,6 +72,16 @@ public:
 	void RenderSceneCB()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		vector<Matrix> Transforms;
+               
+        float RunningTime = GetRunningTime();
+
+        mesh.BoneTransform(RunningTime, Transforms);
+        
+        for (uint i = 0 ; i < Transforms.size() ; i++) {
+            pLight->SetBoneTransform(i, Transforms[i]);
+        }
 
 		static float Scale = 0.0f;
 
@@ -92,7 +108,7 @@ public:
 		pLight->SetMatSpecularIntensity(1.0f);
 		pLight->SetMatSpecularPower(32);
 
-		pMesh->Render();
+		mesh.Render();
 
 		glutSwapBuffers();
 	}
@@ -102,7 +118,7 @@ private:
     GLuint IBO;
     Light *pLight;
     Camera *pCamera;
-	Mesh *pMesh;
+	Mesh mesh;
     DirectionalLight directionalLight;
 };
 
@@ -113,6 +129,8 @@ int main(int argc, char *argv[])
     if (!GLUTBackendCreateWindow(WINDOW_WIDTH, WINDOW_HEIGHT, false, "Fawrek")) {
         return 1;
     }
+
+	SRANDOM;
 
     Fawrek *pApp = new Fawrek();
 

@@ -17,6 +17,8 @@ class Light : public Shader
 {
 public:
 
+	static const uint MAX_BONES = 100;
+
     Light();
 
     virtual bool Init();
@@ -28,6 +30,7 @@ public:
 	void SetEyeWorldPos(const Vector3 _eyeWorldPos);
     void SetMatSpecularIntensity(float _intensity);
     void SetMatSpecularPower(float _power);
+	void SetBoneTransform(uint _index, const Matrix &_transform);
 
 private:
 
@@ -44,6 +47,8 @@ private:
         GLuint Direction;
         GLuint DiffuseIntensity;
     } dirLightLocation;
+
+	GLuint boneLocation[MAX_BONES];
 };
 
 

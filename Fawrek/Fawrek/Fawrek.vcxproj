@@ -84,6 +84,7 @@
   <ItemGroup>
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\light.cpp" />
     <ClCompile Include="src\matrix.cpp" />
     <ClCompile Include="src\mesh.cpp" />
@@ -100,6 +101,7 @@
   <ItemGroup>
     <ClInclude Include="include\callbacks.h" />
     <ClInclude Include="include\camera.h" />
+    <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\light.h" />
     <ClInclude Include="include\matrix.h" />
     <ClInclude Include="include\mesh.h" />
@@ -119,6 +121,8 @@
     <None Include="lighting.vs" />
     <None Include="shader.fs" />
     <None Include="shader.vs" />
+    <None Include="skinning.fs" />
+    <None Include="skinning.vs" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

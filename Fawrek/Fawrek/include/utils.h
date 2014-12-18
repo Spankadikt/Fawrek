@@ -1,4 +1,12 @@
+#ifndef UTILS_H
+#define	UTILS_H
+
+#include <time.h>
 #include <string>
+
+#include "types.h"
+
+using namespace std;
 
 #define PI_f 3.1415926535897932384626433832795f
 #define ToRadian(x) ((x) * PI_f / 180.0f)
@@ -7,7 +15,24 @@
 #define GLCheckError() (glGetError() == GL_NO_ERROR)
 #define ARRAY_SIZE_IN_ELEMENTS(a) (sizeof(a)/sizeof(a[0]))
 #define SAFE_DELETE(p) if (p) { delete p; p = NULL; }
+#define SNPRINTF _snprintf_s
+#define ZERO_MEM(a) memset(a, 0, sizeof(a))
+
+#ifdef WIN32
+#define SNPRINTF _snprintf_s
+#define RANDOM rand
+#define SRANDOM srand((unsigned)time(NULL))
+float fmax(float a, float b);
+#else
+#define SNPRINTF snprintf
+#define RANDOM random
+#define SRANDOM srandom(getpid())
+#endif
 
 using namespace std;
 
 bool ReadFile(const char *_fileName, string &_outFile);
+
+long long GetCurrentTimeMillis();
+
+#endif //UTILS_H
