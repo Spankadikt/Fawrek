@@ -2,6 +2,7 @@
 
 Engine::Engine()
 {
+	startTime = GetCurrentTimeMillis();
 }
 
 float Engine::GetRunningTime()

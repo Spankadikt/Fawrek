@@ -5,12 +5,29 @@
 #include "vector3.h"
 #include "matrix.h"
 
-struct DirectionalLight
+struct BaseLight
 {
     Vector3 Color;
     float AmbientIntensity;
-	Vector3 Direction;
     float DiffuseIntensity;
+
+    BaseLight()
+    {
+        Color = Vector3(0.0f, 0.0f, 0.0f);
+        AmbientIntensity = 0.0f;
+        DiffuseIntensity = 0.0f;
+    }
+
+};
+
+struct DirectionalLight : public BaseLight
+{        
+    Vector3 Direction;
+
+    DirectionalLight()
+    {
+        Direction = Vector3(0.0f, 0.0f, 0.0f);
+    }
 };
 
 class Light : public Shader
@@ -30,7 +47,7 @@ public:
 	void SetEyeWorldPos(const Vector3 _eyeWorldPos);
     void SetMatSpecularIntensity(float _intensity);
     void SetMatSpecularPower(float _power);
-	void SetBoneTransform(uint _index, const Matrix &_transform);
+	void SetBoneTransform(uint _index, const Matrix _transform);
 
 private:
 

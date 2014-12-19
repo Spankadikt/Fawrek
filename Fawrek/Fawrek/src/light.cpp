@@ -28,10 +28,11 @@ bool Light::Init()
     WVPLocation = GetUniformLocation("gWVP");
 	worldMatrixLocation = GetUniformLocation("gWorld");
     samplerLocation = GetUniformLocation("gSampler");
-    dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Color");
-    dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.AmbientIntensity");
+	//eyeWorldPosLocation = GetUniformLocation("gEyeWorldPos");
+    dirLightLocation.Color = GetUniformLocation("gDirectionalLight.Base.Color");
+    dirLightLocation.AmbientIntensity = GetUniformLocation("gDirectionalLight.Base.AmbientIntensity");
 	dirLightLocation.Direction = GetUniformLocation("gDirectionalLight.Direction");
-    dirLightLocation.DiffuseIntensity = GetUniformLocation("gDirectionalLight.DiffuseIntensity");
+    dirLightLocation.DiffuseIntensity = GetUniformLocation("gDirectionalLight.Base.DiffuseIntensity");
 	matSpecularIntensityLocation = GetUniformLocation("gMatSpecularIntensity");
     matSpecularPowerLocation = GetUniformLocation("gSpecularPower");
 
@@ -39,6 +40,7 @@ bool Light::Init()
         WVPLocation == 0xFFFFFFFF ||
         worldMatrixLocation == 0xFFFFFFFF ||
         samplerLocation == 0xFFFFFFFF ||
+		//eyeWorldPosLocation == 0xFFFFFFFF ||
         dirLightLocation.Color == 0xFFFFFFFF ||
         dirLightLocation.DiffuseIntensity == 0xFFFFFFFF ||
         dirLightLocation.Direction == 0xFFFFFFFF ||
@@ -100,8 +102,8 @@ void Light::SetMatSpecularPower(float _power)
     glUniform1f(matSpecularPowerLocation, _power);
 }
 
-void Light::SetBoneTransform(uint _index, const Matrix &_transform)
+void Light::SetBoneTransform(uint _index, const Matrix _transform)
 {
     assert(_index < MAX_BONES);
-	glUniformMatrix4fv(boneLocation[_index], 1, GL_TRUE, (const GLfloat*)_transform.m);       
+	glUniformMatrix4fv(boneLocation[_index], 1, GL_FALSE, &_transform.m[0]);       
 }

@@ -54,6 +54,10 @@ public:
 
 		pLight->Enable();
 		pLight->SetTextureUnit(0);
+		pLight->SetDirectionalLight(directionalLight);
+		//pLight->SetEyeWorldPos(pCamera->pos);
+		pLight->SetMatSpecularIntensity(1.0f);
+		pLight->SetMatSpecularPower(32);
 
 		//pMesh = new Mesh();
 		if (!mesh.LoadMesh("boblampclean.md5mesh")) {
@@ -61,7 +65,8 @@ public:
             return false;            
         }
 
-        //return pMesh->LoadMesh("phoenix_ugv.md2");
+        //return mesh.LoadMesh("phoenix_ugv.md2");
+		return true;
     }
 
     void Run()
@@ -73,6 +78,8 @@ public:
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		pLight->Enable();
+
 		vector<Matrix> Transforms;
                
         float RunningTime = GetRunningTime();
@@ -83,30 +90,26 @@ public:
             pLight->SetBoneTransform(i, Transforms[i]);
         }
 
-		static float Scale = 0.0f;
+		/*static float Scale = 0.0f;
 
-		Scale += 0.01f;
+		Scale += 0.01f;*/
 
 		Matrix modelMatrix = Matrix::Identity;
 
-		float n = 2 * cos(Scale);
-		Vector3 scale = Vector3(0.1f,0.1f,0.1f);
+		//float n = 2 * cos(Scale);
+		Vector3 scale = Vector3(0.3f,0.3f,0.3f);
 		Quaternion rotate = Quaternion(0.0f,0.0f,0.0f,1.0f);
 		Vector3 translate = Vector3(0.0f,0.0f,0.0f);
 
 		modelMatrix.Scale(scale);
 		modelMatrix.Rotate(rotate);
 		modelMatrix.Translate(translate);
-		
+
 		Matrix modelView = pCamera->view * modelMatrix;
 		Matrix viewProjection = pCamera->projection * modelView;
 		
 		pLight->SetWVP(viewProjection);
         pLight->SetWorldMatrix(modelMatrix);
-		pLight->SetDirectionalLight(directionalLight);
-		pLight->SetEyeWorldPos(pCamera->pos);
-		pLight->SetMatSpecularIntensity(1.0f);
-		pLight->SetMatSpecularPower(32);
 
 		mesh.Render();
 
@@ -114,8 +117,6 @@ public:
 	}
 
 private:
-    GLuint VBO;
-    GLuint IBO;
     Light *pLight;
     Camera *pCamera;
 	Mesh mesh;

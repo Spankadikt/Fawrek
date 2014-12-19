@@ -5,6 +5,7 @@
 
 Matrix::Matrix()
 {
+	*this = Matrix::Identity;
 }
 
 Matrix::Matrix(const float _m[16])

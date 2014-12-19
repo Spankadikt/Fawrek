@@ -180,6 +180,9 @@ cmake_install.cmake
 *.pcx
 *.md2
 *.png
+*.tga
+*.md5mesh
+*.md5anim
 Resources/
 Plugins/
 Data/
