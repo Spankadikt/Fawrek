@@ -1,6 +1,7 @@
 #include "mesh.h"
 #include "glew.h"
 #include "assert.h"
+#include "quaternion.h"
 
 #define POSITION_LOCATION    0
 #define TEX_COORD_LOCATION   1
@@ -411,27 +412,32 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const Mat
     const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
     
     if (pNodeAnim) {
-		Matrix matrix;
+		Matrix result;
 
-        // Interpolate scaling and generate scaling transformation matrix
-        aiVector3D Scaling;
-        CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
-        matrix.Scale(Scaling.x, Scaling.y, Scaling.z);
-        
-        // Interpolate rotation and generate rotation transformation matrix
-        aiQuaternion RotationQ;
-        CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim);        
-        //Matrix RotationM = Matrix(RotationQ.GetMatrix());
-		matrix.Rotate(RotationQ.GetMatrix());
 
         // Interpolate translation and generate translation transformation matrix
         aiVector3D Translation;
         CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
-        //Matrix TranslationM;
-        matrix.Translate(Translation.x, Translation.y, Translation.z);
+        Matrix TranslationM;
+        result.Translate(Translation.x, Translation.y, Translation.z);
         
-        // Combine the above transformations
-        NodeTransformation = matrix;
+        // Interpolate rotation and generate rotation transformation matrix
+        aiQuaternion RotationQ;
+        CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim); 
+		Quaternion qTest = Quaternion(RotationQ.x,RotationQ.y,RotationQ.z,RotationQ.w);
+        //Matrix RotationM2 = Matrix(RotationQ.GetMatrix());
+		result.Rotate(qTest);
+
+		
+		// Interpolate scaling and generate scaling transformation matrix
+        aiVector3D Scaling;
+        CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
+        Matrix ScalingM;
+        result.Scale(Scaling.x, Scaling.y, Scaling.z);
+        
+        
+        // set the above combined transformations
+        NodeTransformation = result;
     }
        
     Matrix GlobalTransformation = ParentTransform * NodeTransformation;

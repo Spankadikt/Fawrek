@@ -13,6 +13,17 @@ Vector3::Vector3(float _x, float _y, float _z)
 	z = _z;
 }
 
+// Scalar operation
+Vector3 Vector3::operator*(const float s) const
+{
+	return Vector3(x*s, y*s, z*s);
+}
+
+Vector3 Vector3::operator/(const float s) const
+{
+	return (*this * (1.f / s));
+}
+
 Vector3 Vector3::operator+(const Vector3 &_v)
 {
 	return Vector3(x + _v.x, y + _v.y, z + _v.z);

@@ -103,11 +103,11 @@ Matrix Matrix::Rotate(const Quaternion &_q)
 	return *this;
 }
 
-Matrix Matrix::Rotate(const Matrix &_m)
+/*Matrix Matrix::Rotate(const Matrix &_m)
 {
 	*this = operator*(_m);
 	return *this;
-}
+}*/
 
 Matrix Matrix::Scale(const Vector3 &_s)
 {
@@ -154,4 +154,22 @@ Matrix Matrix::GetInverse() const
 	ret.m[14]=-(ret.m[ 2]*m[12] + ret.m[ 6]*m[13] + ret.m[10]*m[14]);
 
 	return ret;
+}
+
+
+void Matrix::InitScaleTransform(float ScaleX, float ScaleY, float ScaleZ)
+{
+    m[0] = ScaleX; m[4] = 0.0f;   m[8] = 0.0f;   m[12] = 0.0f;
+    m[1] = 0.0f;   m[5] = ScaleY; m[9] = 0.0f;   m[13] = 0.0f;
+    m[2] = 0.0f;   m[6] = 0.0f;   m[10] = ScaleZ; m[14] = 0.0f;
+    m[3] = 0.0f;   m[7] = 0.0f;   m[11] = 0.0f;   m[15] = 1.0f;
+}
+
+
+void Matrix::InitTranslationTransform(float x, float y, float z)
+{
+    m[0] = 1.0f; m[4] = 0.0f; m[8] = 0.0f; m[12] = x;
+    m[1] = 0.0f; m[5] = 1.0f; m[9] = 0.0f; m[13] = y;
+    m[2] = 0.0f; m[6] = 0.0f; m[10] = 1.0f; m[14] = z;
+    m[3] = 0.0f; m[7] = 0.0f; m[11] = 0.0f; m[15] = 1.0f;
 }

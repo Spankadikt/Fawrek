@@ -98,12 +98,14 @@ public:
 
 		//float n = 2 * cos(Scale);
 		Vector3 scale = Vector3(0.3f,0.3f,0.3f);
-		Quaternion rotate = Quaternion(0.0f,0.0f,0.0f,1.0f);
-		Vector3 translate = Vector3(0.0f,0.0f,0.0f);
+		//Quaternion rotate = Quaternion(0.0f,0.0f,0.0f,1.0f);
+		Vector3 vRotate = Vector3(90.0f,0.0f,0.0f);
+		Quaternion qRotate = qRotate.FromEuler(vRotate.x,vRotate.y,vRotate.z);
+		Vector3 translate = Vector3(0.0f,-5.0f,0.0f);
 
-		modelMatrix.Scale(scale);
-		modelMatrix.Rotate(rotate);
 		modelMatrix.Translate(translate);
+		modelMatrix.Rotate(qRotate);
+		modelMatrix.Scale(scale);
 
 		Matrix modelView = pCamera->view * modelMatrix;
 		Matrix viewProjection = pCamera->projection * modelView;

@@ -11,6 +11,9 @@ public:
 	Quaternion();
 	Quaternion(float _x,float _y,float _z,float _w);
 
+	Quaternion FromEuler(float yaw, float pitch, float roll);
+	Quaternion FromMatrix(const Matrix _mat);
+	Vector3 ToEuler() const;
 	Matrix ToMatrix() const;
 };
 

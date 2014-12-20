@@ -28,13 +28,16 @@ public:
 	Matrix Scale(const Vector3 &_s);
 	Matrix Scale(const float _s1,const float _s2,const float _s3);
 	Matrix Rotate(const Quaternion &_q);
-	Matrix Rotate(const Matrix &_m);
+	//Matrix Rotate(const Matrix &_m);
 	Matrix Translate(const Vector3 &_v);
 	Matrix Translate(const float _v1,const float _v2,const float _v3);
 
 	void GetRowMajor(float floatArray[16]);
 	/// The transformation matrix that undoes this transformation.
 	Matrix GetInverse() const;
+
+	void InitTranslationTransform(float x, float y, float z);
+	void InitScaleTransform(float ScaleX, float ScaleY, float ScaleZ);
 
 	void SetZero()
     {
