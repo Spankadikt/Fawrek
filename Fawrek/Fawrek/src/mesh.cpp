@@ -306,7 +306,7 @@ uint Mesh::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
         }
     }
     
-    assert(0);
+    //assert(0);
 
     return 0;
 }
@@ -322,7 +322,7 @@ uint Mesh::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
         }
     }
     
-    assert(0);
+    //assert(0);
 
     return 0;
 }
@@ -338,7 +338,7 @@ uint Mesh::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
         }
     }
     
-    assert(0);
+    //assert(0);
 
     return 0;
 }
@@ -353,7 +353,7 @@ void Mesh::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const 
             
     uint PositionIndex = FindPosition(AnimationTime, pNodeAnim);
     uint NextPositionIndex = (PositionIndex + 1);
-    assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
+    //assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
     float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
     float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
     //assert(Factor >= 0.0f && Factor <= 1.0f);
@@ -374,7 +374,7 @@ void Mesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, cons
     
     uint RotationIndex = FindRotation(AnimationTime, pNodeAnim);
     uint NextRotationIndex = (RotationIndex + 1);
-    assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
+    //assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
     float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
     float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
     //assert(Factor >= 0.0f && Factor <= 1.0f);
@@ -394,7 +394,7 @@ void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const a
 
     uint ScalingIndex = FindScaling(AnimationTime, pNodeAnim);
     uint NextScalingIndex = (ScalingIndex + 1);
-    assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
+    //assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
     float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
     float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
     //assert(Factor >= 0.0f && Factor <= 1.0f);
