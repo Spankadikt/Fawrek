@@ -66,7 +66,7 @@ bool Mesh::LoadMesh(const std::string &_filename)
     
     bool ret = false;
 
-    m_pScene = m_Importer.ReadFile(_filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs);
+    m_pScene = m_Importer.ReadFile(_filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals );//aiProcess_FlipUVs for D3D
     
     if (m_pScene) {  
         m_GlobalInverseTransform = m_pScene->mRootNode->mTransformation;
@@ -247,7 +247,10 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
                 if (p.substr(0, 2) == ".\\") {                    
                     p = p.substr(2, p.size() - 2);
                 }
-                               
+				//hack for absolute texture path...
+				string::size_type SlashIndex = p.find_last_of("/");
+				SlashIndex++;
+				p = p.substr(SlashIndex, p.size()-SlashIndex);
                 string FullPath = Dir + "/" + p;
                     
                 textures[i] = new Texture(FullPath.c_str(),GL_TEXTURE_2D);

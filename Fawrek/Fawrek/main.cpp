@@ -59,7 +59,7 @@ public:
 		pLight->SetMatSpecularIntensity(1.0f);
 		pLight->SetMatSpecularPower(32);
 
-		//pMesh = new Mesh();
+		//pMesh = new Mesh(); //boblampclean.md5mesh
 		if (!mesh.LoadMesh("boblampclean.md5mesh")) {
             printf("Mesh load failed\n");
             return false;            
