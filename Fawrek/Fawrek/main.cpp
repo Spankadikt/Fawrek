@@ -59,8 +59,8 @@ public:
 		pLight->SetMatSpecularIntensity(1.0f);
 		pLight->SetMatSpecularPower(32);
 
-		//pMesh = new Mesh(); //boblampclean.md5mesh
-		if (!mesh.LoadMesh("boblampclean.md5mesh")) {
+		//pMesh = new Mesh(); //boblampclean.md5mesh //marcus.dae //monster.dae
+		if (!mesh.LoadMesh("resources/dwarf1.b3d")) {
             printf("Mesh load failed\n");
             return false;            
         }
@@ -101,7 +101,7 @@ public:
 		//Quaternion rotate = Quaternion(0.0f,0.0f,0.0f,1.0f);
 		Vector3 vRotate = Vector3(90.0f,0.0f,0.0f);
 		Quaternion qRotate = qRotate.FromEuler(vRotate.x,vRotate.y,vRotate.z);
-		Vector3 translate = Vector3(0.0f,-5.0f,0.0f);
+		Vector3 translate = Vector3(0.0f,-15.0f,0.0f);
 
 		modelMatrix.Translate(translate);
 		modelMatrix.Rotate(qRotate);

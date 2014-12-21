@@ -13,11 +13,11 @@ bool Light::Init()
         return false;
     }
 
-    if (!AddShader(GL_VERTEX_SHADER, "skinning.vs")) {
+    if (!AddShader(GL_VERTEX_SHADER, "shaders/skinning.vs")) {
         return false;
     }
 
-    if (!AddShader(GL_FRAGMENT_SHADER, "skinning.fs")) {
+    if (!AddShader(GL_FRAGMENT_SHADER, "shaders/skinning.fs")) {
         return false;
     }
 
