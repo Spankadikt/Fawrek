@@ -36,6 +36,9 @@ public:
     {
         SAFE_DELETE(pLight);
         SAFE_DELETE(pCamera);
+		SAFE_DELETE(pModel);
+		SAFE_DELETE(pModel2);
+		SAFE_DELETE(pModel3);
     }
 
     bool Init()
@@ -55,17 +58,13 @@ public:
 		pLight->Enable();
 		pLight->SetTextureUnit(0);
 		pLight->SetDirectionalLight(directionalLight);
-		//pLight->SetEyeWorldPos(pCamera->pos);
 		pLight->SetMatSpecularIntensity(1.0f);
 		pLight->SetMatSpecularPower(32);
 
-		//pMesh = new Mesh(); //boblampclean.md5mesh //marcus.dae //monster.dae
-		if (!mesh.LoadMesh("resources/dwarf1.b3d")) {
-            printf("Mesh load failed\n");
-            return false;            
-        }
+		pModel = new Model("resources/ninja.b3d",Vector3(-15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f));
+		pModel2 = new Model("resources/dwarf1.b3d",Vector3(15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
+		pModel3 = new Model("resources/boblampclean.md5mesh",Vector3(0.0f,-15.0f,0.0f),Vector3(90.0f,0.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
 
-        //return mesh.LoadMesh("phoenix_ugv.md2");
 		return true;
     }
 
@@ -78,42 +77,11 @@ public:
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		pLight->Enable();
+		float runningTime = GetRunningTime();
 
-		vector<Matrix> Transforms;
-               
-        float RunningTime = GetRunningTime();
-
-        mesh.BoneTransform(RunningTime, Transforms);
-        
-        for (uint i = 0 ; i < Transforms.size() ; i++) {
-            pLight->SetBoneTransform(i, Transforms[i]);
-        }
-
-		/*static float Scale = 0.0f;
-
-		Scale += 0.01f;*/
-
-		Matrix modelMatrix = Matrix::Identity;
-
-		//float n = 2 * cos(Scale);
-		Vector3 scale = Vector3(0.3f,0.3f,0.3f);
-		//Quaternion rotate = Quaternion(0.0f,0.0f,0.0f,1.0f);
-		Vector3 vRotate = Vector3(90.0f,0.0f,0.0f);
-		Quaternion qRotate = qRotate.FromEuler(vRotate.x,vRotate.y,vRotate.z);
-		Vector3 translate = Vector3(0.0f,-15.0f,0.0f);
-
-		modelMatrix.Translate(translate);
-		modelMatrix.Rotate(qRotate);
-		modelMatrix.Scale(scale);
-
-		Matrix modelView = pCamera->view * modelMatrix;
-		Matrix viewProjection = pCamera->projection * modelView;
-		
-		pLight->SetWVP(viewProjection);
-        pLight->SetWorldMatrix(modelMatrix);
-
-		mesh.Render();
+		pModel->Render(pCamera,pLight,runningTime);
+		pModel2->Render(pCamera,pLight,runningTime);
+		pModel3->Render(pCamera,pLight,runningTime);
 
 		glutSwapBuffers();
 	}
@@ -121,7 +89,9 @@ public:
 private:
     Light *pLight;
     Camera *pCamera;
-	Mesh mesh;
+	Model *pModel;
+	Model *pModel2;
+	Model *pModel3;
     DirectionalLight directionalLight;
 };
 

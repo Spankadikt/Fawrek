@@ -1,5 +1,5 @@
-#ifndef ENGINE__H
-#define	ENGINE_COMMON_H
+#ifndef ENGINE_H
+#define	ENGINE_H
 
 #define COLOR_TEXTURE_UNIT              GL_TEXTURE0
 #define COLOR_TEXTURE_UNIT_INDEX        0

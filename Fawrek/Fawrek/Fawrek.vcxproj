@@ -116,14 +116,6 @@
     <ClInclude Include="include\vertex.h" />
     <ClInclude Include="include\window.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="lighting.fs" />
-    <None Include="lighting.vs" />
-    <None Include="shader.fs" />
-    <None Include="shader.vs" />
-    <None Include="skinning.fs" />
-    <None Include="skinning.vs" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

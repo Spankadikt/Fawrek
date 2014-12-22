@@ -111,12 +111,4 @@
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="shader.fs" />
-    <None Include="shader.vs" />
-    <None Include="lighting.fs" />
-    <None Include="lighting.vs" />
-    <None Include="skinning.fs" />
-    <None Include="skinning.vs" />
-  </ItemGroup>
 </Project>

@@ -252,6 +252,7 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 				string::size_type SlashIndex = p.find_last_of("/");
 				SlashIndex++;
 				p = p.substr(SlashIndex, p.size()-SlashIndex);
+				//end hack
                 string FullPath = Dir + "/" + p;
                     
                 textures[i] = new Texture(FullPath.c_str(),GL_TEXTURE_2D);
@@ -305,8 +306,6 @@ uint Mesh::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
             return i;
         }
     }
-    
-    //assert(0);
 
     return 0;
 }
@@ -321,8 +320,6 @@ uint Mesh::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
             return i;
         }
     }
-    
-    //assert(0);
 
     return 0;
 }
@@ -337,8 +334,6 @@ uint Mesh::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
             return i;
         }
     }
-    
-    //assert(0);
 
     return 0;
 }
@@ -353,10 +348,10 @@ void Mesh::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const 
             
     uint PositionIndex = FindPosition(AnimationTime, pNodeAnim);
     uint NextPositionIndex = (PositionIndex + 1);
-    //assert(NextPositionIndex < pNodeAnim->mNumPositionKeys);
+
     float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
     float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
-    //assert(Factor >= 0.0f && Factor <= 1.0f);
+
     const aiVector3D& Start = pNodeAnim->mPositionKeys[PositionIndex].mValue;
     const aiVector3D& End = pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
     aiVector3D Delta = End - Start;
@@ -374,10 +369,10 @@ void Mesh::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, cons
     
     uint RotationIndex = FindRotation(AnimationTime, pNodeAnim);
     uint NextRotationIndex = (RotationIndex + 1);
-    //assert(NextRotationIndex < pNodeAnim->mNumRotationKeys);
+
     float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
     float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
-    //assert(Factor >= 0.0f && Factor <= 1.0f);
+
     const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
     const aiQuaternion& EndRotationQ   = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;    
     aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, Factor);
@@ -394,10 +389,10 @@ void Mesh::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const a
 
     uint ScalingIndex = FindScaling(AnimationTime, pNodeAnim);
     uint NextScalingIndex = (ScalingIndex + 1);
-    //assert(NextScalingIndex < pNodeAnim->mNumScalingKeys);
+
     float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
     float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
-    //assert(Factor >= 0.0f && Factor <= 1.0f);
+
     const aiVector3D& Start = pNodeAnim->mScalingKeys[ScalingIndex].mValue;
     const aiVector3D& End   = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
     aiVector3D Delta = End - Start;
@@ -429,7 +424,6 @@ void Mesh::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const Mat
         aiQuaternion RotationQ;
         CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim); 
 		Quaternion qTest = Quaternion(RotationQ.x,RotationQ.y,RotationQ.z,RotationQ.w);
-        //Matrix RotationM2 = Matrix(RotationQ.GetMatrix());
 		result.Rotate(qTest);
 
 		
