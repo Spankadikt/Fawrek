@@ -2,24 +2,32 @@
 
 Model::Model(const std::string &_filename)
 {
-	if (!mesh.LoadMesh(_filename)) {
-        printf("Mesh load failed\n");   
+	m_pScene = NULL;
+
+	if (!ModelInit(_filename)) {
+        printf("Model init failed\n");   
     }
 
 	vTranslate = Vector3(0.0f,0.0f,0.0f);
 	vRotate = Vector3(0.0f,0.0f,0.0f);
 	vScale = Vector3(1.0f,1.0f,1.0f);
+
+
 }
 
 Model::Model(const std::string &_filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale)
 {
-	if (!mesh.LoadMesh(_filename)) {
-        printf("Mesh load failed\n");   
+	m_pScene = NULL;
+
+	if (!ModelInit(_filename)) {
+        printf("Model init failed\n");   
     }
 
 	vTranslate = _vTranslate;
 	vRotate = _vRotate;
 	vScale = _vScale;
+
+	
 }
 
 Model::~Model()
@@ -27,13 +35,38 @@ Model::~Model()
 
 }
 
+bool Model::ModelInit(const std::string &_filename)
+{
+
+	pMesh = new Mesh(m_pScene);
+
+	bool ret = false;
+
+    m_pScene = m_Importer.ReadFile(_filename.c_str(), aiProcess_Triangulate | aiProcess_GenSmoothNormals );//aiProcess_FlipUVs for D3D
+    
+    if (m_pScene) {  
+        m_GlobalInverseTransform = m_pScene->mRootNode->mTransformation;
+        m_GlobalInverseTransform.GetInverse();
+        ret = pMesh->InitFromScene(m_pScene, _filename);
+    }
+    else {
+        printf("Error parsing '%s': '%s'\n", _filename.c_str(), m_Importer.GetErrorString());
+    }
+
+
+	pAnimation = new Animation(m_pScene,pMesh,m_GlobalInverseTransform);
+
+	return ret;
+}
+
+
 void Model::Render(Camera *_pCamera, Light *_pLight, float _runningTime)
 {
 	_pLight->Enable();
 
 	vector<Matrix> Transforms;
 
-    mesh.BoneTransform(_runningTime, Transforms);
+    pAnimation->BoneTransform(_runningTime, Transforms);
         
     for (uint i = 0 ; i < Transforms.size() ; i++) {
         _pLight->SetBoneTransform(i, Transforms[i]);
@@ -52,6 +85,6 @@ void Model::Render(Camera *_pCamera, Light *_pLight, float _runningTime)
 	_pLight->SetWVP(viewProjection);
     _pLight->SetWorldMatrix(modelMatrix);
 
-	mesh.Render();
+	pMesh->Render();
 }
 

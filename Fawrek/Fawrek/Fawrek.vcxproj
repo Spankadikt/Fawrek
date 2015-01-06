@@ -83,6 +83,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\light.cpp" />
@@ -91,6 +92,7 @@
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\quaternion.cpp" />
     <ClCompile Include="src\shader.cpp" />
+    <ClCompile Include="src\skeleton.cpp" />
     <ClCompile Include="src\texture.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\vector2.cpp" />
@@ -99,6 +101,7 @@
     <ClCompile Include="src\window.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="include\animation.h" />
     <ClInclude Include="include\callbacks.h" />
     <ClInclude Include="include\camera.h" />
     <ClInclude Include="include\engine.h" />
@@ -108,6 +111,7 @@
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\quaternion.h" />
     <ClInclude Include="include\shader.h" />
+    <ClInclude Include="include\skeleton.h" />
     <ClInclude Include="include\texture.h" />
     <ClInclude Include="include\types.h" />
     <ClInclude Include="include\utils.h" />
