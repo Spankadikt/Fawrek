@@ -32,13 +32,13 @@ Model::Model(const std::string &_filename, Vector3 _vTranslate, Vector3 _vRotate
 
 Model::~Model()
 {
-
+	SAFE_DELETE(pMesh);
+	SAFE_DELETE(pAnimation);
 }
 
 bool Model::ModelInit(const std::string &_filename)
 {
-
-	pMesh = new Mesh(m_pScene);
+	pMesh = new Mesh();
 
 	bool ret = false;
 
