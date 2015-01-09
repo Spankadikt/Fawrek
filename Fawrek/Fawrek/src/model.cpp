@@ -54,7 +54,7 @@ bool Model::ModelInit(const std::string &_filename)
     }
 
 
-	pAnimation = new Animation(m_pScene,pMesh,m_GlobalInverseTransform);
+	pAnimation = new Animation(m_pScene,pMesh,m_GlobalInverseTransform,1.0f);
 
 	return ret;
 }

@@ -1,16 +1,19 @@
 #include <assert.h>
 
 #include "animation.h"
-
 #include "quaternion.h"
+
 #include "glew.h"
 
 
-Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform)
+Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform, float _animationSpeed)
 {
 	pScene = _pScene;
 	pMesh = _pMesh;
 	m_GlobalInverseTransform = _globalInverseTransform;
+	animationSpeed = _animationSpeed;
+
+    LoadClips();
 }
 
 Animation::~Animation()
@@ -18,6 +21,23 @@ Animation::~Animation()
 
 }
 
+void Animation::LoadClips()
+{
+    tinyxml2::XMLDocument doc;
+    doc.LoadFile("resources/animation_ninja.xml");
+
+	/*tinyxml2::XMLElement* animElement = doc.FirstChildElement()->FirstChildElement( "ANIMATION" );
+	animElement->QueryIntAttribute( "nb_clip", &nbClip );*/
+
+    tinyxml2::XMLElement* clipElement = doc.FirstChildElement()->FirstChildElement( "CLIP" );
+    float startTime;
+    clipElement->QueryFloatAttribute( "start_time", &startTime );
+	float endTime;
+    clipElement->QueryFloatAttribute( "end_time", &endTime );
+
+    Clip clip(startTime,endTime);
+    clips.push_back(clip);
+}
 
 uint Animation::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {    
@@ -177,8 +197,11 @@ void Animation::BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms)
 	if(pScene->HasAnimations())
 	{
 		float TicksPerSecond = (float)(pScene->mAnimations[0]->mTicksPerSecond != 0 ? pScene->mAnimations[0]->mTicksPerSecond : 25.0f);
+		TicksPerSecond = TicksPerSecond * animationSpeed;
 		float TimeInTicks = TimeInSeconds * TicksPerSecond;
-		float AnimationTime = fmod(TimeInTicks, (float)pScene->mAnimations[0]->mDuration);
+		//float AnimationTime = fmod(TimeInTicks, (float)pScene->mAnimations[0]->mDuration);
+        float AnimationTime = fmod(TimeInTicks, clips[0].GetClipLength());
+        AnimationTime = clips[0].startTime + AnimationTime;
 
 		ReadNodeHeirarchy(AnimationTime, pScene->mRootNode, Identity);
 	}

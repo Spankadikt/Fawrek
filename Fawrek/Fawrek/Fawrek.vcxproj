@@ -94,6 +94,7 @@
     <ClCompile Include="src\shader.cpp" />
     <ClCompile Include="src\skeleton.cpp" />
     <ClCompile Include="src\texture.cpp" />
+    <ClCompile Include="src\tinyxml2.cpp" />
     <ClCompile Include="src\utils.cpp" />
     <ClCompile Include="src\vector2.cpp" />
     <ClCompile Include="src\vector3.cpp" />
@@ -113,6 +114,7 @@
     <ClInclude Include="include\shader.h" />
     <ClInclude Include="include\skeleton.h" />
     <ClInclude Include="include\texture.h" />
+    <ClInclude Include="include\tinyxml2.h" />
     <ClInclude Include="include\types.h" />
     <ClInclude Include="include\utils.h" />
     <ClInclude Include="include\vector2.h" />
