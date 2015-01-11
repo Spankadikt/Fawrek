@@ -32,12 +32,15 @@ public:
     const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
     void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const Matrix& ParentTransform);
 	void BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms);
+	void SetClipToPlay(uint num);
 
 	float animationSpeed;
 
 private:
 	Mesh *pMesh;
 	const aiScene *pScene;
+
+	uint numClipToPlay;
 
 	Matrix m_GlobalInverseTransform;
 

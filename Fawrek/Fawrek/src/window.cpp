@@ -27,11 +27,16 @@ static void IdleCB()
     pCallbacks->RenderSceneCB();
 }
 
+static void KeyboardManager(unsigned char key, int x, int y)
+{
+	pCallbacks->KeyboardManager(key, x, y);
+}
 
 static void InitCallbacks()
 {
     glutDisplayFunc(RenderSceneCB);
     glutIdleFunc(IdleCB);
+	glutKeyboardFunc(KeyboardManager);
 }
 
 

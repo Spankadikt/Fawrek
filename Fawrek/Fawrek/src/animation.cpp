@@ -14,6 +14,7 @@ Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverse
 	animationSpeed = _animationSpeed;
 
     LoadClips();
+	SetClipToPlay(0);
 }
 
 Animation::~Animation()
@@ -26,17 +27,26 @@ void Animation::LoadClips()
     tinyxml2::XMLDocument doc;
     doc.LoadFile("resources/animation_ninja.xml");
 
-	/*tinyxml2::XMLElement* animElement = doc.FirstChildElement()->FirstChildElement( "ANIMATION" );
-	animElement->QueryIntAttribute( "nb_clip", &nbClip );*/
+	tinyxml2::XMLElement* animElement = doc.FirstChildElement( "ANIMATION" );
+	animElement->QueryIntAttribute( "nb_clip", &nbClip );
 
-    tinyxml2::XMLElement* clipElement = doc.FirstChildElement()->FirstChildElement( "CLIP" );
-    float startTime;
-    clipElement->QueryFloatAttribute( "start_time", &startTime );
-	float endTime;
-    clipElement->QueryFloatAttribute( "end_time", &endTime );
+	tinyxml2::XMLNode* child;
+	for( child = animElement->FirstChild(); child; child = child->NextSibling() )
+	{
+		//tinyxml2::XMLElement* clipElement = doc.FirstChildElement()->FirstChildElement( "CLIP" );
+		float startTime;
+		child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
+		float endTime;
+		child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
 
-    Clip clip(startTime,endTime);
-    clips.push_back(clip);
+		Clip clip(startTime,endTime);
+		clips.push_back(clip);
+	}
+}
+
+void Animation::SetClipToPlay(uint num)
+{
+	numClipToPlay = num;
 }
 
 uint Animation::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
@@ -200,8 +210,8 @@ void Animation::BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms)
 		TicksPerSecond = TicksPerSecond * animationSpeed;
 		float TimeInTicks = TimeInSeconds * TicksPerSecond;
 		//float AnimationTime = fmod(TimeInTicks, (float)pScene->mAnimations[0]->mDuration);
-        float AnimationTime = fmod(TimeInTicks, clips[0].GetClipLength());
-        AnimationTime = clips[0].startTime + AnimationTime;
+        float AnimationTime = fmod(TimeInTicks, clips[numClipToPlay].GetClipLength());
+        AnimationTime = clips[numClipToPlay].startTime + AnimationTime;
 
 		ReadNodeHeirarchy(AnimationTime, pScene->mRootNode, Identity);
 	}

@@ -5,6 +5,7 @@ class ICallbacks
 {
 public:
     virtual void RenderSceneCB() {};
+	virtual void KeyboardManager(unsigned char key, int x, int y) {};
 };
 
 

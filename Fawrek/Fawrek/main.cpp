@@ -37,8 +37,8 @@ public:
         SAFE_DELETE(pLight);
         SAFE_DELETE(pCamera);
 		SAFE_DELETE(pModel);
-		SAFE_DELETE(pModel2);
-		SAFE_DELETE(pModel3);
+		//SAFE_DELETE(pModel2);
+		//SAFE_DELETE(pModel3);
     }
 
     bool Init()
@@ -61,9 +61,10 @@ public:
 		pLight->SetMatSpecularIntensity(1.0f);
 		pLight->SetMatSpecularPower(32);
 
-		pModel = new Model("resources/ninja.b3d",Vector3(-15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f));
-		pModel2 = new Model("resources/dwarf1.b3d",Vector3(15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
-		pModel3 = new Model("resources/boblampclean.md5mesh",Vector3(0.0f,-15.0f,0.0f),Vector3(90.0f,0.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
+		pModel = new Model("resources/ninja.b3d",Vector3(0.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f));
+		pModel->pAnimation->SetClipToPlay(0);
+		//pModel2 = new Model("resources/dwarf1.b3d",Vector3(15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
+		//pModel3 = new Model("resources/boblampclean.md5mesh",Vector3(0.0f,-15.0f,0.0f),Vector3(90.0f,0.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
 
 		return true;
     }
@@ -73,17 +74,35 @@ public:
         GLUTBackendRun(this);
     }
 
-	void RenderSceneCB()
+	virtual void RenderSceneCB()
 	{
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 		float runningTime = GetRunningTime();
 
 		pModel->Render(pCamera,pLight,runningTime);
-		pModel2->Render(pCamera,pLight,runningTime);
-		pModel3->Render(pCamera,pLight,runningTime);
+		//pModel2->Render(pCamera,pLight,runningTime);
+		//pModel3->Render(pCamera,pLight,runningTime);
 
 		glutSwapBuffers();
+	}
+
+	virtual void KeyboardManager(unsigned char key, int x, int y)
+	{	
+		switch (key)
+		{
+		case 'a':
+			pModel->pAnimation->SetClipToPlay(0);
+			break;
+		case 'z':
+			pModel->pAnimation->SetClipToPlay(1);
+			break;
+		case ' ':
+			pModel->pAnimation->SetClipToPlay(2);
+			break;
+		default:
+			break;
+		}	 
 	}
 
 private:
