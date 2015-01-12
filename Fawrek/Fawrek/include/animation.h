@@ -9,6 +9,7 @@
 #include "skeleton.h"
 #include "mesh.h"
 #include "tinyxml2.h"
+#include "clip.h"
 
 #include "Importer.hpp"
 #include "scene.h"
@@ -18,7 +19,7 @@ class Animation
 {
 
 public:
-	Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform, float _animationSpeed);
+	Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform);
 	~Animation();
 
 	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
@@ -30,36 +31,24 @@ public:
     uint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
 
     const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
-    void ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const Matrix& ParentTransform);
+    void ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const Matrix& ParentTransform);
 	void BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms);
-	void SetClipToPlay(uint num);
+	
+    void SetCurrentClip(uint num);
+    void SetCurrentClipAndPlay(uint num);
+    Clip *GetCurrentClip();
 
-	float animationSpeed;
+    void PlayClip();
+
+    const aiScene *pScene;
 
 private:
 	Mesh *pMesh;
-	const aiScene *pScene;
+
 
 	uint numClipToPlay;
 
 	Matrix m_GlobalInverseTransform;
-
-    struct Clip
-    {
-	    float startTime;
-	    float endTime;        
-
-	    Clip(float _startTime, float _endTime)
-	    {
-            startTime = _startTime;
-            endTime = _endTime;
-	    }
-
-        float GetClipLength()
-        {
-            return endTime - startTime;
-        }
-    };
 
     void LoadClips();
     int nbClip;

@@ -85,6 +85,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\camera.cpp" />
+    <ClCompile Include="src\clip.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\light.cpp" />
     <ClCompile Include="src\matrix.cpp" />
@@ -105,6 +106,7 @@
     <ClInclude Include="include\animation.h" />
     <ClInclude Include="include\callbacks.h" />
     <ClInclude Include="include\camera.h" />
+    <ClInclude Include="include\clip.h" />
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\light.h" />
     <ClInclude Include="include\matrix.h" />

@@ -62,7 +62,6 @@ public:
 		pLight->SetMatSpecularPower(32);
 
 		pModel = new Model("resources/ninja.b3d",Vector3(0.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f));
-		pModel->pAnimation->SetClipToPlay(0);
 		//pModel2 = new Model("resources/dwarf1.b3d",Vector3(15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
 		//pModel3 = new Model("resources/boblampclean.md5mesh",Vector3(0.0f,-15.0f,0.0f),Vector3(90.0f,0.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
 
@@ -92,13 +91,13 @@ public:
 		switch (key)
 		{
 		case 'a':
-			pModel->pAnimation->SetClipToPlay(0);
+			pModel->pAnimation->SetCurrentClipAndPlay(0);
 			break;
 		case 'z':
-			pModel->pAnimation->SetClipToPlay(1);
+			pModel->pAnimation->SetCurrentClipAndPlay(1);
 			break;
 		case ' ':
-			pModel->pAnimation->SetClipToPlay(2);
+			pModel->pAnimation->SetCurrentClipAndPlay(2);
 			break;
 		default:
 			break;
@@ -109,8 +108,8 @@ private:
     Light *pLight;
     Camera *pCamera;
 	Model *pModel;
-	Model *pModel2;
-	Model *pModel3;
+	//Model *pModel2;
+	//Model *pModel3;
     DirectionalLight directionalLight;
 };
 

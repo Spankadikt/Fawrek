@@ -6,15 +6,17 @@
 #include "glew.h"
 
 
-Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform, float _animationSpeed)
+Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform)
 {
 	pScene = _pScene;
 	pMesh = _pMesh;
 	m_GlobalInverseTransform = _globalInverseTransform;
-	animationSpeed = _animationSpeed;
 
-    LoadClips();
-	SetClipToPlay(0);
+    if(pScene->HasAnimations())
+    {
+        LoadClips();
+	    SetCurrentClipAndPlay(0);
+    }
 }
 
 Animation::~Animation()
@@ -33,21 +35,34 @@ void Animation::LoadClips()
 	tinyxml2::XMLNode* child;
 	for( child = animElement->FirstChild(); child; child = child->NextSibling() )
 	{
-		//tinyxml2::XMLElement* clipElement = doc.FirstChildElement()->FirstChildElement( "CLIP" );
 		float startTime;
 		child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
 		float endTime;
 		child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
+        bool loop;
+        child->ToElement()->QueryBoolAttribute( "loop", &loop );
 
-		Clip clip(startTime,endTime);
+		Clip clip(this,startTime,endTime,loop);
 		clips.push_back(clip);
 	}
 }
 
-void Animation::SetClipToPlay(uint num)
+void Animation::SetCurrentClip(uint num)
 {
 	numClipToPlay = num;
 }
+
+void Animation::SetCurrentClipAndPlay(uint num)
+{
+	numClipToPlay = num;
+    GetCurrentClip()->Play();
+}
+
+Clip* Animation::GetCurrentClip()
+{
+    return &clips[numClipToPlay];
+}
+
 
 uint Animation::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {    
@@ -150,7 +165,7 @@ void Animation::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, co
 }
 
 
-void Animation::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, const Matrix& ParentTransform)
+void Animation::ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const Matrix& ParentTransform)
 {    
     string NodeName(pNode->mName.data);
 	
@@ -196,7 +211,7 @@ void Animation::ReadNodeHeirarchy(float AnimationTime, const aiNode* pNode, cons
     }
     
     for (uint i = 0 ; i < pNode->mNumChildren ; i++) {
-        ReadNodeHeirarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
+        ReadNodeHierarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
     }
 }
 
@@ -204,16 +219,10 @@ void Animation::BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms)
 {
 	Matrix Identity = Matrix::Identity;
     
-	if(pScene->HasAnimations())
-	{
-		float TicksPerSecond = (float)(pScene->mAnimations[0]->mTicksPerSecond != 0 ? pScene->mAnimations[0]->mTicksPerSecond : 25.0f);
-		TicksPerSecond = TicksPerSecond * animationSpeed;
-		float TimeInTicks = TimeInSeconds * TicksPerSecond;
-		//float AnimationTime = fmod(TimeInTicks, (float)pScene->mAnimations[0]->mDuration);
-        float AnimationTime = fmod(TimeInTicks, clips[numClipToPlay].GetClipLength());
-        AnimationTime = clips[numClipToPlay].startTime + AnimationTime;
-
-		ReadNodeHeirarchy(AnimationTime, pScene->mRootNode, Identity);
+    if(pScene->HasAnimations() && GetCurrentClip()->state == Clip::ClipState::PLAY)
+	{    
+        GetCurrentClip()->SetClipCurrentTime(TimeInSeconds);
+        ReadNodeHierarchy(GetCurrentClip()->GetClipCurrentTime(), pScene->mRootNode, Identity);
 	}
 
     Transforms.resize(pMesh->pSkeleton->m_NumBones);
