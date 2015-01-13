@@ -11,12 +11,6 @@ Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverse
 	pScene = _pScene;
 	pMesh = _pMesh;
 	m_GlobalInverseTransform = _globalInverseTransform;
-
-    if(pScene->HasAnimations())
-    {
-        LoadClips();
-	    SetCurrentClipAndPlay(0);
-    }
 }
 
 Animation::~Animation()
@@ -24,27 +18,35 @@ Animation::~Animation()
 
 }
 
-void Animation::LoadClips()
+void Animation::LoadClips(const std::string &_animdata_filename)
 {
-    tinyxml2::XMLDocument doc;
-    doc.LoadFile("resources/animation_ninja.xml");
-
-	tinyxml2::XMLElement* animElement = doc.FirstChildElement( "ANIMATION" );
-	animElement->QueryIntAttribute( "nb_clip", &nbClip );
-
-	tinyxml2::XMLNode* child;
-	for( child = animElement->FirstChild(); child; child = child->NextSibling() )
-	{
-		float startTime;
-		child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
-		float endTime;
-		child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
-        bool loop;
-        child->ToElement()->QueryBoolAttribute( "loop", &loop );
-
-		Clip clip(this,startTime,endTime,loop);
+    if(_animdata_filename.empty())
+    {
+        Clip clip(this,0,(float)pScene->mAnimations[0]->mDuration,false);
 		clips.push_back(clip);
-	}
+    }
+    else
+    {
+        tinyxml2::XMLDocument doc;
+        doc.LoadFile(_animdata_filename.c_str());
+
+	    tinyxml2::XMLElement* animElement = doc.FirstChildElement( "ANIMATION" );
+	    animElement->QueryIntAttribute( "nb_clip", &nbClip );
+
+	    tinyxml2::XMLNode* child;
+	    for( child = animElement->FirstChild(); child; child = child->NextSibling() )
+	    {
+		    float startTime;
+		    child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
+		    float endTime;
+		    child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
+            bool loop;
+            child->ToElement()->QueryBoolAttribute( "loop", &loop );
+
+		    Clip clip(this,startTime,endTime,loop);
+		    clips.push_back(clip);
+	    }
+    }
 }
 
 void Animation::SetCurrentClip(uint num)

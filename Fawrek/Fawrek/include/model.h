@@ -16,7 +16,7 @@ class Model
 {
 public:
 	Model(const string &_filename);
-	Model(const string &_filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale);
+	Model(const string &_filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string &_animdata_filename = "");
 	~Model();
 
 	void Render(Camera *_camera, Light *_shader, float _runningTime);
@@ -35,7 +35,7 @@ public:
 	Animation *pAnimation;
 
 private:
-	bool ModelInit(const string &_filename);
+	bool ModelInit(const string &_filename, const std::string &_animdata_filename = "");
 };
 
 #endif //MESH_H

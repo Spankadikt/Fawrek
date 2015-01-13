@@ -61,7 +61,8 @@ public:
 		pLight->SetMatSpecularIntensity(1.0f);
 		pLight->SetMatSpecularPower(32);
 
-		pModel = new Model("resources/ninja.b3d",Vector3(0.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f));
+		pModel = new Model("resources/ninja.b3d",Vector3(0.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f),"resources/animation_ninja.xml");
+        pModel->pAnimation->SetCurrentClipAndPlay(0);
 		//pModel2 = new Model("resources/dwarf1.b3d",Vector3(15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
 		//pModel3 = new Model("resources/boblampclean.md5mesh",Vector3(0.0f,-15.0f,0.0f),Vector3(90.0f,0.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
 

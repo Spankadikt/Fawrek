@@ -15,11 +15,11 @@ Model::Model(const std::string &_filename)
 
 }
 
-Model::Model(const std::string &_filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale)
+Model::Model(const std::string &_filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string &_animdata_filename)
 {
 	m_pScene = NULL;
 
-	if (!ModelInit(_filename)) {
+    if (!ModelInit(_filename,_animdata_filename)) {
         printf("Model init failed\n");   
     }
 
@@ -36,7 +36,7 @@ Model::~Model()
 	SAFE_DELETE(pAnimation);
 }
 
-bool Model::ModelInit(const std::string &_filename)
+bool Model::ModelInit(const std::string &_filename, const std::string &_animdata_filename)
 {
 	pMesh = new Mesh();
 
@@ -53,8 +53,11 @@ bool Model::ModelInit(const std::string &_filename)
         printf("Error parsing '%s': '%s'\n", _filename.c_str(), m_Importer.GetErrorString());
     }
 
-
 	pAnimation = new Animation(m_pScene,pMesh,m_GlobalInverseTransform);
+    if(m_pScene->HasAnimations())
+    {
+        pAnimation->LoadClips(_animdata_filename);
+    }
 
 	return ret;
 }

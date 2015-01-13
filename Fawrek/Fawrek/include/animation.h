@@ -38,6 +38,7 @@ public:
     void SetCurrentClipAndPlay(uint num);
     Clip *GetCurrentClip();
 
+    void LoadClips(const std::string &_filename);
     void PlayClip();
 
     const aiScene *pScene;
@@ -50,7 +51,6 @@ private:
 
 	Matrix m_GlobalInverseTransform;
 
-    void LoadClips();
     int nbClip;
     vector<Clip> clips;
 };
