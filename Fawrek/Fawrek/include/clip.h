@@ -6,6 +6,9 @@ class Animation;
 class Clip
 {
 public:
+	
+	Clip();
+	Clip(Clip &&clip);
 
     enum ClipState
     {
@@ -13,6 +16,7 @@ public:
         PAUSE,
         STOP
     };
+
 
     Animation *animation;
 

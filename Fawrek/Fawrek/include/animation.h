@@ -31,12 +31,18 @@ public:
     uint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
 
     const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
-    void ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const Matrix& ParentTransform);
+    void ReadNodeHierarchy(const aiNode* pNode, const Matrix& ParentTransform, bool _crossFade);
 	void BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms);
+    Matrix CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFade);
 	
-    void SetCurrentClip(uint num);
-    void SetCurrentClipAndPlay(uint num);
-    Clip *GetCurrentClip();
+    void SetCurrentClip(Clip *_clip);
+    //void SetCurrentClipAndPlay(int num);
+    Clip &GetCurrentClip();
+    //void SetNextClip(int num);
+    void SetNextClipAndPlay(int num);
+    Clip &GetNextClip();
+
+	void InitCrossfade();
 
     void LoadClips(const std::string &_filename);
     void PlayClip();
@@ -46,8 +52,11 @@ public:
 private:
 	Mesh *pMesh;
 
+	Clip *currentClip;
+    Clip *nextClip;
 
-	uint numClipToPlay;
+    float weight;
+	float startCrossfade;
 
 	Matrix m_GlobalInverseTransform;
 

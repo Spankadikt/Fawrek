@@ -24,12 +24,12 @@ Vector3 Vector3::operator/(const float s) const
 	return (*this * (1.f / s));
 }
 
-Vector3 Vector3::operator+(const Vector3 &_v)
+Vector3 Vector3::operator+(const Vector3 &_v) const
 {
 	return Vector3(x + _v.x, y + _v.y, z + _v.z);
 }
 
-Vector3 Vector3::operator-(const Vector3 &_v)
+Vector3 Vector3::operator-(const Vector3 &_v) const
 {
 	return Vector3(x - _v.x, y - _v.y, z - _v.z);
 }
@@ -103,4 +103,11 @@ Vector3 Vector3::Normalize() const
 float Vector3::Dot(const Vector3 &u, const Vector3 &v)
 {
 	return u.x*v.x + u.y*v.y + u.z*v.z;
+}
+
+Vector3 Vector3::Lerp(const Vector3 &from, const Vector3 &to, float t)
+{
+	Vector3 ret;
+	ret = from + (to - from)*t;
+	return ret;
 }

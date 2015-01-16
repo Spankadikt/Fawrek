@@ -36,6 +36,8 @@ public:
 	/// The transformation matrix that undoes this transformation.
 	Matrix GetInverse() const;
 
+    Matrix SetIdentity(float _value);
+
 	void InitTranslationTransform(float x, float y, float z);
 	void InitScaleTransform(float ScaleX, float ScaleY, float ScaleZ);
 

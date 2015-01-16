@@ -191,3 +191,105 @@ Matrix Quaternion::ToMatrix() const
 
 	return result;
 }
+
+/** Generate a quaternion by spherically-linearly interpolating between the poses
+	\p from	and \p to.
+	\param from The source \p from quaternion
+	\param to The source \p to quaternion
+	\param t In the range of 0 to 1, this value specifies how much to
+		interpolate from the \p from quaternion to the \p to quaternion.
+*/
+Quaternion Quaternion::Slerp(const Quaternion &from, const Quaternion &to, float t)
+{
+	// Most of this code is optimized for speed and not for readability
+	// slerp(p,q,t) = (p*sin((1-t)*omega) + q*sin(t*omega)) / sin(omega)
+	Quaternion ret;
+	float to1[4];
+	float omega, cosom, sinom;
+	float scale0, scale1;
+	
+	// cheap cosine (quaternion dot product)
+	// calc cosine
+	cosom = from.x*to.x + from.y*to.y + from.z*to.z + from.w*to.w;
+	// adjust signs (if necessary)
+	if (cosom < 0.0)
+	{
+		cosom = -cosom;
+		to1[0] = -to.x;
+		to1[1] = -to.y;
+		to1[2] = -to.z;
+		to1[3] = -to.w;
+	} else  {
+		to1[0] = to.x;
+		to1[1] = to.y;
+		to1[2] = to.z;
+		to1[3] = to.w;
+	}
+	
+	// calculate coefficients
+	if ((1.0 - cosom) > DELTA) 
+	{
+		// standard case (slerp)
+		omega = acos(cosom);
+		sinom = sin(omega);
+		scale0 = (float)sin((1.0 - t) * omega) / sinom;
+		scale1 = (float)sin(t * omega) / sinom;
+	} else {        
+		// "from" and "to" quaternions are very close 
+		//  ... so we can do a linear interpolation
+		scale0 = 1.0f - t;
+		scale1 = t;
+	}
+	
+	// calculate final values
+	ret.x = scale0*from.x + scale1*to1[0];
+	ret.y = scale0*from.y + scale1*to1[1];
+	ret.z = scale0*from.z + scale1*to1[2];
+	ret.w = scale0*from.w + scale1*to1[3];
+	return ret;
+}
+	
+/** Generate a quaternion by linearly interpolating between the poses
+	\p from	and \p to.
+	\param from The source \p from quaternion
+	\param to The source \p to quaternion
+	\param t In the range of 0 to 1, this value specifies how much to
+		interpolate from the \p from quaternion to the \p to quaternion.
+*/
+Quaternion Quaternion::Lerp(const Quaternion &from, const Quaternion &to, float t)
+{
+	// Linearly interpolates between two quaternion positions
+	// fast but not as nearly as smooth as Slerp
+	Quaternion ret;
+	float to1[4];
+	float cosom;
+	float scale0, scale1;
+
+	// cheap cosine (quaternion dot product)
+	// calc cosine
+	cosom = from.x*to.x + from.y*to.y + from.z*to.z + from.w*to.w;
+    // adjust signs (if necessary)
+    if ( cosom < 0.0 )
+	{
+		to1[0] = - to.x;
+		to1[1] = - to.y;
+		to1[2] = - to.z;
+		to1[3] = - to.w;
+    } else  {
+		to1[0] = to.x;
+		to1[1] = to.y;
+		to1[2] = to.z;
+		to1[3] = to.w;
+    }
+ 
+	// interpolate linearly
+    scale0 = 1.0f - t;
+    scale1 = t;
+ 
+	// calculate final values
+	ret.x = scale0*from.x + scale1*to1[0];
+	ret.y = scale0*from.y + scale1*to1[1];
+	ret.z = scale0*from.z + scale1*to1[2];
+	ret.w = scale0*from.w + scale1*to1[3];
+	return ret;
+}

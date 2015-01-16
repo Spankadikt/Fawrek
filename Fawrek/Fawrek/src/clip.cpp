@@ -1,5 +1,13 @@
 #include "animation.h"
 
+Clip::Clip()
+{
+}
+
+Clip::Clip(Clip &&clip)
+{
+	*this = clip;
+}
 
 Clip::Clip(Animation *_animation, float _startTime, float _endTime, bool _loop)
 {

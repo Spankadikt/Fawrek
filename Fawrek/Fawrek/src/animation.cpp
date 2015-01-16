@@ -11,11 +11,17 @@ Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverse
 	pScene = _pScene;
 	pMesh = _pMesh;
 	m_GlobalInverseTransform = _globalInverseTransform;
+
+	currentClip = new Clip();
+	nextClip = new Clip();
+
+	InitCrossfade();
 }
 
 Animation::~Animation()
 {
-
+	SAFE_DELETE(currentClip);
+	SAFE_DELETE(nextClip);
 }
 
 void Animation::LoadClips(const std::string &_animdata_filename)
@@ -47,22 +53,51 @@ void Animation::LoadClips(const std::string &_animdata_filename)
 		    clips.push_back(clip);
 	    }
     }
+
+	currentClip = &clips[0];
+	nextClip = &clips[0];
 }
 
-void Animation::SetCurrentClip(uint num)
+void Animation::SetCurrentClip(Clip *_clip)
 {
-	numClipToPlay = num;
+    currentClip = new Clip(*_clip);
 }
 
-void Animation::SetCurrentClipAndPlay(uint num)
+
+//void Animation::SetCurrentClipAndPlay(int num)
+//{
+//	nCurrentClip = num;
+//    GetCurrentClip()->Play();
+//}
+
+Clip& Animation::GetCurrentClip()
 {
-	numClipToPlay = num;
-    GetCurrentClip()->Play();
+    return *currentClip;
 }
 
-Clip* Animation::GetCurrentClip()
+//void Animation::SetNextClip(int num)
+//{
+//    if(nCurrentClip<0)
+//        nCurrentClip = num;
+//    nNextClip = num;
+//}
+
+void Animation::SetNextClipAndPlay(int num)
 {
-    return &clips[numClipToPlay];
+
+	currentClip = new Clip(*nextClip);
+	GetCurrentClip().Play();
+
+	nextClip = &clips[num];
+	GetNextClip().Play();
+
+	InitCrossfade();
+	
+}
+
+Clip& Animation::GetNextClip()
+{
+    return *nextClip;
 }
 
 
@@ -166,8 +201,64 @@ void Animation::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, co
     Out = Start + Factor * Delta;
 }
 
+Matrix Animation::CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFade)
+{
+    Matrix result;
 
-void Animation::ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, const Matrix& ParentTransform)
+    // Interpolate translation and generate translation transformation matrix
+    aiVector3D Translation;
+    if(!_crossFade)
+    {
+        CalcInterpolatedPosition(Translation, GetCurrentClip().clipCurrentTime, pNodeAnim);
+    }
+    else
+    {
+        aiVector3D currentTranslation;
+        aiVector3D nextTranslation;
+        CalcInterpolatedPosition(currentTranslation, GetCurrentClip().clipCurrentTime, pNodeAnim);
+        CalcInterpolatedPosition(nextTranslation, GetNextClip().clipCurrentTime, pNodeAnim);
+        Translation = (currentTranslation * weight) + (nextTranslation * (1-weight));
+    }
+    result.Translate(Translation.x, Translation.y, Translation.z);
+        
+    // Interpolate rotation and generate rotation transformation matrix
+    aiQuaternion RotationQ;
+    if(!_crossFade)
+    {
+        CalcInterpolatedRotation(RotationQ, GetCurrentClip().clipCurrentTime, pNodeAnim); 
+    }
+    else
+    {
+        aiQuaternion currentRotationQ;
+        aiQuaternion nextRotationQ;
+        CalcInterpolatedRotation(currentRotationQ, GetCurrentClip().clipCurrentTime, pNodeAnim);
+        CalcInterpolatedRotation(nextRotationQ, GetNextClip().clipCurrentTime, pNodeAnim);
+        Quaternion res = Quaternion::Slerp(Quaternion(currentRotationQ.x,currentRotationQ.y,currentRotationQ.z,currentRotationQ.w),Quaternion(nextRotationQ.x,nextRotationQ.y,nextRotationQ.z,nextRotationQ.w),weight);
+        RotationQ = aiQuaternion(res.w,res.x,res.y,res.z);
+    }
+	Quaternion qTest = Quaternion(RotationQ.x,RotationQ.y,RotationQ.z,RotationQ.w);
+	result.Rotate(qTest);
+
+	// Interpolate scaling and generate scaling transformation matrix
+    aiVector3D Scaling;
+    if(!_crossFade)
+    {
+        CalcInterpolatedScaling(Scaling, GetCurrentClip().clipCurrentTime, pNodeAnim);
+    }
+    else
+    {
+        aiVector3D currentScaling;
+        aiVector3D nextScaling;
+        CalcInterpolatedScaling(currentScaling, GetCurrentClip().clipCurrentTime, pNodeAnim);
+        CalcInterpolatedScaling(nextScaling, GetNextClip().clipCurrentTime, pNodeAnim);
+        Scaling = (currentScaling * weight) + (nextScaling * (1-weight));
+    }
+    result.Scale(Scaling.x, Scaling.y, Scaling.z);
+
+    return result;
+}
+
+void Animation::ReadNodeHierarchy(const aiNode* pNode, const Matrix& ParentTransform, bool _crossFade)
 {    
     string NodeName(pNode->mName.data);
 	
@@ -179,28 +270,8 @@ void Animation::ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, cons
     
     if (pNodeAnim) {
 		Matrix result;
+        result = CalcInterpolations(pNodeAnim,_crossFade);
 
-
-        // Interpolate translation and generate translation transformation matrix
-        aiVector3D Translation;
-        CalcInterpolatedPosition(Translation, AnimationTime, pNodeAnim);
-        Matrix TranslationM;
-        result.Translate(Translation.x, Translation.y, Translation.z);
-        
-        // Interpolate rotation and generate rotation transformation matrix
-        aiQuaternion RotationQ;
-        CalcInterpolatedRotation(RotationQ, AnimationTime, pNodeAnim); 
-		Quaternion qTest = Quaternion(RotationQ.x,RotationQ.y,RotationQ.z,RotationQ.w);
-		result.Rotate(qTest);
-
-		
-		// Interpolate scaling and generate scaling transformation matrix
-        aiVector3D Scaling;
-        CalcInterpolatedScaling(Scaling, AnimationTime, pNodeAnim);
-        Matrix ScalingM;
-        result.Scale(Scaling.x, Scaling.y, Scaling.z);
-        
-        
         // set the above combined transformations
         NodeTransformation = result;
     }
@@ -213,18 +284,44 @@ void Animation::ReadNodeHierarchy(float AnimationTime, const aiNode* pNode, cons
     }
     
     for (uint i = 0 ; i < pNode->mNumChildren ; i++) {
-        ReadNodeHierarchy(AnimationTime, pNode->mChildren[i], GlobalTransformation);
+        ReadNodeHierarchy(pNode->mChildren[i], GlobalTransformation, _crossFade);
     }
 }
+
+void Animation::InitCrossfade()
+{
+	weight = 1;
+    startCrossfade = -1;
+}
+
 
 void Animation::BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms)
 {
 	Matrix Identity = Matrix::Identity;
     
-    if(pScene->HasAnimations() && GetCurrentClip()->state == Clip::ClipState::PLAY)
+    if(pScene->HasAnimations() && GetCurrentClip().state == Clip::ClipState::PLAY)
 	{    
-        GetCurrentClip()->SetClipCurrentTime(TimeInSeconds);
-        ReadNodeHierarchy(GetCurrentClip()->GetClipCurrentTime(), pScene->mRootNode, Identity);
+        GetCurrentClip().SetClipCurrentTime(TimeInSeconds);
+        bool crossfade = false;
+        if(&GetNextClip() != &GetCurrentClip() && GetNextClip().state == Clip::ClipState::PLAY)
+        {
+            if(startCrossfade < 0)
+                startCrossfade = TimeInSeconds;
+            crossfade = true;
+            GetNextClip().SetClipCurrentTime(TimeInSeconds);
+            
+            float dt = TimeInSeconds - startCrossfade;
+            weight -= dt / 0.8f;
+            if(weight>1)
+                weight = 1;
+			if(weight<0)
+			{
+				weight = 0;
+				//SetCurrentClip(&GetNextClip());
+			}
+        }
+
+        ReadNodeHierarchy(pScene->mRootNode, Identity, crossfade);
 	}
 
     Transforms.resize(pMesh->pSkeleton->m_NumBones);
