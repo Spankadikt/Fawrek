@@ -9,16 +9,21 @@ Clip::Clip(Clip &&clip)
 	*this = clip;
 }
 
-Clip::Clip(Animation *_animation, float _startTime, float _endTime, bool _loop)
+Clip::Clip(Animation *_animation, int _id, float _startTime, float _endTime, bool _loop)
 {
     animation = _animation;
 
+	id = _id;
     clipStartTime = _startTime;
     clipEndTime = _endTime;
     loop = _loop;
 
     SetClipSpeed(1.0f);
     Stop();
+
+	
+	stamp_lastStartTime = 0.0f;
+	stamp_startTime = -1.0f;
 }
 
 void Clip::SetClipSpeed(float speed)
@@ -31,8 +36,6 @@ float Clip::GetClipSpeed()
     return clipSpeed;
 }
 
-float stamp_lastStartTime = 0.0f;
-float stamp_startTime = -1.0f;
 void Clip::SetClipCurrentTime(float _timeInSeconds)
 {
     if(stamp_startTime < 0)

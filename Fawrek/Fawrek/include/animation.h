@@ -38,9 +38,9 @@ public:
     void SetCurrentClip(Clip *_clip);
     //void SetCurrentClipAndPlay(int num);
     Clip &GetCurrentClip();
-    //void SetNextClip(int num);
-    void SetNextClipAndPlay(int num);
-    Clip &GetNextClip();
+    void SetLastClip(Clip *_clip);
+    void CrossfadeToNextClip(int num);
+    Clip &GetLastClip();
 
 	void InitCrossfade();
 
@@ -53,7 +53,7 @@ private:
 	Mesh *pMesh;
 
 	Clip *currentClip;
-    Clip *nextClip;
+    Clip *lastClip;
 
     float weight;
 	float startCrossfade;

@@ -12,8 +12,8 @@ Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverse
 	pMesh = _pMesh;
 	m_GlobalInverseTransform = _globalInverseTransform;
 
-	currentClip = new Clip();
-	nextClip = new Clip();
+	currentClip = lastClip = new Clip();
+	//nextClip = new Clip();
 
 	InitCrossfade();
 }
@@ -21,14 +21,14 @@ Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverse
 Animation::~Animation()
 {
 	SAFE_DELETE(currentClip);
-	SAFE_DELETE(nextClip);
+	SAFE_DELETE(lastClip);
 }
 
 void Animation::LoadClips(const std::string &_animdata_filename)
 {
     if(_animdata_filename.empty())
     {
-        Clip clip(this,0,(float)pScene->mAnimations[0]->mDuration,false);
+        Clip clip(this,0,0.0f,(float)pScene->mAnimations[0]->mDuration,false);
 		clips.push_back(clip);
     }
     else
@@ -42,6 +42,8 @@ void Animation::LoadClips(const std::string &_animdata_filename)
 	    tinyxml2::XMLNode* child;
 	    for( child = animElement->FirstChild(); child; child = child->NextSibling() )
 	    {
+			int id;
+			child->ToElement()->QueryIntAttribute( "id", &id );
 		    float startTime;
 		    child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
 		    float endTime;
@@ -49,20 +51,20 @@ void Animation::LoadClips(const std::string &_animdata_filename)
             bool loop;
             child->ToElement()->QueryBoolAttribute( "loop", &loop );
 
-		    Clip clip(this,startTime,endTime,loop);
+		    Clip clip(this,id,startTime,endTime,loop);
 		    clips.push_back(clip);
 	    }
     }
 
 	currentClip = &clips[0];
-	nextClip = &clips[0];
+	lastClip = &clips[0];
 }
 
 void Animation::SetCurrentClip(Clip *_clip)
 {
     currentClip = new Clip(*_clip);
-}
 
+}
 
 //void Animation::SetCurrentClipAndPlay(int num)
 //{
@@ -82,22 +84,33 @@ Clip& Animation::GetCurrentClip()
 //    nNextClip = num;
 //}
 
-void Animation::SetNextClipAndPlay(int num)
+void Animation::SetLastClip(Clip *_clip)
 {
+    lastClip = new Clip(*_clip);
 
-	currentClip = new Clip(*nextClip);
-	GetCurrentClip().Play();
-
-	nextClip = &clips[num];
-	GetNextClip().Play();
-
-	InitCrossfade();
-	
 }
 
-Clip& Animation::GetNextClip()
+void Animation::CrossfadeToNextClip(int num)
 {
-    return *nextClip;
+	if(currentClip->id != clips[num].id)
+	{
+		
+		lastClip = new Clip(*currentClip);
+
+
+		currentClip = new Clip(clips[num]);
+
+
+
+		InitCrossfade();
+	}
+	GetCurrentClip().Play();
+	GetLastClip().Play();
+}
+
+Clip& Animation::GetLastClip()
+{
+    return *lastClip;
 }
 
 
@@ -216,7 +229,7 @@ Matrix Animation::CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFad
         aiVector3D currentTranslation;
         aiVector3D nextTranslation;
         CalcInterpolatedPosition(currentTranslation, GetCurrentClip().clipCurrentTime, pNodeAnim);
-        CalcInterpolatedPosition(nextTranslation, GetNextClip().clipCurrentTime, pNodeAnim);
+        CalcInterpolatedPosition(nextTranslation, GetLastClip().clipCurrentTime, pNodeAnim);
         Translation = (currentTranslation * weight) + (nextTranslation * (1-weight));
     }
     result.Translate(Translation.x, Translation.y, Translation.z);
@@ -232,7 +245,7 @@ Matrix Animation::CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFad
         aiQuaternion currentRotationQ;
         aiQuaternion nextRotationQ;
         CalcInterpolatedRotation(currentRotationQ, GetCurrentClip().clipCurrentTime, pNodeAnim);
-        CalcInterpolatedRotation(nextRotationQ, GetNextClip().clipCurrentTime, pNodeAnim);
+        CalcInterpolatedRotation(nextRotationQ, GetLastClip().clipCurrentTime, pNodeAnim);
         Quaternion res = Quaternion::Slerp(Quaternion(currentRotationQ.x,currentRotationQ.y,currentRotationQ.z,currentRotationQ.w),Quaternion(nextRotationQ.x,nextRotationQ.y,nextRotationQ.z,nextRotationQ.w),weight);
         RotationQ = aiQuaternion(res.w,res.x,res.y,res.z);
     }
@@ -250,7 +263,7 @@ Matrix Animation::CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFad
         aiVector3D currentScaling;
         aiVector3D nextScaling;
         CalcInterpolatedScaling(currentScaling, GetCurrentClip().clipCurrentTime, pNodeAnim);
-        CalcInterpolatedScaling(nextScaling, GetNextClip().clipCurrentTime, pNodeAnim);
+        CalcInterpolatedScaling(nextScaling, GetLastClip().clipCurrentTime, pNodeAnim);
         Scaling = (currentScaling * weight) + (nextScaling * (1-weight));
     }
     result.Scale(Scaling.x, Scaling.y, Scaling.z);
@@ -301,14 +314,14 @@ void Animation::BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms)
     
     if(pScene->HasAnimations() && GetCurrentClip().state == Clip::ClipState::PLAY)
 	{    
-        GetCurrentClip().SetClipCurrentTime(TimeInSeconds);
+        
         bool crossfade = false;
-        if(&GetNextClip() != &GetCurrentClip() && GetNextClip().state == Clip::ClipState::PLAY)
+		if(GetLastClip().id != GetCurrentClip().id && GetLastClip().state == Clip::ClipState::PLAY)
         {
             if(startCrossfade < 0)
                 startCrossfade = TimeInSeconds;
             crossfade = true;
-            GetNextClip().SetClipCurrentTime(TimeInSeconds);
+            GetLastClip().SetClipCurrentTime(TimeInSeconds);
             
             float dt = TimeInSeconds - startCrossfade;
             weight -= dt / 0.8f;
@@ -317,10 +330,10 @@ void Animation::BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms)
 			if(weight<0)
 			{
 				weight = 0;
-				//SetCurrentClip(&GetNextClip());
+				GetLastClip().Stop();
 			}
         }
-
+		GetCurrentClip().SetClipCurrentTime(TimeInSeconds);
         ReadNodeHierarchy(pScene->mRootNode, Identity, crossfade);
 	}
 

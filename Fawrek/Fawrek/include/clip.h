@@ -20,6 +20,7 @@ public:
 
     Animation *animation;
 
+	int id;
     float fps;
 	float clipStartTime;
 	float clipEndTime;
@@ -29,7 +30,7 @@ public:
     ClipState state;
     float clipSpeed;
 
-	Clip(Animation *_animation, float _startTime, float _endTime, bool _loop);
+	Clip(Animation *_animation, int id, float _startTime, float _endTime, bool _loop);
 
     float GetClipLength()
     {
@@ -45,6 +46,11 @@ public:
     void Play();
     void Pause();
     void Stop();
+
+private:
+	
+	float stamp_lastStartTime;
+	float stamp_startTime;
 };
 
 #endif // CLIP_H

@@ -62,7 +62,7 @@ public:
 		pLight->SetMatSpecularPower(32);
 
 		pModel = new Model("resources/ninja.b3d",Vector3(0.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f),"resources/animation_ninja.xml");
-        pModel->pAnimation->SetNextClipAndPlay(0);
+        pModel->pAnimation->CrossfadeToNextClip(0);
 		//pModel2 = new Model("resources/dwarf1.b3d",Vector3(15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
 		//pModel3 = new Model("resources/boblampclean.md5mesh",Vector3(0.0f,-15.0f,0.0f),Vector3(90.0f,0.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
 
@@ -92,13 +92,13 @@ public:
 		switch (key)
 		{
 		case 'a':
-			pModel->pAnimation->SetNextClipAndPlay(0);
+			pModel->pAnimation->CrossfadeToNextClip(0);
 			break;
 		case 'z':
-			pModel->pAnimation->SetNextClipAndPlay(1);
+			pModel->pAnimation->CrossfadeToNextClip(1);
 			break;
 		case ' ':
-			pModel->pAnimation->SetNextClipAndPlay(2);
+			pModel->pAnimation->CrossfadeToNextClip(2);
 			break;
 		default:
 			break;
