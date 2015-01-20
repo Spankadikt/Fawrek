@@ -6,14 +6,14 @@
 #include "glew.h"
 
 
-Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform)
+Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform, BodyPart _bodyPartAffected)
 {
+    bodyPartAffected = _bodyPartAffected;
 	pScene = _pScene;
 	pMesh = _pMesh;
 	m_GlobalInverseTransform = _globalInverseTransform;
 
 	currentClip = lastClip = new Clip();
-	//nextClip = new Clip();
 
 	InitCrossfade();
 }
@@ -22,6 +22,7 @@ Animation::~Animation()
 {
 	SAFE_DELETE(currentClip);
 	SAFE_DELETE(lastClip);
+	SAFE_DELETE(nodePack);
 }
 
 void Animation::LoadClips(const std::string &_animdata_filename)
@@ -42,18 +43,86 @@ void Animation::LoadClips(const std::string &_animdata_filename)
 	    tinyxml2::XMLNode* child;
 	    for( child = animElement->FirstChild(); child; child = child->NextSibling() )
 	    {
-			int id;
-			child->ToElement()->QueryIntAttribute( "id", &id );
-		    float startTime;
-		    child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
-		    float endTime;
-		    child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
-            bool loop;
-            child->ToElement()->QueryBoolAttribute( "loop", &loop );
+            string bodyPart = child->ToElement()->Attribute( "body_part" );
+            
+            bool addClip = false;
+            switch(bodyPartAffected)
+            {
+            case BodyPart::FULL_BODY:
+                if(bodyPart == "full_body")
+                    addClip = true;
+                break;
+            case BodyPart::LOWER_BODY:
+                if(bodyPart == "lower_body")
+                    addClip = true;
+                break;
+            case BodyPart::UPPER_BODY:
+                if(bodyPart == "upper_body")
+                    addClip = true;
+                break;
+            default:
+                break;
+            }
 
-		    Clip clip(this,id,startTime,endTime,loop);
-		    clips.push_back(clip);
+            if(addClip)
+            {
+			    int id;
+			    child->ToElement()->QueryIntAttribute( "id", &id );
+		        float startTime;
+		        child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
+		        float endTime;
+		        child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
+                bool loop;
+                child->ToElement()->QueryBoolAttribute( "loop", &loop );
+
+		        Clip clip(this,id,startTime,endTime,loop);
+		        clips.push_back(clip);
+            }
 	    }
+
+        tinyxml2::XMLElement* skeletonElement = doc.FirstChildElement( "SKELETON" );
+        //skeletonElement->QueryIntAttribute( "nb_nodepack", &nbNodePack );
+
+        tinyxml2::XMLNode* np;
+        for( np = skeletonElement->FirstChild(); np; np = np->NextSibling() )
+	    {
+
+            string packName = np->ToElement()->Attribute( "name" );
+
+            bool addNodePack = false;
+            switch(bodyPartAffected)
+            {
+            case BodyPart::FULL_BODY:
+                if(packName == "full_body")
+                    addNodePack = true;
+                break;
+            case BodyPart::LOWER_BODY:
+                if(packName == "lower_body" || packName == "common")
+                    addNodePack = true;
+                break;
+            case BodyPart::UPPER_BODY:
+                if(packName == "upper_body" || packName == "common")
+                    addNodePack = true;
+                break;
+            default:
+                break;
+            }
+            if(addNodePack)
+            {
+                int id;
+                np->ToElement()->QueryIntAttribute( "id" , &id );
+                int nbNode;
+                np->ToElement()->QueryIntAttribute( "nb_node", &nbNode );
+
+                nodePack = new NodePack(id, packName, nbNode);
+
+                for( child = np->FirstChild(); child; child = child->NextSibling() )
+	            {
+                    const char *nodeId = child->ToElement()->Attribute( "nodeId" );
+                    nodePack->AddBoneToPack(nodeId);
+                }
+            }
+        }
     }
 
 	currentClip = &clips[0];
@@ -63,26 +132,12 @@ void Animation::LoadClips(const std::string &_animdata_filename)
 void Animation::SetCurrentClip(Clip *_clip)
 {
     currentClip = new Clip(*_clip);
-
 }
-
-//void Animation::SetCurrentClipAndPlay(int num)
-//{
-//	nCurrentClip = num;
-//    GetCurrentClip()->Play();
-//}
 
 Clip& Animation::GetCurrentClip()
 {
     return *currentClip;
 }
-
-//void Animation::SetNextClip(int num)
-//{
-//    if(nCurrentClip<0)
-//        nCurrentClip = num;
-//    nNextClip = num;
-//}
 
 void Animation::SetLastClip(Clip *_clip)
 {
@@ -92,20 +147,30 @@ void Animation::SetLastClip(Clip *_clip)
 
 void Animation::CrossfadeToNextClip(int num)
 {
-	if(currentClip->id != clips[num].id)
+	if(currentClip->id != clips[num].id || !clips[num].loop)
 	{
-		
 		lastClip = new Clip(*currentClip);
-
 
 		currentClip = new Clip(clips[num]);
 
+		InitCrossfade();
 
+		GetCurrentClip().Play();
+		GetLastClip().Play();
+	}
+	else if(currentClip==&clips[0] && lastClip==&clips[0])//first time
+	{
+		lastClip = new Clip(*currentClip);
+
+		currentClip = new Clip(clips[num]);
 
 		InitCrossfade();
+
+		GetCurrentClip().Play();
+		GetLastClip().Play();
 	}
-	GetCurrentClip().Play();
-	GetLastClip().Play();
+
+
 }
 
 Clip& Animation::GetLastClip()
@@ -116,6 +181,8 @@ Clip& Animation::GetLastClip()
 
 uint Animation::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
 {    
+    assert(pNodeAnim->mNumPositionKeys > 0);
+
     for (uint i = 0 ; i < pNodeAnim->mNumPositionKeys - 1 ; i++) {
         if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
             return i;
@@ -296,8 +363,17 @@ void Animation::ReadNodeHierarchy(const aiNode* pNode, const Matrix& ParentTrans
         pMesh->pSkeleton->m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * pMesh->pSkeleton->m_BoneInfo[BoneIndex].BoneOffset;
     }
     
-    for (uint i = 0 ; i < pNode->mNumChildren ; i++) {
-        ReadNodeHierarchy(pNode->mChildren[i], GlobalTransformation, _crossFade);
+    for (uint i = 0 ; i < pNode->mNumChildren ; i++) 
+    {
+
+			for(int j=0;j<nodePack->nbNode;j++)
+			{
+				if(strcmp(nodePack->pack[j].c_str(),pNode->mChildren[i]->mName.C_Str())==0)
+				{
+					ReadNodeHierarchy(pNode->mChildren[i], GlobalTransformation, _crossFade);
+				}
+			}
+
     }
 }
 

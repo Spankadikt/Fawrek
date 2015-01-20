@@ -53,7 +53,7 @@ bool Model::ModelInit(const std::string &_filename, const std::string &_animdata
         printf("Error parsing '%s': '%s'\n", _filename.c_str(), m_Importer.GetErrorString());
     }
 
-	pAnimation = new Animation(m_pScene,pMesh,m_GlobalInverseTransform);
+    pAnimation = new Animation(m_pScene,pMesh,m_GlobalInverseTransform,Animation::BodyPart::FULL_BODY);
     if(m_pScene->HasAnimations())
     {
         pAnimation->LoadClips(_animdata_filename);
@@ -61,7 +61,6 @@ bool Model::ModelInit(const std::string &_filename, const std::string &_animdata
 
 	return ret;
 }
-
 
 void Model::Render(Camera *_pCamera, Light *_pLight, float _runningTime)
 {
@@ -89,5 +88,13 @@ void Model::Render(Camera *_pCamera, Light *_pLight, float _runningTime)
     _pLight->SetWorldMatrix(modelMatrix);
 
 	pMesh->Render();
+
+	if(pAnimation->currentClip->state == Clip::ClipState::STOP)
+	{
+		if(!pAnimation->currentClip->loop)
+		{
+			pAnimation->CrossfadeToNextClip(18);
+		}
+	}
 }
 

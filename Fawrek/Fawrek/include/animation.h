@@ -17,9 +17,16 @@
 
 class Animation
 {
-
 public:
-	Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform);
+
+    enum BodyPart
+    {
+        FULL_BODY,
+        UPPER_BODY,
+        LOWER_BODY
+    };
+
+	Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform, BodyPart _bodyPartAffected);
 	~Animation();
 
 	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
@@ -49,11 +56,13 @@ public:
 
     const aiScene *pScene;
 
-private:
-	Mesh *pMesh;
-
 	Clip *currentClip;
     Clip *lastClip;
+
+private:
+    BodyPart bodyPartAffected;
+
+	Mesh *pMesh;
 
     float weight;
 	float startCrossfade;
@@ -62,6 +71,9 @@ private:
 
     int nbClip;
     vector<Clip> clips;
+
+    //int nbNodePack;
+    NodePack *nodePack;
 };
 
 #endif // ANIMATION_H

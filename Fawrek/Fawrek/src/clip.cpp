@@ -18,7 +18,7 @@ Clip::Clip(Animation *_animation, int _id, float _startTime, float _endTime, boo
     clipEndTime = _endTime;
     loop = _loop;
 
-    SetClipSpeed(1.0f);
+    SetClipSpeed(0.5f);
     Stop();
 
 	
@@ -66,12 +66,12 @@ float Clip::GetClipCurrentTime()
 
 void Clip::Play()
 {
-	if(state != ClipState::PAUSE)
-	{
-		stamp_startTime = -1.0f;
-		stamp_lastStartTime = 0.0f;
-		clipCurrentTime = 0.0f;
-	}
+	//if(state != ClipState::PAUSE)
+	//{
+	//	stamp_startTime = -1.0f;
+	//	stamp_lastStartTime = 0.0f;
+	//	clipCurrentTime = 0.0f;
+	//}
     state = PLAY;
 }
 
@@ -84,5 +84,8 @@ void Clip::Pause()
 
 void Clip::Stop()
 {
+	//stamp_startTime = -1.0f;
+	//stamp_lastStartTime = 0.0f;
+	clipCurrentTime = clipEndTime;
     state = STOP;
 }

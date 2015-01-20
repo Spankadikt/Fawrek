@@ -9,7 +9,7 @@
 
 #include "scene.h"
 
-#define NUM_BONES_PER_VEREX 4
+#define NUM_BONES_PER_VERTEX 4
 
 struct BoneInfo
 {
@@ -25,8 +25,8 @@ struct BoneInfo
 
 struct VertexBoneData
 {        
-	uint IDs[NUM_BONES_PER_VEREX];
-	float Weights[NUM_BONES_PER_VEREX];
+	uint IDs[NUM_BONES_PER_VERTEX];
+	float Weights[NUM_BONES_PER_VERTEX];
 
 	VertexBoneData()
 	{
@@ -40,6 +40,26 @@ struct VertexBoneData
 	}
         
 	void AddBoneData(uint BoneID, float Weight);
+};
+
+struct NodePack
+{
+    int id;
+    string name;
+    int nbNode;
+    vector<string> pack;
+
+    NodePack(int _id,string _name, int _nbNode)
+    {
+        id = _id;
+        name = _name;
+        nbNode = _nbNode;
+    }
+
+    void AddBoneToPack(const char *_nodeId)
+    {
+        pack.push_back(_nodeId);
+    }
 };
 
 class Mesh;
