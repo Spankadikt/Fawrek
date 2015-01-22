@@ -8,7 +8,7 @@ class Clip
 public:
 	
 	Clip();
-	Clip(Clip &&clip);
+	Clip(Clip&& _clip);
 
     enum ClipState
     {
@@ -18,39 +18,42 @@ public:
     };
 
 
-    Animation *animation;
+    Animation* m_pAnimation;
 
-	int id;
-    float fps;
-	float clipStartTime;
-	float clipEndTime;
-    float clipCurrentTime;
+    bool operator==(const Clip& _clip);
 
-    bool loop;
-    ClipState state;
-    float clipSpeed;
+	int m_iId;
+    float m_fFps;
+	float m_fClipStartTime;
+	float m_fClipEndTime;
+    float m_fClipCurrentTime;
 
-	Clip(Animation *_animation, int id, float _startTime, float _endTime, bool _loop);
+    bool m_bLoop;
+    ClipState m_state;
+    float m_fClipSpeed;
+
+	Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime, bool _bLoop);
 
     float GetClipLength()
     {
-        return clipEndTime - clipStartTime;
+        return m_fClipEndTime - m_fClipStartTime;
     }
 
-    void SetClipSpeed(float speed);
+    void SetClipSpeed(float _fSpeed);
     float GetClipSpeed();
 
-    void SetClipCurrentTime(float time);
+    void SetClipCurrentTime(float _fTime);
     float GetClipCurrentTime();
 
+    void Init();
     void Play();
     void Pause();
     void Stop();
 
 private:
 	
-	float stamp_lastStartTime;
-	float stamp_startTime;
+	float m_fStampLastStartTime;
+	float m_fStampStartTime;
 };
 
 #endif // CLIP_H

@@ -13,20 +13,20 @@
 
 struct BoneInfo
 {
-	Matrix BoneOffset;
-	Matrix FinalTransformation;        
+	Matrix m_boneOffset;
+	Matrix m_finalTransformation;        
 
 	BoneInfo()
 	{
-		BoneOffset.SetZero();
-		FinalTransformation.SetZero();            
+		m_boneOffset.SetZero();
+		m_finalTransformation.SetZero();            
 	}
 };
 
 struct VertexBoneData
 {        
-	uint IDs[NUM_BONES_PER_VERTEX];
-	float Weights[NUM_BONES_PER_VERTEX];
+	uint m_uiIDs[NUM_BONES_PER_VERTEX];
+	float m_fWeights[NUM_BONES_PER_VERTEX];
 
 	VertexBoneData()
 	{
@@ -35,30 +35,30 @@ struct VertexBoneData
         
 	void Reset()
 	{
-		ZERO_MEM(IDs);
-		ZERO_MEM(Weights);        
+		ZERO_MEM(m_uiIDs);
+		ZERO_MEM(m_fWeights);        
 	}
         
-	void AddBoneData(uint BoneID, float Weight);
+	void AddBoneData(uint _uiBoneID, float _fWeight);
 };
 
 struct NodePack
 {
-    int id;
-    string name;
-    int nbNode;
-    vector<string> pack;
+    int m_iId;
+    string m_sName;
+    int m_iNbNode;
+    vector<string> m_pack;
 
     NodePack(int _id,string _name, int _nbNode)
     {
-        id = _id;
-        name = _name;
-        nbNode = _nbNode;
+        m_iId = _id;
+        m_sName = _name;
+        m_iNbNode = _nbNode;
     }
 
     void AddBoneToPack(const char *_nodeId)
     {
-        pack.push_back(_nodeId);
+        m_pack.push_back(_nodeId);
     }
 };
 
@@ -68,20 +68,20 @@ class Skeleton
 {
 public :
 
-	Skeleton(Mesh *_pMesh);
+	Skeleton(Mesh* _pMesh);
 	~Skeleton();
 
 	uint NumBones() const
     {
-        return m_NumBones;
+        return m_uiNumBones;
     }
     
-	void LoadBones(uint MeshIndex, const aiMesh* paiMesh, vector<VertexBoneData>& Bones);
-	uint m_NumBones;
-	map<string,uint> m_BoneMapping; // maps a bone name to its index
-    vector<BoneInfo> m_BoneInfo;
+	void LoadBones(uint _uiMeshIndex, const aiMesh* _paiMesh, vector<VertexBoneData>& _bones);
+	uint m_uiNumBones;
+	map<string,uint> m_boneMapping; // maps a bone name to its index
+    vector<BoneInfo> m_boneInfo;
 private:
-	Mesh *pMesh;
+	Mesh* m_pMesh;
 
 };
 

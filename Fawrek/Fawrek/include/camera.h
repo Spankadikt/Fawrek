@@ -12,7 +12,7 @@ public:
     Camera(const Vector3 _pos, const Vector3 _target, const Vector3 _up);
 	~Camera();
 
-	void PerspectiveFOV(float _fovAngle, float _aspectRation, float _nearZ, float _farZ);
+	void PerspectiveFOV(float _fFovAngle, float _fAspectRation, float _fNearZ, float _fFarZ);
 	void LookAt(Vector3 _pos, Vector3 _target, Vector3 _up);
 
 	Matrix view;

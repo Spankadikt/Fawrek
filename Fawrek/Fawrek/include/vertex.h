@@ -7,9 +7,9 @@
 class Vertex
 {
 public :
-	Vector3 position;
-	Vector2 uv;
-	Vector3 normal;
+	Vector3 m_position;
+	Vector2 m_uv;
+	Vector3 m_normal;
 
 	Vertex();
 	Vertex(Vector3 _pos, Vector2 _uv, Vector3 _normal);

@@ -23,7 +23,7 @@ protected:
 
 private:
 
-	long long startTime;
+	long long m_lStartTime;
 };
 
 #endif	//ENGINE_H

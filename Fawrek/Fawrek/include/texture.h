@@ -9,15 +9,15 @@
 class Texture
 {
 public:
-	Texture(const char *_filename,GLenum _textureTarget);
+	Texture(const char* _pcFilename,GLenum _textureTarget);
 
 	bool LoadTexture();
 	void Bind(GLenum _textureUnit);
 
 private:
-	GLuint texture;
-	const char *filename;
-	GLenum textureTarget;
+	GLuint m_texture;
+	const char* m_pcFilename;
+	GLenum m_textureTarget;
 };
 
 #endif //TEXTURE_H

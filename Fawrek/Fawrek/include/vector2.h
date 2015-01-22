@@ -4,10 +4,10 @@
 class Vector2
 {
 public:
-	float u,v;
+	float m_fU,m_fV;
 
 	Vector2();
-	Vector2(float _u, float _v);
+	Vector2(float _fU, float _fV);
 };
 
 #endif //VECTOR2_H

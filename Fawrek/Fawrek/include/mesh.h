@@ -29,43 +29,43 @@ public:
 	void Init();
 	void Render();
 
-	bool InitFromScene(const aiScene *_pScene, const std::string &_filename);
+	bool InitFromScene(const aiScene *_pScene, const std::string &_sFilename);
 
     const aiScene* m_pScene;
-	Skeleton *pSkeleton;
+	Skeleton* m_pSkeleton;
 
 	#define INVALID_MATERIAL 0xFFFFFFFF
 
 	struct MeshEntry {
         MeshEntry()
         {
-            NumIndices    = 0;
-            BaseVertex    = 0;
-            BaseIndex     = 0;
-            MaterialIndex = INVALID_MATERIAL;
+            m_uiNumIndices    = 0;
+            m_uiBaseVertex    = 0;
+            m_uiBaseIndex     = 0;
+            m_uiMaterialIndex = INVALID_MATERIAL;
         }
         
-        unsigned int NumIndices;
-        unsigned int BaseVertex;
-        unsigned int BaseIndex;
-        unsigned int MaterialIndex;
+        unsigned int m_uiNumIndices;
+        unsigned int m_uiBaseVertex;
+        unsigned int m_uiBaseIndex;
+        unsigned int m_uiMaterialIndex;
     };
 	
-    std::vector<MeshEntry> entries;
-    std::vector<Texture*> textures;
+    std::vector<MeshEntry> m_entries;
+    std::vector<Texture*> m_textures;
 
 	void Clear();
 private:
 
-    void InitMesh(uint MeshIndex,
-                  const aiMesh* paiMesh,
-                  vector<Vector3>& Positions,
-                  vector<Vector3>& Normals,
-                  vector<Vector2>& TexCoords,
-                  vector<VertexBoneData>& Bones,
-                  vector<unsigned int>& Indices);
+    void InitMesh(uint _uiMeshIndex,
+                  const aiMesh* _paiMesh,
+                  vector<Vector3>& _positions,
+                  vector<Vector3>& _normals,
+                  vector<Vector2>& _texCoords,
+                  vector<VertexBoneData>& _bones,
+                  vector<unsigned int>& _indices);
 
-    bool InitMaterials(const aiScene *_pScene, const std::string &_filename);
+    bool InitMaterials(const aiScene *_pScene, const std::string &_sFilename);
 
     enum VB_TYPES {
 		INDEX_BUFFER,

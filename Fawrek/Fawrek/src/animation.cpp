@@ -6,39 +6,44 @@
 #include "glew.h"
 
 
-Animation::Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform, BodyPart _bodyPartAffected)
+Animation::Animation(const aiScene* _pScene, Mesh* _pMesh, Matrix _globalInverseTransform, BodyPart _bodyPartAffected)
 {
+    m_pCurrentClip = NULL;
+    m_pLastClip = NULL;
+    m_pNextClip = NULL;
+
     bodyPartAffected = _bodyPartAffected;
-	pScene = _pScene;
-	pMesh = _pMesh;
+	m_pScene = _pScene;
+	m_pMesh = _pMesh;
 	m_GlobalInverseTransform = _globalInverseTransform;
 
-	currentClip = lastClip = new Clip();
+	m_pCurrentClip = m_pLastClip = new Clip();
 
 	InitCrossfade();
 }
 
 Animation::~Animation()
 {
-	SAFE_DELETE(currentClip);
-	SAFE_DELETE(lastClip);
-	SAFE_DELETE(nodePack);
+	SAFE_DELETE(m_pCurrentClip);
+	SAFE_DELETE(m_pLastClip);
+    SAFE_DELETE(m_pNextClip);
+	SAFE_DELETE(m_pNodePack);
 }
 
-void Animation::LoadClips(const std::string &_animdata_filename)
+void Animation::LoadClips(const std::string& _sFilename)
 {
-    if(_animdata_filename.empty())
+    if(_sFilename.empty())
     {
-        Clip clip(this,0,0.0f,(float)pScene->mAnimations[0]->mDuration,false);
-		clips.push_back(clip);
+        Clip clip(this,0,0.0f,(float)m_pScene->mAnimations[0]->mDuration,false);
+		m_clips.push_back(clip);
     }
     else
     {
         tinyxml2::XMLDocument doc;
-        doc.LoadFile(_animdata_filename.c_str());
+        doc.LoadFile(_sFilename.c_str());
 
 	    tinyxml2::XMLElement* animElement = doc.FirstChildElement( "ANIMATION" );
-	    animElement->QueryIntAttribute( "nb_clip", &nbClip );
+	    animElement->QueryIntAttribute( "nb_clip", &m_iNbClip );
 
 	    tinyxml2::XMLNode* child;
 	    for( child = animElement->FirstChild(); child; child = child->NextSibling() )
@@ -76,12 +81,11 @@ void Animation::LoadClips(const std::string &_animdata_filename)
                 child->ToElement()->QueryBoolAttribute( "loop", &loop );
 
 		        Clip clip(this,id,startTime,endTime,loop);
-		        clips.push_back(clip);
+		        m_clips.push_back(clip);
             }
 	    }
 
         tinyxml2::XMLElement* skeletonElement = doc.FirstChildElement( "SKELETON" );
-        //skeletonElement->QueryIntAttribute( "nb_nodepack", &nbNodePack );
 
         tinyxml2::XMLNode* np;
         for( np = skeletonElement->FirstChild(); np; np = np->NextSibling() )
@@ -114,174 +118,216 @@ void Animation::LoadClips(const std::string &_animdata_filename)
                 int nbNode;
                 np->ToElement()->QueryIntAttribute( "nb_node", &nbNode );
 
-                nodePack = new NodePack(id, packName, nbNode);
+                m_pNodePack = new NodePack(id, packName, nbNode);
 
                 for( child = np->FirstChild(); child; child = child->NextSibling() )
 	            {
                     const char *nodeId = child->ToElement()->Attribute( "nodeId" );
-                    nodePack->AddBoneToPack(nodeId);
+                    m_pNodePack->AddBoneToPack(nodeId);
                 }
             }
         }
     }
 
-	currentClip = &clips[0];
-	lastClip = &clips[0];
+	m_pCurrentClip = &m_clips[0];
+	m_pLastClip = &m_clips[0];
 }
 
-void Animation::SetCurrentClip(Clip *_clip)
+void Animation::SetCurrentClip(Clip* _pClip)
 {
-    currentClip = new Clip(*_clip);
+    m_pCurrentClip = new Clip(*_pClip);
 }
 
 Clip& Animation::GetCurrentClip()
 {
-    return *currentClip;
+    return *m_pCurrentClip;
 }
 
-void Animation::SetLastClip(Clip *_clip)
+void Animation::SetLastClip(Clip* _pClip)
 {
-    lastClip = new Clip(*_clip);
-
+    m_pLastClip = new Clip(*_pClip);
 }
 
-void Animation::CrossfadeToNextClip(int num)
+void Animation::CrossfadeToClip(int _iNum)
 {
-	if(currentClip->id != clips[num].id || !clips[num].loop)
+	if(m_pCurrentClip->m_iId != m_clips[_iNum].m_iId || !m_clips[_iNum].m_bLoop)
 	{
-		lastClip = new Clip(*currentClip);
+		m_pLastClip = new Clip(*m_pCurrentClip);
 
-		currentClip = new Clip(clips[num]);
+        for(int i=0;i<m_clips.size();i++)
+        {
+            if(m_clips[i].m_iId == _iNum)
+            {
+                m_pCurrentClip = new Clip(m_clips[i]);
+                break;
+            }
+        }
+		
+		InitCrossfade();
+
+		GetCurrentClip().Play();
+		GetLastClip().Play();
+	}
+	else if(m_pCurrentClip == &m_clips[0] && m_pLastClip == &m_clips[0])//first time
+	{
+		m_pLastClip = new Clip(*m_pCurrentClip);
+
+		m_pCurrentClip = new Clip(m_clips[_iNum]);
 
 		InitCrossfade();
 
 		GetCurrentClip().Play();
 		GetLastClip().Play();
 	}
-	else if(currentClip==&clips[0] && lastClip==&clips[0])//first time
-	{
-		lastClip = new Clip(*currentClip);
+}
 
-		currentClip = new Clip(clips[num]);
+void Animation::CrossfadeToClip(Clip *_pClip)
+{
+	if(m_pCurrentClip->m_iId != _pClip->m_iId || !_pClip->m_bLoop)
+	{
+		m_pLastClip = new Clip(*m_pCurrentClip);
+
+        for(int i=0;i<m_clips.size();i++)
+        {
+            if(m_clips[i].m_iId == _pClip->m_iId)
+            {
+		        m_pCurrentClip = new Clip(m_clips[i]);
+            }
+        }
 
 		InitCrossfade();
 
 		GetCurrentClip().Play();
 		GetLastClip().Play();
 	}
+	else if(*m_pCurrentClip == *_pClip && *m_pLastClip == *_pClip)//first time
+	{
+		m_pLastClip = new Clip(*m_pCurrentClip);
 
+		m_pCurrentClip = new Clip(*_pClip);
 
+		InitCrossfade();
+
+		GetCurrentClip().Play();
+		GetLastClip().Play();
+	}
 }
 
 Clip& Animation::GetLastClip()
 {
-    return *lastClip;
+    return *m_pLastClip;
 }
 
+void Animation::QueueNextClip(Clip* _pClip)
+{
+    m_pNextClip = _pClip;
+}
 
-uint Animation::FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim)
+uint Animation::FindPosition(float _fAnimationTime, const aiNodeAnim* _pNodeAnim)
 {    
-    assert(pNodeAnim->mNumPositionKeys > 0);
+    assert(_pNodeAnim->mNumPositionKeys > 0);
 
-    for (uint i = 0 ; i < pNodeAnim->mNumPositionKeys - 1 ; i++) {
-        if (AnimationTime < (float)pNodeAnim->mPositionKeys[i + 1].mTime) {
+    for (uint i = 0 ; i < _pNodeAnim->mNumPositionKeys - 1 ; i++) {
+        if (_fAnimationTime < (float)_pNodeAnim->mPositionKeys[i + 1].mTime)
             return i;
-        }
     }
 
     return 0;
 }
 
 
-uint Animation::FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim)
+uint Animation::FindRotation(float _fAnimationTime, const aiNodeAnim* _pNodeAnim)
 {
-    assert(pNodeAnim->mNumRotationKeys > 0);
+    assert(_pNodeAnim->mNumRotationKeys > 0);
 
-    for (uint i = 0 ; i < pNodeAnim->mNumRotationKeys - 1 ; i++) {
-        if (AnimationTime < (float)pNodeAnim->mRotationKeys[i + 1].mTime) {
+    for (uint i = 0 ; i < _pNodeAnim->mNumRotationKeys - 1 ; i++)
+    {
+        if (_fAnimationTime < (float)_pNodeAnim->mRotationKeys[i + 1].mTime)
             return i;
-        }
     }
 
     return 0;
 }
 
 
-uint Animation::FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim)
+uint Animation::FindScaling(float _fAnimationTime, const aiNodeAnim* _pNodeAnim)
 {
-    assert(pNodeAnim->mNumScalingKeys > 0);
+    assert(_pNodeAnim->mNumScalingKeys > 0);
     
-    for (uint i = 0 ; i < pNodeAnim->mNumScalingKeys - 1 ; i++) {
-        if (AnimationTime < (float)pNodeAnim->mScalingKeys[i + 1].mTime) {
+    for (uint i = 0 ; i < _pNodeAnim->mNumScalingKeys - 1 ; i++)
+    {
+        if (_fAnimationTime < (float)_pNodeAnim->mScalingKeys[i + 1].mTime)
             return i;
-        }
     }
 
     return 0;
 }
 
 
-void Animation::CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+void Animation::CalcInterpolatedPosition(aiVector3D& _out, float _fAnimationTime, const aiNodeAnim* _pNodeAnim)
 {
-    if (pNodeAnim->mNumPositionKeys == 1) {
-        Out = pNodeAnim->mPositionKeys[0].mValue;
+    if (_pNodeAnim->mNumPositionKeys == 1)
+    {
+        _out = _pNodeAnim->mPositionKeys[0].mValue;
         return;
     }
             
-    uint PositionIndex = FindPosition(AnimationTime, pNodeAnim);
+    uint PositionIndex = FindPosition(_fAnimationTime, _pNodeAnim);
     uint NextPositionIndex = (PositionIndex + 1);
 
-    float DeltaTime = (float)(pNodeAnim->mPositionKeys[NextPositionIndex].mTime - pNodeAnim->mPositionKeys[PositionIndex].mTime);
-    float Factor = (AnimationTime - (float)pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
+    float DeltaTime = (float)(_pNodeAnim->mPositionKeys[NextPositionIndex].mTime - _pNodeAnim->mPositionKeys[PositionIndex].mTime);
+    float Factor = (_fAnimationTime - (float)_pNodeAnim->mPositionKeys[PositionIndex].mTime) / DeltaTime;
 
-    const aiVector3D& Start = pNodeAnim->mPositionKeys[PositionIndex].mValue;
-    const aiVector3D& End = pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
+    const aiVector3D& Start = _pNodeAnim->mPositionKeys[PositionIndex].mValue;
+    const aiVector3D& End = _pNodeAnim->mPositionKeys[NextPositionIndex].mValue;
     aiVector3D Delta = End - Start;
-    Out = Start + Factor * Delta;
+    _out = Start + Factor * Delta;
 }
 
 
-void Animation::CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+void Animation::CalcInterpolatedRotation(aiQuaternion& _out, float _fAnimationTime, const aiNodeAnim* _pNodeAnim)
 {
 	// we need at least two values to interpolate...
-    if (pNodeAnim->mNumRotationKeys == 1) {
-        Out = pNodeAnim->mRotationKeys[0].mValue;
+    if (_pNodeAnim->mNumRotationKeys == 1)
+    {
+        _out = _pNodeAnim->mRotationKeys[0].mValue;
         return;
     }
     
-    uint RotationIndex = FindRotation(AnimationTime, pNodeAnim);
+    uint RotationIndex = FindRotation(_fAnimationTime, _pNodeAnim);
     uint NextRotationIndex = (RotationIndex + 1);
 
-    float DeltaTime = (float)(pNodeAnim->mRotationKeys[NextRotationIndex].mTime - pNodeAnim->mRotationKeys[RotationIndex].mTime);
-    float Factor = (AnimationTime - (float)pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
+    float DeltaTime = (float)(_pNodeAnim->mRotationKeys[NextRotationIndex].mTime - _pNodeAnim->mRotationKeys[RotationIndex].mTime);
+    float Factor = (_fAnimationTime - (float)_pNodeAnim->mRotationKeys[RotationIndex].mTime) / DeltaTime;
 
-    const aiQuaternion& StartRotationQ = pNodeAnim->mRotationKeys[RotationIndex].mValue;
-    const aiQuaternion& EndRotationQ   = pNodeAnim->mRotationKeys[NextRotationIndex].mValue;    
-    aiQuaternion::Interpolate(Out, StartRotationQ, EndRotationQ, Factor);
-    Out = Out.Normalize();
+    const aiQuaternion& StartRotationQ = _pNodeAnim->mRotationKeys[RotationIndex].mValue;
+    const aiQuaternion& EndRotationQ   = _pNodeAnim->mRotationKeys[NextRotationIndex].mValue;    
+    aiQuaternion::Interpolate(_out, StartRotationQ, EndRotationQ, Factor);
+    _out = _out.Normalize();
 }
 
 
-void Animation::CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim)
+void Animation::CalcInterpolatedScaling(aiVector3D& _out, float _fAnimationTime, const aiNodeAnim* _pNodeAnim)
 {
-    if (pNodeAnim->mNumScalingKeys == 1) {
-        Out = pNodeAnim->mScalingKeys[0].mValue;
+    if (_pNodeAnim->mNumScalingKeys == 1)
+    {
+        _out = _pNodeAnim->mScalingKeys[0].mValue;
         return;
     }
 
-    uint ScalingIndex = FindScaling(AnimationTime, pNodeAnim);
+    uint ScalingIndex = FindScaling(_fAnimationTime, _pNodeAnim);
     uint NextScalingIndex = (ScalingIndex + 1);
 
-    float DeltaTime = (float)(pNodeAnim->mScalingKeys[NextScalingIndex].mTime - pNodeAnim->mScalingKeys[ScalingIndex].mTime);
-    float Factor = (AnimationTime - (float)pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
+    float DeltaTime = (float)(_pNodeAnim->mScalingKeys[NextScalingIndex].mTime - _pNodeAnim->mScalingKeys[ScalingIndex].mTime);
+    float Factor = (_fAnimationTime - (float)_pNodeAnim->mScalingKeys[ScalingIndex].mTime) / DeltaTime;
 
-    const aiVector3D& Start = pNodeAnim->mScalingKeys[ScalingIndex].mValue;
-    const aiVector3D& End   = pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
+    const aiVector3D& Start = _pNodeAnim->mScalingKeys[ScalingIndex].mValue;
+    const aiVector3D& End   = _pNodeAnim->mScalingKeys[NextScalingIndex].mValue;
     aiVector3D Delta = End - Start;
-    Out = Start + Factor * Delta;
+    _out = Start + Factor * Delta;
 }
 
-Matrix Animation::CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFade)
+Matrix Animation::CalcInterpolations(const aiNodeAnim* _pNodeAnim, bool _crossFade)
 {
     Matrix result;
 
@@ -289,15 +335,15 @@ Matrix Animation::CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFad
     aiVector3D Translation;
     if(!_crossFade)
     {
-        CalcInterpolatedPosition(Translation, GetCurrentClip().clipCurrentTime, pNodeAnim);
+        CalcInterpolatedPosition(Translation, GetCurrentClip().m_fClipCurrentTime, _pNodeAnim);
     }
     else
     {
         aiVector3D currentTranslation;
         aiVector3D nextTranslation;
-        CalcInterpolatedPosition(currentTranslation, GetCurrentClip().clipCurrentTime, pNodeAnim);
-        CalcInterpolatedPosition(nextTranslation, GetLastClip().clipCurrentTime, pNodeAnim);
-        Translation = (currentTranslation * weight) + (nextTranslation * (1-weight));
+        CalcInterpolatedPosition(currentTranslation, GetCurrentClip().m_fClipCurrentTime, _pNodeAnim);
+        CalcInterpolatedPosition(nextTranslation, GetLastClip().m_fClipCurrentTime, _pNodeAnim);
+        Translation = (currentTranslation * m_fWeight) + (nextTranslation * (1-m_fWeight));
     }
     result.Translate(Translation.x, Translation.y, Translation.z);
         
@@ -305,16 +351,16 @@ Matrix Animation::CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFad
     aiQuaternion RotationQ;
     if(!_crossFade)
     {
-        CalcInterpolatedRotation(RotationQ, GetCurrentClip().clipCurrentTime, pNodeAnim); 
+        CalcInterpolatedRotation(RotationQ, GetCurrentClip().m_fClipCurrentTime, _pNodeAnim); 
     }
     else
     {
         aiQuaternion currentRotationQ;
         aiQuaternion nextRotationQ;
-        CalcInterpolatedRotation(currentRotationQ, GetCurrentClip().clipCurrentTime, pNodeAnim);
-        CalcInterpolatedRotation(nextRotationQ, GetLastClip().clipCurrentTime, pNodeAnim);
-        Quaternion res = Quaternion::Slerp(Quaternion(currentRotationQ.x,currentRotationQ.y,currentRotationQ.z,currentRotationQ.w),Quaternion(nextRotationQ.x,nextRotationQ.y,nextRotationQ.z,nextRotationQ.w),weight);
-        RotationQ = aiQuaternion(res.w,res.x,res.y,res.z);
+        CalcInterpolatedRotation(currentRotationQ, GetCurrentClip().m_fClipCurrentTime, _pNodeAnim);
+        CalcInterpolatedRotation(nextRotationQ, GetLastClip().m_fClipCurrentTime, _pNodeAnim);
+        Quaternion res = Quaternion::Slerp(Quaternion(currentRotationQ.x,currentRotationQ.y,currentRotationQ.z,currentRotationQ.w),Quaternion(nextRotationQ.x,nextRotationQ.y,nextRotationQ.z,nextRotationQ.w),m_fWeight);
+        RotationQ = aiQuaternion(res.m_fW,res.m_fX,res.m_fY,res.m_fZ);
     }
 	Quaternion qTest = Quaternion(RotationQ.x,RotationQ.y,RotationQ.z,RotationQ.w);
 	result.Rotate(qTest);
@@ -323,112 +369,105 @@ Matrix Animation::CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFad
     aiVector3D Scaling;
     if(!_crossFade)
     {
-        CalcInterpolatedScaling(Scaling, GetCurrentClip().clipCurrentTime, pNodeAnim);
+        CalcInterpolatedScaling(Scaling, GetCurrentClip().m_fClipCurrentTime, _pNodeAnim);
     }
     else
     {
         aiVector3D currentScaling;
         aiVector3D nextScaling;
-        CalcInterpolatedScaling(currentScaling, GetCurrentClip().clipCurrentTime, pNodeAnim);
-        CalcInterpolatedScaling(nextScaling, GetLastClip().clipCurrentTime, pNodeAnim);
-        Scaling = (currentScaling * weight) + (nextScaling * (1-weight));
+        CalcInterpolatedScaling(currentScaling, GetCurrentClip().m_fClipCurrentTime, _pNodeAnim);
+        CalcInterpolatedScaling(nextScaling, GetLastClip().m_fClipCurrentTime, _pNodeAnim);
+        Scaling = (currentScaling * m_fWeight) + (nextScaling * (1-m_fWeight));
     }
     result.Scale(Scaling.x, Scaling.y, Scaling.z);
 
     return result;
 }
 
-void Animation::ReadNodeHierarchy(const aiNode* pNode, const Matrix& ParentTransform, bool _crossFade)
+void Animation::ReadNodeHierarchy(const aiNode* _pNode, const Matrix& _parentTransform, bool _crossFade)
 {    
-    string NodeName(pNode->mName.data);
+    string NodeName(_pNode->mName.data);
 	
-    const aiAnimation* pAnimation = pScene->mAnimations[0];
+    const aiAnimation* pAnimation = m_pScene->mAnimations[0];
         
-    Matrix NodeTransformation(pNode->mTransformation);
+    Matrix NodeTransformation(_pNode->mTransformation);
      
     const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
     
-    if (pNodeAnim) {
-		Matrix result;
-        result = CalcInterpolations(pNodeAnim,_crossFade);
-
-        // set the above combined transformations
-        NodeTransformation = result;
-    }
+    if (pNodeAnim)
+        NodeTransformation = CalcInterpolations(pNodeAnim,_crossFade);
        
-    Matrix GlobalTransformation = ParentTransform * NodeTransformation;
+    Matrix GlobalTransformation = _parentTransform * NodeTransformation;
     
-	if (pMesh->pSkeleton->m_BoneMapping.find(NodeName) != pMesh->pSkeleton->m_BoneMapping.end()) {
-        uint BoneIndex = pMesh->pSkeleton->m_BoneMapping[NodeName];
-        pMesh->pSkeleton->m_BoneInfo[BoneIndex].FinalTransformation = m_GlobalInverseTransform * GlobalTransformation * pMesh->pSkeleton->m_BoneInfo[BoneIndex].BoneOffset;
+	if (m_pMesh->m_pSkeleton->m_boneMapping.find(NodeName) != m_pMesh->m_pSkeleton->m_boneMapping.end())
+    {
+        uint BoneIndex = m_pMesh->m_pSkeleton->m_boneMapping[NodeName];
+        m_pMesh->m_pSkeleton->m_boneInfo[BoneIndex].m_finalTransformation = m_GlobalInverseTransform * GlobalTransformation * m_pMesh->m_pSkeleton->m_boneInfo[BoneIndex].m_boneOffset;
     }
     
-    for (uint i = 0 ; i < pNode->mNumChildren ; i++) 
+    for (uint i = 0 ; i < _pNode->mNumChildren ; i++) 
     {
-
-			for(int j=0;j<nodePack->nbNode;j++)
+		for(int j=0;j<m_pNodePack->m_iNbNode;j++)
+		{
+			if(strcmp(m_pNodePack->m_pack[j].c_str(),_pNode->mChildren[i]->mName.C_Str())==0)
 			{
-				if(strcmp(nodePack->pack[j].c_str(),pNode->mChildren[i]->mName.C_Str())==0)
-				{
-					ReadNodeHierarchy(pNode->mChildren[i], GlobalTransformation, _crossFade);
-				}
+				ReadNodeHierarchy(_pNode->mChildren[i], GlobalTransformation, _crossFade);
 			}
-
+		}
     }
 }
 
 void Animation::InitCrossfade()
 {
-	weight = 1;
-    startCrossfade = -1;
+	m_fWeight = 1;
+    m_fStartCrossfade = -1;
 }
 
 
-void Animation::BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms)
+void Animation::BoneTransform(float _fTimeInSeconds, vector<Matrix>& _transforms)
 {
 	Matrix Identity = Matrix::Identity;
     
-    if(pScene->HasAnimations() && GetCurrentClip().state == Clip::ClipState::PLAY)
+    if(m_pScene->HasAnimations() && GetCurrentClip().m_state == Clip::ClipState::PLAY)
 	{    
-        
         bool crossfade = false;
-		if(GetLastClip().id != GetCurrentClip().id && GetLastClip().state == Clip::ClipState::PLAY)
+
+		if(GetLastClip().m_iId != GetCurrentClip().m_iId && m_fWeight>0)//if crossfafe is not finished
         {
-            if(startCrossfade < 0)
-                startCrossfade = TimeInSeconds;
+            if(m_fStartCrossfade < 0)
+                m_fStartCrossfade = _fTimeInSeconds;
             crossfade = true;
-            GetLastClip().SetClipCurrentTime(TimeInSeconds);
+            GetLastClip().SetClipCurrentTime(_fTimeInSeconds);
             
-            float dt = TimeInSeconds - startCrossfade;
-            weight -= dt / 0.8f;
-            if(weight>1)
-                weight = 1;
-			if(weight<0)
-			{
-				weight = 0;
-				GetLastClip().Stop();
-			}
+            float dt = _fTimeInSeconds - m_fStartCrossfade;
+            m_fWeight -= dt / 0.8f;
+            if(m_fWeight>1)
+                m_fWeight = 1;
+			if(m_fWeight<0)
+				m_fWeight = 0;
         }
-		GetCurrentClip().SetClipCurrentTime(TimeInSeconds);
-        ReadNodeHierarchy(pScene->mRootNode, Identity, crossfade);
+
+		GetCurrentClip().SetClipCurrentTime(_fTimeInSeconds);
+        ReadNodeHierarchy(m_pScene->mRootNode, Identity, crossfade);
 	}
 
-    Transforms.resize(pMesh->pSkeleton->m_NumBones);
+    _transforms.resize(m_pMesh->m_pSkeleton->m_uiNumBones);
 
-    for (uint i = 0 ; i < pMesh->pSkeleton->m_NumBones ; i++) {
-        Transforms[i] = pMesh->pSkeleton->m_BoneInfo[i].FinalTransformation;
+    for (uint i = 0 ; i < m_pMesh->m_pSkeleton->m_uiNumBones ; i++)
+    {
+        _transforms[i] = m_pMesh->m_pSkeleton->m_boneInfo[i].m_finalTransformation;
     }
 }
 
 
-const aiNodeAnim* Animation::FindNodeAnim(const aiAnimation* pAnimation, const string NodeName)
+const aiNodeAnim* Animation::FindNodeAnim(const aiAnimation* _pAnimation, const string _sNodeName)
 {
-    for (uint i = 0 ; i < pAnimation->mNumChannels ; i++) {
-        const aiNodeAnim* pNodeAnim = pAnimation->mChannels[i];
+    for (uint i = 0 ; i < _pAnimation->mNumChannels ; i++)
+    {
+        const aiNodeAnim* pNodeAnim = _pAnimation->mChannels[i];
         
-        if (string(pNodeAnim->mNodeName.data) == NodeName) {
+        if (string(pNodeAnim->mNodeName.data) == _sNodeName)
             return pNodeAnim;
-        }
     }
     
     return NULL;

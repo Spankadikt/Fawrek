@@ -26,10 +26,10 @@ public:
 
     Fawrek()
     {
-        directionalLight.Color = Vector3(1.0f, 1.0f, 1.0f);
-        directionalLight.AmbientIntensity = 0.85f;
-        directionalLight.DiffuseIntensity = 0.2f;
-        directionalLight.Direction = Vector3(0.0f, 1.0f, 1.0f);        
+        directionalLight.m_color = Vector3(1.0f, 1.0f, 1.0f);
+        directionalLight.m_fAmbientIntensity = 0.85f;
+        directionalLight.m_fDiffuseIntensity = 0.2f;
+        directionalLight.m_direction = Vector3(0.0f, 1.0f, 1.0f);        
     }
 
     ~Fawrek()
@@ -37,8 +37,6 @@ public:
         SAFE_DELETE(pLight);
         SAFE_DELETE(pCamera);
 		SAFE_DELETE(pModel);
-		//SAFE_DELETE(pModel2);
-		//SAFE_DELETE(pModel3);
     }
 
     bool Init()
@@ -48,7 +46,7 @@ public:
         pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 		pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
 
-		pLight = new Light();
+		pLight = new Light("shaders/skinning.vs","shaders/skinning.fs");
 
 		if (!pLight->Init())
 		{
@@ -62,9 +60,7 @@ public:
 		pLight->SetMatSpecularPower(32);
 
 		pModel = new Model("resources/ninja.b3d",Vector3(0.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f),"resources/animation_ninja.xml");
-        pModel->pAnimation->CrossfadeToNextClip(18);
-		//pModel2 = new Model("resources/dwarf1.b3d",Vector3(15.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
-		//pModel3 = new Model("resources/boblampclean.md5mesh",Vector3(0.0f,-15.0f,0.0f),Vector3(90.0f,0.0f,0.0f),Vector3(0.3f,0.3f,0.3f));
+        pModel->m_pAnimation->CrossfadeToClip(18);
 
 		return true;
     }
@@ -81,8 +77,6 @@ public:
 		float runningTime = GetRunningTime();
 
 		pModel->Render(pCamera,pLight,runningTime);
-		//pModel2->Render(pCamera,pLight,runningTime);
-		//pModel3->Render(pCamera,pLight,runningTime);
 
 		glutSwapBuffers();
 	}
@@ -92,13 +86,14 @@ public:
 		switch (key)
 		{
 		case 'a':
-			pModel->pAnimation->CrossfadeToNextClip(0);
+			pModel->m_pAnimation->CrossfadeToClip(0);
 			break;
 		case 'z':
-			pModel->pAnimation->CrossfadeToNextClip(18);
+			pModel->m_pAnimation->CrossfadeToClip(18);
 			break;
 		case ' ':
-			pModel->pAnimation->CrossfadeToNextClip(2);
+			pModel->m_pAnimation->CrossfadeToClip(2);
+            pModel->m_pAnimation->QueueNextClip(pModel->m_pAnimation->m_pLastClip);
 			break;
 		default:
 			break;
@@ -109,8 +104,6 @@ private:
     Light *pLight;
     Camera *pCamera;
 	Model *pModel;
-	//Model *pModel2;
-	//Model *pModel3;
     DirectionalLight directionalLight;
 };
 

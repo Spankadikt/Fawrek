@@ -4,88 +4,90 @@ Clip::Clip()
 {
 }
 
-Clip::Clip(Clip &&clip)
+Clip::Clip(Clip&& clip)
 {
 	*this = clip;
 }
 
-Clip::Clip(Animation *_animation, int _id, float _startTime, float _endTime, bool _loop)
+Clip::Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime, bool _bLoop)
 {
-    animation = _animation;
+    m_pAnimation = _pAnimation;
 
-	id = _id;
-    clipStartTime = _startTime;
-    clipEndTime = _endTime;
-    loop = _loop;
+	m_iId = _iId;
+    m_fClipStartTime = _fStartTime;
+    m_fClipEndTime = _fEndTime;
+    m_bLoop = _bLoop;
 
     SetClipSpeed(0.5f);
     Stop();
 
 	
-	stamp_lastStartTime = 0.0f;
-	stamp_startTime = -1.0f;
+	m_fStampLastStartTime = 0.0f;
+	m_fStampStartTime = -1.0f;
 }
 
-void Clip::SetClipSpeed(float speed)
+bool Clip::operator==(const Clip& _clip)
 {
-    clipSpeed = speed;
+    return m_iId == _clip.m_iId;
+}
+
+void Clip::SetClipSpeed(float _fSpeed)
+{
+    m_fClipSpeed = _fSpeed;
 }
 
 float Clip::GetClipSpeed()
 {
-    return clipSpeed;
+    return m_fClipSpeed;
 }
 
-void Clip::SetClipCurrentTime(float _timeInSeconds)
+void Clip::SetClipCurrentTime(float _fTimeInSeconds)
 {
-    if(stamp_startTime < 0)
-        stamp_startTime = _timeInSeconds + stamp_lastStartTime;
+    if(m_fStampStartTime < 0)
+        m_fStampStartTime = _fTimeInSeconds + m_fStampLastStartTime;
 
-    float TicksPerSecond = (float)(animation->pScene->mAnimations[0]->mTicksPerSecond != 0 ? animation->pScene->mAnimations[0]->mTicksPerSecond * clipSpeed : 25.0f * clipSpeed);
-    float stampTime = _timeInSeconds - stamp_startTime;
+    float TicksPerSecond = (float)(m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond != 0 ? m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond * m_fClipSpeed : 25.0f * m_fClipSpeed);
+    float stampTime = _fTimeInSeconds - m_fStampStartTime;
 	float TimeInTicks = stampTime + TicksPerSecond * stampTime ;
     float AnimationTime = fmod(TimeInTicks, GetClipLength());
 
-    if(loop)
+    if(m_bLoop)
     {
-        clipCurrentTime = clipStartTime + AnimationTime;
+        m_fClipCurrentTime = m_fClipStartTime + AnimationTime;
     }
     else
     {
 		if(TimeInTicks < GetClipLength())
-            clipCurrentTime = clipStartTime + AnimationTime;
-		else if (state != ClipState::STOP)
+            m_fClipCurrentTime = m_fClipStartTime + AnimationTime;
+		else if (m_state != ClipState::STOP)
 			Stop();
     }
 }
 
 float Clip::GetClipCurrentTime()
 {
-    return clipCurrentTime;
+    return m_fClipCurrentTime;
+}
+
+void Clip::Init()
+{
+    m_fStampStartTime = -1.0f;
+	m_fStampLastStartTime = 0.0f;
 }
 
 void Clip::Play()
 {
-	//if(state != ClipState::PAUSE)
-	//{
-	//	stamp_startTime = -1.0f;
-	//	stamp_lastStartTime = 0.0f;
-	//	clipCurrentTime = 0.0f;
-	//}
-    state = PLAY;
+    m_state = PLAY;
 }
 
 void Clip::Pause()
 {
-    state = PAUSE;
-    stamp_lastStartTime = stamp_startTime;
-    stamp_startTime = -1.0f;
+    m_state = PAUSE;
+    m_fStampLastStartTime = m_fStampStartTime;
+    m_fStampStartTime = -1.0f;
 }
 
 void Clip::Stop()
 {
-	//stamp_startTime = -1.0f;
-	//stamp_lastStartTime = 0.0f;
-	clipCurrentTime = clipEndTime;
-    state = STOP;
+    m_state = STOP;
 }

@@ -4,8 +4,8 @@ Vector2::Vector2()
 {
 }
 
-Vector2::Vector2(float _u, float _v)
+Vector2::Vector2(float _fU, float _fV)
 {
-	u = _u;
-	v = _v;
+	m_fU = _fU;
+	m_fV = _fV;
 }

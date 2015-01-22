@@ -26,54 +26,54 @@ public:
         LOWER_BODY
     };
 
-	Animation(const aiScene *_pScene, Mesh *_pMesh, Matrix _globalInverseTransform, BodyPart _bodyPartAffected);
+	Animation(const aiScene* _pScene, Mesh* _pMesh, Matrix _globalInverseTransform, BodyPart _bodyPartAffected);
 	~Animation();
 
-	void CalcInterpolatedScaling(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-    void CalcInterpolatedRotation(aiQuaternion& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
-    void CalcInterpolatedPosition(aiVector3D& Out, float AnimationTime, const aiNodeAnim* pNodeAnim);
+	void CalcInterpolatedScaling(aiVector3D& _out, float _fAnimationTime, const aiNodeAnim* _pNodeAnim);
+    void CalcInterpolatedRotation(aiQuaternion& _out, float _fAnimationTime, const aiNodeAnim* _pNodeAnim);
+    void CalcInterpolatedPosition(aiVector3D& _out, float _fAnimationTime, const aiNodeAnim* _pNodeAnim);
 
-    uint FindScaling(float AnimationTime, const aiNodeAnim* pNodeAnim);
-    uint FindRotation(float AnimationTime, const aiNodeAnim* pNodeAnim);
-    uint FindPosition(float AnimationTime, const aiNodeAnim* pNodeAnim);
+    uint FindScaling(float _fAnimationTime, const aiNodeAnim* _pNodeAnim);
+    uint FindRotation(float _fAnimationTime, const aiNodeAnim* _pNodeAnim);
+    uint FindPosition(float _fAnimationTime, const aiNodeAnim* _pNodeAnim);
 
-    const aiNodeAnim* FindNodeAnim(const aiAnimation* pAnimation, const string NodeName);
-    void ReadNodeHierarchy(const aiNode* pNode, const Matrix& ParentTransform, bool _crossFade);
-	void BoneTransform(float TimeInSeconds, vector<Matrix>& Transforms);
-    Matrix CalcInterpolations(const aiNodeAnim* pNodeAnim, bool _crossFade);
+    const aiNodeAnim* FindNodeAnim(const aiAnimation* _pAnimation, const string _sNodeName);
+    void ReadNodeHierarchy(const aiNode* _pNode, const Matrix& _parentTransform, bool _crossFade);
+	void BoneTransform(float _fTimeInSeconds, vector<Matrix>& _transforms);
+    Matrix CalcInterpolations(const aiNodeAnim* _pNodeAnim, bool _crossFade);
 	
-    void SetCurrentClip(Clip *_clip);
-    //void SetCurrentClipAndPlay(int num);
+    void SetCurrentClip(Clip* _clip);
     Clip &GetCurrentClip();
-    void SetLastClip(Clip *_clip);
-    void CrossfadeToNextClip(int num);
+    void SetLastClip(Clip* _clip);
     Clip &GetLastClip();
-
+    void CrossfadeToClip(int _iNum);
+    void CrossfadeToClip(Clip* _clip);
+    void QueueNextClip(Clip* _clip);
 	void InitCrossfade();
 
-    void LoadClips(const std::string &_filename);
+    void LoadClips(const std::string& _sFilename);
     void PlayClip();
 
-    const aiScene *pScene;
+    const aiScene* m_pScene;
 
-	Clip *currentClip;
-    Clip *lastClip;
+	Clip* m_pCurrentClip;
+    Clip* m_pLastClip;
+    Clip* m_pNextClip;
 
 private:
     BodyPart bodyPartAffected;
 
-	Mesh *pMesh;
+	Mesh* m_pMesh;
 
-    float weight;
-	float startCrossfade;
+    float m_fWeight;
+	float m_fStartCrossfade;
 
 	Matrix m_GlobalInverseTransform;
 
-    int nbClip;
-    vector<Clip> clips;
+    int m_iNbClip;
+    vector<Clip> m_clips;
 
-    //int nbNodePack;
-    NodePack *nodePack;
+    NodePack* m_pNodePack;
 };
 
 #endif // ANIMATION_H

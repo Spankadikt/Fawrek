@@ -15,27 +15,27 @@
 class Model
 {
 public:
-	Model(const string &_filename);
-	Model(const string &_filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string &_animdata_filename = "");
+	Model(const string& _filename);
+	Model(const string& _filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string& _sAnimdataFilename = "");
 	~Model();
 
-	void Render(Camera *_camera, Light *_shader, float _runningTime);
+	void Render(Camera* _camera, Light* _shader, float _fRunningTime);
 
-	Vector3 vScale;
-	Vector3 vRotate;
-	Vector3 vTranslate;
+	Vector3 m_scale;
+	Vector3 m_rotate;
+	Vector3 m_translate;
 
 	//mesh , skeleton and anim stuff
-	Assimp::Importer m_Importer;
+	Assimp::Importer m_importer;
 	const aiScene* m_pScene;
-	Matrix m_GlobalInverseTransform;
+	Matrix m_globalInverseTransform;
     
-	Mesh *pMesh;
-	Skeleton *pSkeleton;
-	Animation *pAnimation;
+	Mesh* m_pMesh;
+	Skeleton* m_pSkeleton;
+	Animation* m_pAnimation;
 
 private:
-	bool ModelInit(const string &_filename, const std::string &_animdata_filename = "");
+	bool ModelInit(const string& _sFilename, const std::string& _sAnimdataFilename = "");
 };
 
 #endif //MESH_H

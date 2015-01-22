@@ -14,16 +14,16 @@ Camera::~Camera()
 {
 }
 
-void Camera::PerspectiveFOV(float _fovAngle, float _aspectRatio, float _nearZ, float _farZ)
+void Camera::PerspectiveFOV(float _fFovAngle, float _fAspectRatio, float _fNnearZ, float _fFarZ)
 {
-	const float rad = std::tan(_fovAngle * PI_f / 360.f);
+	const float rad = std::tan(_fFovAngle * PI_f / 360.f);
 
 	projection = Matrix::Zero;
-	projection.m[ 0] = 1.f / (_aspectRatio * rad);
-	projection.m[ 5] = 1.f / rad;
-	projection.m[10] = -(_farZ + _nearZ) / (_farZ - _nearZ);
-	projection.m[11] = -1;
-	projection.m[14] = -(2.f * _farZ * _nearZ) / (_farZ - _nearZ);
+	projection.m_m[ 0] = 1.f / (_fAspectRatio * rad);
+	projection.m_m[ 5] = 1.f / rad;
+	projection.m_m[10] = -(_fFarZ + _fNnearZ) / (_fFarZ - _fNnearZ);
+	projection.m_m[11] = -1;
+	projection.m_m[14] = -(2.f * _fFarZ * _fNnearZ) / (_fFarZ - _fNnearZ);
 }
 
 void Camera::LookAt(Vector3 _pos, Vector3 _target, Vector3 _up)
@@ -34,9 +34,9 @@ void Camera::LookAt(Vector3 _pos, Vector3 _target, Vector3 _up)
 	/*
 	*		OpenGL MODELVIEW
 	*		Column Major
-	*	X.x		Y.x		Z.x		T.x
-	*	X.y		Y.y		Z.y		T.y
-	*	X.z		Y.z		Z.z		T.z
+	*	X.m_fX		Y.m_fX		Z.m_fX		T.m_fX
+	*	X.m_fY		Y.m_fY		Z.m_fY		T.m_fY
+	*	X.m_fZ		Y.m_fZ		Z.m_fZ		T.m_fZ
 	*	-		-		-		-
 	* X: Side
 	* Y: Up
@@ -45,30 +45,30 @@ void Camera::LookAt(Vector3 _pos, Vector3 _target, Vector3 _up)
 	*/
 
 	const Vector3 forward = (pos - target).Normalize();
-	// Side = forward x up
+	// Side = forward m_fX up
 	const Vector3 side = (Vector3::Cross(up, forward)).Normalize();
 
-	// Recompute up as: up = side x forward
+	// Recompute up as: up = side m_fX forward
 	const Vector3 rup = Vector3::Cross(forward, side);
 
 	//Work on temp matrix
 	Matrix result = Matrix::Identity;
 
-	result.m[ 0] = side.x;
-	result.m[ 4] = side.y;
-	result.m[ 8] = side.z;
+	result.m_m[ 0] = side.m_fX;
+	result.m_m[ 4] = side.m_fY;
+	result.m_m[ 8] = side.m_fZ;
 
-	result.m[ 1] = rup.x;
-	result.m[ 5] = rup.y;
-	result.m[ 9] = rup.z;
+	result.m_m[ 1] = rup.m_fX;
+	result.m_m[ 5] = rup.m_fY;
+	result.m_m[ 9] = rup.m_fZ;
 
-	result.m[ 2] = forward.x;
-	result.m[ 6] = forward.y;
-	result.m[10] = forward.z;
+	result.m_m[ 2] = forward.m_fX;
+	result.m_m[ 6] = forward.m_fY;
+	result.m_m[10] = forward.m_fZ;
 
-	result.m[12] = -Vector3::Dot(side, pos);
-	result.m[13] = -Vector3::Dot(rup, pos);
-	result.m[14] = -Vector3::Dot(forward, pos);
+	result.m_m[12] = -Vector3::Dot(side, pos);
+	result.m_m[13] = -Vector3::Dot(rup, pos);
+	result.m_m[14] = -Vector3::Dot(forward, pos);
 
 	view = result;
 }

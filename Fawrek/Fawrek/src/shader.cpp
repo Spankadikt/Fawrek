@@ -6,7 +6,7 @@
 
 Shader::Shader()
 {
-    shaderProg = 0;
+    m_shaderProg = 0;
 }
 
 
@@ -15,24 +15,24 @@ Shader::~Shader()
     // Delete the intermediate shader objects that have been added to the program
     // The list will only contain something if shaders were compiled but the object itself
     // was destroyed prior to linking.
-    for (ShaderObjList::iterator it = shaderObjList.begin() ; it != shaderObjList.end() ; it++)
+    for (ShaderObjList::iterator it = m_shaderObjList.begin() ; it != m_shaderObjList.end() ; it++)
     {
         glDeleteShader(*it);
     }
 
-    if (shaderProg != 0)
+    if (m_shaderProg != 0)
     {
-        glDeleteProgram(shaderProg);
-        shaderProg = 0;
+        glDeleteProgram(m_shaderProg);
+        m_shaderProg = 0;
     }
 }
 
 
 bool Shader::Init()
 {
-    shaderProg = glCreateProgram();
+    m_shaderProg = glCreateProgram();
 
-    if (shaderProg == 0) {
+    if (m_shaderProg == 0) {
         fprintf(stderr, "Error creating shader program\n");
         return false;
     }
@@ -41,7 +41,7 @@ bool Shader::Init()
 }
 
 // Use this method to add shaders to the program. When finished - call finalize()
-bool Shader::AddShader(GLenum _shaderType, const char *_pFilename)
+bool Shader::AddShader(GLenum _shaderType, const char* _pFilename)
 {
     string s;
     
@@ -57,7 +57,7 @@ bool Shader::AddShader(GLenum _shaderType, const char *_pFilename)
     }
 
     // Save the shader object - will be deleted in the destructor
-    shaderObjList.push_back(shaderObj);
+    m_shaderObjList.push_back(shaderObj);
 
     const GLchar* p[1];
     p[0] = s.c_str();
@@ -77,7 +77,7 @@ bool Shader::AddShader(GLenum _shaderType, const char *_pFilename)
         return false;
     }
 
-    glAttachShader(shaderProg, shaderObj);
+    glAttachShader(m_shaderProg, shaderObj);
 
     return true;
 }
@@ -90,29 +90,29 @@ bool Shader::Finalize()
     GLint success = 0;
     GLchar errorLog[1024] = { 0 };
 
-    glLinkProgram(shaderProg);
+    glLinkProgram(m_shaderProg);
 
-    glGetProgramiv(shaderProg, GL_LINK_STATUS, &success);
+    glGetProgramiv(m_shaderProg, GL_LINK_STATUS, &success);
 	if (success == 0) {
-		glGetProgramInfoLog(shaderProg, sizeof(errorLog), NULL, errorLog);
+		glGetProgramInfoLog(m_shaderProg, sizeof(errorLog), NULL, errorLog);
 		fprintf(stderr, "Error linking shader program: '%s'\n", errorLog);
         return false;
 	}
 
-    glValidateProgram(shaderProg);
-    glGetProgramiv(shaderProg, GL_VALIDATE_STATUS, &success);
+    glValidateProgram(m_shaderProg);
+    glGetProgramiv(m_shaderProg, GL_VALIDATE_STATUS, &success);
     if (!success) {
-        glGetProgramInfoLog(shaderProg, sizeof(errorLog), NULL, errorLog);
+        glGetProgramInfoLog(m_shaderProg, sizeof(errorLog), NULL, errorLog);
         fprintf(stderr, "Invalid shader program: '%s'\n", errorLog);
      //   return false;
     }
 
     // Delete the intermediate shader objects that have been added to the program
-    for (ShaderObjList::iterator it = shaderObjList.begin() ; it != shaderObjList.end() ; it++) {
+    for (ShaderObjList::iterator it = m_shaderObjList.begin() ; it != m_shaderObjList.end() ; it++) {
         glDeleteShader(*it);
     }
 
-    shaderObjList.clear();
+    m_shaderObjList.clear();
 
     return GLCheckError();
 }
@@ -120,13 +120,13 @@ bool Shader::Finalize()
 
 void Shader::Enable()
 {
-    glUseProgram(shaderProg);
+    glUseProgram(m_shaderProg);
 }
 
 
 GLint Shader::GetUniformLocation(const char *_pUniformName)
 {
-    GLuint Location = glGetUniformLocation(shaderProg, _pUniformName);
+    GLuint Location = glGetUniformLocation(m_shaderProg, _pUniformName);
 
     if (Location == 0xffffffff) {
         fprintf(stderr, "Warning! Unable to get the location of uniform '%s'\n", _pUniformName);
@@ -138,6 +138,6 @@ GLint Shader::GetUniformLocation(const char *_pUniformName)
 GLint Shader::GetProgramParam(GLint _param)
 {
     GLint ret;
-    glGetProgramiv(shaderProg, _param, &ret);
+    glGetProgramiv(m_shaderProg, _param, &ret);
     return ret;
 }

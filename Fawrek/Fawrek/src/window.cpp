@@ -10,26 +10,26 @@
 
 // Points to the object implementing the ICallbacks interface which was delivered to
 // GLUTBackendRun(). All events are forwarded to this object.
-static ICallbacks* pCallbacks = NULL;
+static ICallbacks* g_pCallbacks = NULL;
 
-static bool sWithDepth = false;
-static bool sWithStencil = false;
+static bool s_WithDepth = false;
+static bool s_WithStencil = false;
 
 
 static void RenderSceneCB()
 {
-    pCallbacks->RenderSceneCB();
+    g_pCallbacks->RenderSceneCB();
 }
 
 
 static void IdleCB()
 {
-    pCallbacks->RenderSceneCB();
+    g_pCallbacks->RenderSceneCB();
 }
 
-static void KeyboardManager(unsigned char key, int x, int y)
+static void KeyboardManager(unsigned char _cKey, int _iX, int _iY)
 {
-	pCallbacks->KeyboardManager(key, x, y);
+	g_pCallbacks->KeyboardManager(_cKey, _iX, _iY);
 }
 
 static void InitCallbacks()
@@ -40,41 +40,41 @@ static void InitCallbacks()
 }
 
 
-void GLUTBackendInit(int _argc, char **_argv, bool _withDepth, bool _withStencil)
+void GLUTBackendInit(int _argc, char** _argv, bool _bWithDepth, bool _bWithStencil)
 {
-    sWithDepth = _withDepth;
-    sWithStencil = _withStencil;
+    s_WithDepth = _bWithDepth;
+    s_WithStencil = _bWithStencil;
 
     glutInit(&_argc, _argv);
 	
-    uint displayMode = GLUT_DOUBLE|GLUT_RGBA;
+    uint uiDisplayMode = GLUT_DOUBLE|GLUT_RGBA;
 
-    if (_withDepth) {
-        displayMode |= GLUT_DEPTH;
+    if (_bWithDepth) {
+        uiDisplayMode |= GLUT_DEPTH;
     }
 
-    if (_withStencil) {
-        displayMode |= GLUT_STENCIL;
+    if (_bWithStencil) {
+        uiDisplayMode |= GLUT_STENCIL;
     }
 
-    glutInitDisplayMode(displayMode);
+    glutInitDisplayMode(uiDisplayMode);
 
     glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 }
 
 
-bool GLUTBackendCreateWindow(unsigned int _width, unsigned int _height, bool _isFullScreen, const char *_pTitle)
+bool GLUTBackendCreateWindow(unsigned int _iWidth, unsigned int _iHeight, bool _bIsFullScreen, const char* _pcTitle)
 {
-    if (_isFullScreen) {
-        char ModeString[64] = { 0 };
-        int bpp = 32;
-        _snprintf_s(ModeString, sizeof(ModeString), "%dx%d@%d", _width, _height, bpp);
-        glutGameModeString(ModeString);
+    if (_bIsFullScreen) {
+        char cModeString[64] = { 0 };
+        int iBpp = 32;
+        _snprintf_s(cModeString, sizeof(cModeString), "%dx%d@%d", _iWidth, _iHeight, iBpp);
+        glutGameModeString(cModeString);
         glutEnterGameMode();
     }
     else {
-        glutInitWindowSize(_width, _height);
-        glutCreateWindow(_pTitle);
+        glutInitWindowSize(_iWidth, _iHeight);
+        glutCreateWindow(_pcTitle);
     }
 
     // Must be done after glut is initialized!
@@ -87,7 +87,7 @@ bool GLUTBackendCreateWindow(unsigned int _width, unsigned int _height, bool _is
     return true;
 }
 
-void GLUTBackendRun(ICallbacks *_pCallbacks)
+void GLUTBackendRun(ICallbacks* _pCallbacks)
 {
     if (!_pCallbacks) {
         fprintf(stderr, "%s : callbacks not specified!\n", __FUNCTION__);
@@ -99,11 +99,11 @@ void GLUTBackendRun(ICallbacks *_pCallbacks)
     glCullFace(GL_FRONT);
     glEnable(GL_CULL_FACE);
 
-    if (sWithDepth) {
+    if (s_WithDepth) {
         glEnable(GL_DEPTH_TEST);
     }
 
-    pCallbacks = _pCallbacks;
+    g_pCallbacks = _pCallbacks;
     InitCallbacks();
     glutMainLoop();
 }

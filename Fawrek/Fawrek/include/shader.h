@@ -18,20 +18,20 @@ public:
 
 protected:
 
-    bool AddShader(GLenum ShaderType, const char *_pFilename);
+    bool AddShader(GLenum ShaderType, const char* _pFilename);
 
     bool Finalize();
 
-    GLint GetUniformLocation(const char *_pUniformName);
+    GLint GetUniformLocation(const char* _pUniformName);
     
     GLint GetProgramParam(GLint _param);
     
-    GLuint shaderProg;    
+    GLuint m_shaderProg;    
     
 private:
 
     typedef std::list<GLuint> ShaderObjList;
-    ShaderObjList shaderObjList;
+    ShaderObjList m_shaderObjList;
 };
 
 #endif	//SHADER

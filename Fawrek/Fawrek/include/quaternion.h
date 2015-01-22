@@ -6,18 +6,18 @@
 class Quaternion
 {
 public:
-	float x,y,z,w;
+	float m_fX,m_fY,m_fZ,m_fW;
 
 	Quaternion();
-	Quaternion(float _x,float _y,float _z,float _w);
+	Quaternion(float _fX,float _fY,float _fZ,float _fW);
 
-	Quaternion FromEuler(float yaw, float pitch, float roll);
+	Quaternion FromEuler(float _fYaw, float _fPitch, float _fRoll);
 	Quaternion FromMatrix(const Matrix _mat);
 	Vector3 ToEuler() const;
 	Matrix ToMatrix() const;
 
-    static Quaternion Lerp(const Quaternion &from, const Quaternion &to, float t);
-    static Quaternion Slerp(const Quaternion &from, const Quaternion &to, float t);
+    static Quaternion Lerp(const Quaternion& _from, const Quaternion& _to, float _fTime);
+    static Quaternion Slerp(const Quaternion& _from, const Quaternion& _to, float _fTime);
 };
 
 #endif //QUATERNION_H

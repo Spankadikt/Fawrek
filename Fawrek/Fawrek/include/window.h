@@ -4,8 +4,8 @@
 #include "types.h"
 #include "callbacks.h"
 
-void GLUTBackendInit(int _argc, char **_argv, bool _withDepth, bool _withStencil);
-bool GLUTBackendCreateWindow(uint _width, uint _height, bool _isFullScreen, const char *_pTitle);
-void GLUTBackendRun(ICallbacks *_pCallbacks);
+void GLUTBackendInit(int _iArgc, char** _argv, bool _bWithDepth, bool _bWithStencil);
+bool GLUTBackendCreateWindow(uint _uiWidth, uint _uiHeight, bool _bIsFullScreen, const char* _pcTitle);
+void GLUTBackendRun(ICallbacks* _pCallbacks);
 
 #endif //WINDOW_H

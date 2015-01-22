@@ -10,37 +10,23 @@
 #define BONE_ID_LOCATION     3
 #define BONE_WEIGHT_LOCATION 4
 
-//void Mesh::VertexBoneData::AddBoneData(uint BoneID, float Weight)
-//{
-//    for (uint i = 0 ; i < ARRAY_SIZE_IN_ELEMENTS(IDs) ; i++) {
-//        if (Weights[i] == 0.0) {
-//            IDs[i]     = BoneID;
-//            Weights[i] = Weight;
-//            return;
-//        }        
-//    }
-//    
-//    // should never get here - more bones than we have space for
-//    assert(0);
-//
-//}
 Mesh::Mesh()
 {
 	m_VAO = 0;
     ZERO_MEM(m_Buffers);
-	pSkeleton = new Skeleton(this);
+	m_pSkeleton = new Skeleton(this);
 }
 
 Mesh::~Mesh()
 {
-	SAFE_DELETE(pSkeleton);
+	SAFE_DELETE(m_pSkeleton);
 	Clear();
 }
 
 void Mesh::Clear()
 {
-    for (unsigned int i = 0 ; i < textures.size() ; i++) {
-        SAFE_DELETE(textures[i]);
+    for (unsigned int i = 0 ; i < m_textures.size() ; i++) {
+        SAFE_DELETE(m_textures[i]);
     }
 
 	if (m_Buffers[0] != 0) {
@@ -67,8 +53,8 @@ bool Mesh::InitFromScene(const aiScene *_pScene, const std::string &_filename)
 
 	m_pScene = _pScene;
 
-    entries.resize(m_pScene->mNumMeshes);
-    textures.resize(m_pScene->mNumMaterials);
+    m_entries.resize(m_pScene->mNumMeshes);
+    m_textures.resize(m_pScene->mNumMaterials);
 
 	vector<Vector3> Positions;
     vector<Vector3> Normals;
@@ -80,14 +66,14 @@ bool Mesh::InitFromScene(const aiScene *_pScene, const std::string &_filename)
     uint NumIndices = 0;
     
     // Count the number of vertices and indices
-    for (uint i = 0 ; i < entries.size() ; i++) {
-        entries[i].MaterialIndex = m_pScene->mMeshes[i]->mMaterialIndex;        
-        entries[i].NumIndices    = m_pScene->mMeshes[i]->mNumFaces * 3;
-        entries[i].BaseVertex    = NumVertices;
-        entries[i].BaseIndex     = NumIndices;
+    for (uint i = 0 ; i < m_entries.size() ; i++) {
+        m_entries[i].m_uiMaterialIndex = m_pScene->mMeshes[i]->mMaterialIndex;        
+        m_entries[i].m_uiNumIndices    = m_pScene->mMeshes[i]->mNumFaces * 3;
+        m_entries[i].m_uiBaseVertex    = NumVertices;
+        m_entries[i].m_uiBaseIndex     = NumIndices;
         
         NumVertices += m_pScene->mMeshes[i]->mNumVertices;
-        NumIndices  += entries[i].NumIndices;
+        NumIndices  += m_entries[i].m_uiNumIndices;
     }
     
     // Reserve space in the vectors for the vertex attributes and indices
@@ -98,7 +84,7 @@ bool Mesh::InitFromScene(const aiScene *_pScene, const std::string &_filename)
     Indices.reserve(NumIndices);
 
     // Initialize the meshes in the scene one by one
-    for (uint i = 0 ; i < entries.size() ; i++) {
+    for (uint i = 0 ; i < m_entries.size() ; i++) {
         const aiMesh* paiMesh = m_pScene->mMeshes[i];
         InitMesh(i, paiMesh, Positions, Normals, TexCoords, Bones, Indices);
     }
@@ -161,7 +147,7 @@ void Mesh::InitMesh(uint MeshIndex,
 
 	if(paiMesh->HasBones())
 	{
-		pSkeleton->LoadBones(MeshIndex, paiMesh, Bones);
+		m_pSkeleton->LoadBones(MeshIndex, paiMesh, Bones);
 	}
     
     // Populate the index buffer
@@ -177,26 +163,26 @@ void Mesh::InitMesh(uint MeshIndex,
 bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 {
     // Extract the directory part from the file name
-    string::size_type SlashIndex = Filename.find_last_of("/");
-    string Dir;
+    string::size_type slashIndex = Filename.find_last_of("/");
+    string sDir;
 
-    if (SlashIndex == string::npos) {
-        Dir = ".";
+    if (slashIndex == string::npos) {
+        sDir = ".";
     }
-    else if (SlashIndex == 0) {
-        Dir = "/";
+    else if (slashIndex == 0) {
+        sDir = "/";
     }
     else {
-        Dir = Filename.substr(0, SlashIndex);
+        sDir = Filename.substr(0, slashIndex);
     }
 
-    bool Ret = true;
+    bool bRet = true;
 
     // Initialize the materials
     for (uint i = 0 ; i < m_pScene->mNumMaterials ; i++) {
         const aiMaterial* pMaterial = m_pScene->mMaterials[i];
 
-        textures[i] = NULL;
+        m_textures[i] = NULL;
 
         if (pMaterial->GetTextureCount(aiTextureType_DIFFUSE) > 0) {
             aiString Path;
@@ -212,15 +198,15 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 				SlashIndex++;
 				p = p.substr(SlashIndex, p.size()-SlashIndex);
 				//end hack
-                string FullPath = Dir + "/" + p;
+                string FullPath = sDir + "/" + p;
                     
-                textures[i] = new Texture(FullPath.c_str(),GL_TEXTURE_2D);
+                m_textures[i] = new Texture(FullPath.c_str(),GL_TEXTURE_2D);
 
-                if (!textures[i]->LoadTexture()) {
+                if (!m_textures[i]->LoadTexture()) {
                     printf("Error loading texture '%s'\n", FullPath.c_str());
-                    delete textures[i];
-                    textures[i] = NULL;
-                    Ret = false;
+                    delete m_textures[i];
+                    m_textures[i] = NULL;
+                    bRet = false;
                 }
                 else {
                     printf("%d - loaded texture '%s'\n", i, FullPath.c_str());
@@ -229,7 +215,7 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
         }
     }
 
-    return Ret;
+    return bRet;
 }
 
 
@@ -237,20 +223,20 @@ void Mesh::Render()
 {
     glBindVertexArray(m_VAO);
     
-    for (uint i = 0 ; i < entries.size() ; i++) {
-        const uint MaterialIndex = entries[i].MaterialIndex;
+    for (uint i = 0 ; i < m_entries.size() ; i++) {
+        const uint uiMaterialIndex = m_entries[i].m_uiMaterialIndex;
 
-        assert(MaterialIndex < textures.size());
+        assert(uiMaterialIndex < m_textures.size());
         
-        if (textures[MaterialIndex]) {
-            textures[MaterialIndex]->Bind(GL_TEXTURE0);
+        if (m_textures[uiMaterialIndex]) {
+            m_textures[uiMaterialIndex]->Bind(GL_TEXTURE0);
         }
 
 		glDrawElementsBaseVertex(GL_TRIANGLES, 
-                                 entries[i].NumIndices, 
+                                 m_entries[i].m_uiNumIndices, 
                                  GL_UNSIGNED_INT, 
-                                 (void*)(sizeof(uint) * entries[i].BaseIndex), 
-                                 entries[i].BaseVertex);
+                                 (void*)(sizeof(uint) * m_entries[i].m_uiBaseIndex), 
+                                 m_entries[i].m_uiBaseVertex);
     }
 
     // Make sure the VAO is not changed from the outside    

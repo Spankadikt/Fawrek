@@ -31,7 +31,7 @@ float fmax(float a, float b);
 
 using namespace std;
 
-bool ReadFile(const char *_fileName, string &_outFile);
+bool ReadFile(const char* _cFileName, string& _sOutFile);
 
 long long GetCurrentTimeMillis();
 
