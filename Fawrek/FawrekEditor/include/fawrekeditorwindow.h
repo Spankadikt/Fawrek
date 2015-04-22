@@ -11,6 +11,7 @@ public:
     void initializeGL();
     void resizeGL(int width, int height);
     void paintGL();
+
 };
 
 #endif // FAWREKEDITORWINDOW_H

@@ -18,6 +18,7 @@ public:
     virtual void resizeGL(int width, int height) = 0;
     virtual void paintGL() = 0;
     virtual void keyPressEvent( QKeyEvent *keyEvent );
+	void toggleFullWindow();
 
 public slots:
     virtual void timeOutSlot();
@@ -25,6 +26,7 @@ public slots:
 private:
 	Ui::FawrekEditorClass ui;
     QTimer *t_Timer;
+	bool b_Fullscreen;
 
 };
 

@@ -20,6 +20,7 @@ FawrekEditorWidget::FawrekEditorWidget(int framesPerSecond, QWidget *parent, cha
 		connect(t_Timer, SIGNAL(timeout()), this, SLOT(timeOutSlot()));
 		t_Timer->start( timerInterval );
 	}
+	b_Fullscreen = false;
 }
 
 
@@ -35,9 +36,27 @@ void FawrekEditorWidget::keyPressEvent(QKeyEvent *keyEvent)
         case Qt::Key_Escape:
             close();
             break;
+		case Qt::Key_F1:
+            toggleFullWindow();
+            break;
     }
 }
 
 void FawrekEditorWidget::timeOutSlot()
 {
+	updateGL();
+}
+
+void FawrekEditorWidget::toggleFullWindow()
+{
+    if(b_Fullscreen)
+    {
+        showNormal();
+        b_Fullscreen = false;
+    }
+    else
+    {
+        showFullScreen();
+        b_Fullscreen = true;
+    }
 }
