@@ -125,7 +125,7 @@
     <ClInclude Include="include\api.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
-    <ClInclude Include="include\GLContext.h">
+    <ClInclude Include="include\glcontext.h">
       <Filter>Fichiers d%27en-tête</Filter>
     </ClInclude>
   </ItemGroup>
