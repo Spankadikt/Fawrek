@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FawrekEngine", "FawrekEngine\Fawrek.vcxproj", "{52500702-5513-43AE-B328-9A930C0065FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FawrekEditor", "FawrekEditor\FawrekEditor.csproj", "{44CF5D3D-583B-4736-8FEA-E09F1A342330}"
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FawrekDemo", "FawrekDemo\FawrekDemo.vcxproj", "{5FF46808-1D07-4514-9629-F117FBE0E051}"
 	ProjectSection(ProjectDependencies) = postProject
 		{52500702-5513-43AE-B328-9A930C0065FD} = {52500702-5513-43AE-B328-9A930C0065FD}
@@ -30,16 +28,6 @@ Global
 		{52500702-5513-43AE-B328-9A930C0065FD}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{52500702-5513-43AE-B328-9A930C0065FD}.Release|Win32.ActiveCfg = Release|Win32
 		{52500702-5513-43AE-B328-9A930C0065FD}.Release|Win32.Build.0 = Release|Win32
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Debug|Win32.ActiveCfg = Debug|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Release|Any CPU.Build.0 = Release|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{44CF5D3D-583B-4736-8FEA-E09F1A342330}.Release|Win32.ActiveCfg = Release|Any CPU
 		{5FF46808-1D07-4514-9629-F117FBE0E051}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{5FF46808-1D07-4514-9629-F117FBE0E051}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{5FF46808-1D07-4514-9629-F117FBE0E051}.Debug|Mixed Platforms.Build.0 = Debug|Win32
