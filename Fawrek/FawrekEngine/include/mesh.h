@@ -6,8 +6,8 @@
 #include "map"
 #include "vector"
 
-
 #include "GL/glew.h"
+#include "GL/gl.h"
 #include "vertex.h"
 #include "texture.h"
 #include "utils.h"
@@ -58,7 +58,6 @@ public:
 
 	void Clear();
 private:
-
     void InitMesh(uint _uiMeshIndex,
                   const aiMesh* _paiMesh,
                   vector<Vector3>& _positions,

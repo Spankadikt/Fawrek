@@ -1,6 +1,6 @@
 #include "mesh.h"
 
-#include "GL/glew.h"
+//#include "GL/glew.h"
 #include "assert.h"
 #include "quaternion.h"
 
@@ -34,7 +34,13 @@ void Mesh::Clear()
     }
        
     if (m_VAO != 0) {
-        glDeleteVertexArrays(1, &m_VAO);
+
+		//typedef void (APIENTRY *_glDeleteVertexArrays) (GLsizei , GLuint*); 
+		//_glDeleteVertexArrays glDeleteVertexArrays;
+		//QOpenGLContext qglcont(QOpenGLContext::currentContext());
+		//PFNGLDELETEVERTEXARRAYSPROC  glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC  ) qglcont.getProcAddress("glDeleteVertexArrays");
+		
+		glDeleteVertexArrays(1, &m_VAO);
         m_VAO = 0;
     }
 }
@@ -45,7 +51,7 @@ bool Mesh::InitFromScene(const aiScene *_pScene, const std::string &_filename)
     Clear();
 
 	// Create the VAO
-    glGenVertexArrays(1, &m_VAO);   
+	glGenVertexArrays(1, &m_VAO);   
     glBindVertexArray(m_VAO);
     
     // Create the buffers for the vertices attributes
@@ -121,7 +127,7 @@ bool Mesh::InitFromScene(const aiScene *_pScene, const std::string &_filename)
 
 	glBindVertexArray(0);	
 
-    return GLCheckError();
+	return (glGetError() == GLU_ERROR);
 }
 
 void Mesh::InitMesh(uint MeshIndex,
