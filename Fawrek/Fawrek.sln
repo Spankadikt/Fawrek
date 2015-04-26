@@ -10,6 +10,10 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FawrekDemo", "FawrekDemo\Fa
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FawrekFreeglut", "FawrekFreeglut", "{210D750B-9121-48E0-B500-5348EE2B0609}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FawrekWin32", "FawrekWin32", "{44932171-D0A1-49EB-917B-ACFE2219691C}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FawrekEditor", "FawrekEditor\FawrekEditor.vcxproj", "{A9D722D8-C905-4811-AED3-59AA06594A6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,12 +44,22 @@ Global
 		{5FF46808-1D07-4514-9629-F117FBE0E051}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{5FF46808-1D07-4514-9629-F117FBE0E051}.Release|Win32.ActiveCfg = Release|Win32
 		{5FF46808-1D07-4514-9629-F117FBE0E051}.Release|Win32.Build.0 = Release|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Debug|Win32.Build.0 = Debug|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Release|Any CPU.ActiveCfg = Release|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Release|Win32.ActiveCfg = Release|Win32
+		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Release|Win32.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5FF46808-1D07-4514-9629-F117FBE0E051} = {210D750B-9121-48E0-B500-5348EE2B0609}
-		{52500702-5513-43AE-B328-9A930C0065FD} = {210D750B-9121-48E0-B500-5348EE2B0609}
+		{A9D722D8-C905-4811-AED3-59AA06594A6B} = {44932171-D0A1-49EB-917B-ACFE2219691C}
 	EndGlobalSection
 EndGlobal
