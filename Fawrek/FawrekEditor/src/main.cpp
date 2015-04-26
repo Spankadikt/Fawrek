@@ -365,7 +365,7 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 	}
 
 	// Create Our OpenGL Window
-	if (!CreateGLWindow("NeHe's OpenGL Framework",640,480,16,fullscreen))
+	if (!CreateGLWindow("Fawrek Editor",640,480,16,fullscreen))
 	{
 		return 0;									// Quit If Window Was Not Created
 	}
@@ -420,11 +420,13 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 				KillGLWindow();						// Kill Our Current Window
 				fullscreen=!fullscreen;				// Toggle Fullscreen / Windowed Mode
 				// Recreate Our OpenGL Window
-				if (!CreateGLWindow("NeHe's OpenGL Framework",640,480,16,fullscreen))
+				if (!CreateGLWindow("Fawrek Editor",640,480,16,fullscreen))
 				{
 					return 0;						// Quit If Window Was Not Created
 				}
 			}
+
+			pApp->KeyboardManager(keys);
 		}
 	}
 

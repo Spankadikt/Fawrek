@@ -41,33 +41,7 @@ public:
 		glutSwapBuffers();
 	}*/
 
-	/*virtual void KeyboardManager(unsigned char key, int x, int y)
-	{	
-		switch (key)
-		{
-		case 'a':
-			pModel->m_pAnimation->CrossfadeToClip(0);
-            pModel->m_pAnimationBis->CrossfadeToClip(0);
-			break;
-		case 'z':
-			pModel->m_pAnimation->CrossfadeToClip(18);
-            pModel->m_pAnimationBis->CrossfadeToClip(18);
-			break;
-		case 'b':
-            pModel->m_pAnimationBis->CrossfadeToClip(2);
-            pModel->m_pAnimationBis->GetLastClip().Init();
-            pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
-			break;
-        case 'n':
-			pModel->m_pAnimation->CrossfadeToClip(2);
-            pModel->m_pAnimation->QueueNextClip(&pModel->m_pAnimation->GetLastClip());
-            pModel->m_pAnimationBis->CrossfadeToClip(2);
-            pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
-			break;
-		default:
-			break;
-		}	 
-	}*/
+	void KeyboardManager(bool _keys[256]);
 
 private:
     Light *pLight;

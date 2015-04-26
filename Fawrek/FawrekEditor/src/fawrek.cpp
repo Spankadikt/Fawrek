@@ -69,31 +69,30 @@ void Fawrek::Render()
 	glutSwapBuffers();
 }*/
 
-/*virtual void KeyboardManager(unsigned char key, int x, int y)
+void Fawrek::KeyboardManager(bool _keys[256])
 {	
-	switch (key)
+	if (_keys[0x41])//A
 	{
-	case 'a':
 		pModel->m_pAnimation->CrossfadeToClip(0);
         pModel->m_pAnimationBis->CrossfadeToClip(0);
-		break;
-	case 'z':
+	}
+	if (_keys[0x42])//Z
+	{
 		pModel->m_pAnimation->CrossfadeToClip(18);
         pModel->m_pAnimationBis->CrossfadeToClip(18);
-		break;
-	case 'b':
+	}
+	if (_keys[0x41])//B
+	{
         pModel->m_pAnimationBis->CrossfadeToClip(2);
         pModel->m_pAnimationBis->GetLastClip().Init();
         pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
-		break;
-    case 'n':
+	}
+    if (_keys[0x4E])
+	{
 		pModel->m_pAnimation->CrossfadeToClip(2);
         pModel->m_pAnimation->QueueNextClip(&pModel->m_pAnimation->GetLastClip());
         pModel->m_pAnimationBis->CrossfadeToClip(2);
         pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
-		break;
-	default:
-		break;
-	}	 
-}*/
+	}
+}
 
