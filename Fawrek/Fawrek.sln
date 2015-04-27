@@ -1,18 +1,22 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FawrekEngine", "FawrekEngine\Fawrek.vcxproj", "{52500702-5513-43AE-B328-9A930C0065FD}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fawrek.Engine", "Fawrek.Engine\Fawrek.Engine.vcxproj", "{52500702-5513-43AE-B328-9A930C0065FD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FawrekDemo", "FawrekDemo\FawrekDemo.vcxproj", "{5FF46808-1D07-4514-9629-F117FBE0E051}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fawrek.Freeglut.Demo", "Fawrek.Freeglut.Demo\Fawrek.Freeglut.Demo.vcxproj", "{5FF46808-1D07-4514-9629-F117FBE0E051}"
 	ProjectSection(ProjectDependencies) = postProject
 		{52500702-5513-43AE-B328-9A930C0065FD} = {52500702-5513-43AE-B328-9A930C0065FD}
 	EndProjectSection
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FawrekFreeglut", "FawrekFreeglut", "{210D750B-9121-48E0-B500-5348EE2B0609}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fawrek.Win32.Demo", "Fawrek.Win32.Demo\Fawrek.Win32.Demo.vcxproj", "{A9D722D8-C905-4811-AED3-59AA06594A6B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "FawrekWin32", "FawrekWin32", "{44932171-D0A1-49EB-917B-ACFE2219691C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tao.OpenGl", "Tao.OpenGl\Tao.OpenGl.csproj", "{6292109B-6BB4-4120-AD56-F409C0285AB6}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "FawrekEditor", "FawrekEditor\FawrekEditor.vcxproj", "{A9D722D8-C905-4811-AED3-59AA06594A6B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tao.Platform.Windows", "Tao.Platform.Windows\Tao.Platform.Windows.csproj", "{228201EB-1A36-4E25-B59F-52255CBBE270}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fawrek.Editor", "Fawrek.Editor\Fawrek.Editor.csproj", "{F1C26391-954D-44DE-8414-5CF14C30D22E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fawrek.Wrapper", "Fawrek.Wrapper\Fawrek.Wrapper.csproj", "{B031802D-621B-4690-A7D7-B48370680201}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -54,12 +58,48 @@ Global
 		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Release|Win32.ActiveCfg = Release|Win32
 		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Release|Win32.Build.0 = Release|Win32
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6292109B-6BB4-4120-AD56-F409C0285AB6}.Release|Win32.ActiveCfg = Release|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Release|Any CPU.Build.0 = Release|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{228201EB-1A36-4E25-B59F-52255CBBE270}.Release|Win32.ActiveCfg = Release|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F1C26391-954D-44DE-8414-5CF14C30D22E}.Release|Win32.ActiveCfg = Release|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Debug|Win32.ActiveCfg = Debug|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B031802D-621B-4690-A7D7-B48370680201}.Release|Win32.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{5FF46808-1D07-4514-9629-F117FBE0E051} = {210D750B-9121-48E0-B500-5348EE2B0609}
-		{A9D722D8-C905-4811-AED3-59AA06594A6B} = {44932171-D0A1-49EB-917B-ACFE2219691C}
 	EndGlobalSection
 EndGlobal

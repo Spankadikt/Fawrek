@@ -1,0 +1,12 @@
+﻿<Window x:Class="Fawrek.Editor.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:int="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+    xmlns:cs="clr-namespace:Fawrek.Editor"
+    Title="OpenGL Window" Height="480" Width="640">
+    <Grid>
+        <int:WindowsFormsHost>
+            <cs:CustomOpenGLControl Name="myOpenGLControl" />
+        </int:WindowsFormsHost>
+    </Grid>
+</Window>
