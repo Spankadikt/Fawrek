@@ -15,7 +15,6 @@ namespace Fawrek.Editor
 
         public CustomOpenGLControl()
         {
-            Gl.glGetString(Gl.GL_VERSION);
             InitializeContexts();
 
             fawrekPtr = Fawrek.Wrapper.Wrapper.RunFawrekCreate();
@@ -25,23 +24,12 @@ namespace Fawrek.Editor
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-
-            Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
-            Gl.glLoadIdentity();
-
-            /*Gl.glBegin(Gl.GL_TRIANGLES);
-            Gl.glColor3f(1.0f, 0.0f, 0.0f); Gl.glVertex3f(-1.0f, -1.0f,  0.0f);
-            Gl.glColor3f(0.0f, 1.0f, 0.0f); Gl.glVertex3f( 0.0f,  1.0f,  0.0f);
-            Gl.glColor3f(0.0f, 0.0f, 1.0f); Gl.glVertex3f( 1.0f, -1.0f,  0.0f);
-            Gl.glEnd();
-
-            Gl.glFlush();*/
-
-            //OpenGLDLLWrapper.Wrapper.RunTest();
             Fawrek.Wrapper.Wrapper.RunFawrekRender(fawrekPtr);
 
             SwapBuffers();
+
+            //call this to refresh and draw
+            Draw();
         }
 
         protected override void OnLoad(EventArgs e)
