@@ -25,7 +25,7 @@ public:
     Fawrek();
     ~Fawrek();
 
-    bool Init();
+    int Init();
     void Dispose();
     void Render();
 

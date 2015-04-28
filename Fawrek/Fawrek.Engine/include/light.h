@@ -41,7 +41,7 @@ public:
     Light(const std::string& _sVertexShaderFilename,const std::string& _sFragmentShaderFilename);
     ~Light();
 
-    virtual bool Init();
+    virtual int Init();
 
     void SetWVP(Matrix _WVP);
 	void SetWorldMatrix(Matrix _W);

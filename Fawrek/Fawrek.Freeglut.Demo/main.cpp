@@ -47,7 +47,8 @@ public:
 
 		pLight = new Light("shaders/skinning.vs","shaders/skinning.fs");
 
-		if (!pLight->Init())
+		int initLight = pLight->Init();
+		if (initLight != 0 )
 		{
 			return false;
 		}

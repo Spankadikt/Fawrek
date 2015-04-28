@@ -24,7 +24,7 @@ using namespace std;
 #define SNPRINTF _snprintf_s
 #define RANDOM rand
 #define SRANDOM srand((unsigned)time(NULL))
-float fmax(float a, float b);
+float FAWREK_API fmax(float a, float b);
 #else
 #define SNPRINTF snprintf
 #define RANDOM random

@@ -23,7 +23,8 @@ bool Fawrek::Init()
 
 	pLight = new Light("shaders/skinning.vs","shaders/skinning.fs");
 
-	if (!pLight->Init())
+	int lightInit = pLight->Init();
+	if (lightInit != 0)
 	{
 		return false;
 	}

@@ -7,7 +7,7 @@
 #include "vector"
 
 #include "GL/glew.h"
-#include "GL/gl.h"
+//#include "GL/gl.h"
 #include "vertex.h"
 #include "texture.h"
 #include "utils.h"

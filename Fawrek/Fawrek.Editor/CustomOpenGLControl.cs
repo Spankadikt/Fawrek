@@ -16,21 +16,21 @@ namespace Fawrek.Editor
         public CustomOpenGLControl()
         {
             Gl.glGetString(Gl.GL_VERSION);
+            InitializeContexts();
 
             fawrekPtr = Fawrek.Wrapper.Wrapper.RunFawrekCreate();
             int initResult = Fawrek.Wrapper.Wrapper.RunFawrekInit(fawrekPtr);
 
-            InitializeContexts();
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            /*Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
+            Gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
 
             Gl.glClear(Gl.GL_COLOR_BUFFER_BIT | Gl.GL_DEPTH_BUFFER_BIT);
             Gl.glLoadIdentity();
 
-            Gl.glBegin(Gl.GL_TRIANGLES);
+            /*Gl.glBegin(Gl.GL_TRIANGLES);
             Gl.glColor3f(1.0f, 0.0f, 0.0f); Gl.glVertex3f(-1.0f, -1.0f,  0.0f);
             Gl.glColor3f(0.0f, 1.0f, 0.0f); Gl.glVertex3f( 0.0f,  1.0f,  0.0f);
             Gl.glColor3f(0.0f, 0.0f, 1.0f); Gl.glVertex3f( 1.0f, -1.0f,  0.0f);

@@ -7,8 +7,9 @@ Fawrek* FawrekCreate()
 
 int FawrekInit(Fawrek* _pFawrek)
 {
-	if(!_pFawrek->Init())
-		return 1;
+	int initResult = _pFawrek->Init();
+	if(initResult != 0)
+		return initResult;
 	else
 		return 0;
 }

@@ -9,13 +9,14 @@ Fawrek::~Fawrek()
     Dispose();
 }
 
-bool Fawrek::Init()
+int Fawrek::Init()
 {
+	//glewExperimental=GL_TRUE;
 	GLint GlewInitResult = glewInit();
 	if (GLEW_OK != GlewInitResult) 
 	{
 		printf("ERROR: %s\n",glewGetErrorString(GlewInitResult));
-		return false;
+		return 100+GlewInitResult;
 	}
 
     directionalLight.m_color = Vector3(1.0f, 1.0f, 1.0f);
@@ -30,9 +31,10 @@ bool Fawrek::Init()
 
 	pLight = new Light("shaders/skinning.vs","shaders/skinning.fs");
 
-	if (!pLight->Init())
+	int lightInit = pLight->Init();
+	if (lightInit != 0)
 	{
-		return false;
+		return lightInit;
 	}
 
 	pLight->Enable();
@@ -45,7 +47,7 @@ bool Fawrek::Init()
     pModel->m_pAnimation->CrossfadeToClip(18);
     pModel->m_pAnimationBis->CrossfadeToClip(18);
 
-	return true;
+	return 0;
 }
 
 void Fawrek::Dispose()

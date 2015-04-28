@@ -14,7 +14,7 @@ public:
 
     virtual ~Shader();
 
-    virtual bool Init();
+    virtual int Init();
 
     void Enable();
 

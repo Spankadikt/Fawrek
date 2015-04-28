@@ -28,16 +28,16 @@ Shader::~Shader()
 }
 
 
-bool Shader::Init()
+int Shader::Init()
 {
     m_shaderProg = glCreateProgram();
 
     if (m_shaderProg == 0) {
         fprintf(stderr, "Error creating shader program\n");
-        return false;
+        return 20;
     }
 
-    return true;
+    return 0;
 }
 
 // Use this method to add shaders to the program. When finished - call finalize()

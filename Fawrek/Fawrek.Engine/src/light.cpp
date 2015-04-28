@@ -14,19 +14,20 @@ Light::~Light()
 }
 
 
-bool Light::Init()
+int Light::Init()
 {
-    if (!Shader::Init())
-        return false;
+	int shaderInit = Shader::Init();
+    if (shaderInit != 0)
+        return shaderInit;
 
     if (!AddShader(GL_VERTEX_SHADER, m_sVertexShaderFilename.c_str()))
-        return false;
+        return 21;
 
     if (!AddShader(GL_FRAGMENT_SHADER, m_sFragmentShaderFilename.c_str()))
-        return false;
+        return 22;
 
     if (!Finalize())
-        return false;
+        return 23;
 
     m_wvpLocation = GetUniformLocation("gWVP");
 	m_worldMatrixLocation = GetUniformLocation("gWorld");
@@ -48,7 +49,7 @@ bool Light::Init()
 		m_matSpecularIntensityLocation == 0xFFFFFFFF ||
         m_matSpecularPowerLocation == 0xFFFFFFFF)
 	{
-        return false;
+        return 24;
     }
 
 	for (unsigned int i = 0 ; i < ARRAY_SIZE_IN_ELEMENTS(m_boneLocation) ; i++) {
@@ -58,7 +59,7 @@ bool Light::Init()
         m_boneLocation[i] = GetUniformLocation(name);
     }
 
-    return true;
+    return 0;
 }
 
 void Light::SetWVP(Matrix _WVP)

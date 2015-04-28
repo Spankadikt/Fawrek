@@ -127,7 +127,8 @@ bool Mesh::InitFromScene(const aiScene *_pScene, const std::string &_filename)
 
 	glBindVertexArray(0);	
 
-	return (glGetError() == GLU_ERROR);
+	fprintf(stderr, "Error: '%s'\n", gluErrorString(glGetError()));
+	return (GLCheckError());
 }
 
 void Mesh::InitMesh(uint MeshIndex,
