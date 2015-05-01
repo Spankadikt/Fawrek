@@ -4,7 +4,7 @@ using Tao.OpenGl;
 using Tao.Platform.Windows;
 using Fawrek.Wrapper;
 
-namespace Fawrek.Editor
+namespace Fawrek.Editor.UserControls
 {
     class CustomOpenGLControl : SimpleOpenGlControl
     {
@@ -20,6 +20,12 @@ namespace Fawrek.Editor
             fawrekPtr = Fawrek.Wrapper.Wrapper.RunFawrekCreate();
             int initResult = Fawrek.Wrapper.Wrapper.RunFawrekInit(fawrekPtr);
 
+        }
+
+        protected override void OnHandleDestroyed(EventArgs e)
+        {
+            Fawrek.Wrapper.Wrapper.RunFawrekDelete(fawrekPtr);
+            base.OnHandleDestroyed(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)

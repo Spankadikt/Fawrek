@@ -1,0 +1,42 @@
+﻿<UserControl x:Class="Fawrek.Editor.UserControls.AnimationEditorControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:int="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
+             xmlns:cs="clr-namespace:Fawrek.Editor.UserControls"
+             mc:Ignorable="d" 
+             d:DesignHeight="540" d:DesignWidth="720">
+    <Grid>
+        <Grid Background="WhiteSmoke">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Menu Grid.ColumnSpan="3" Grid.Row="0">
+                <MenuItem Header="File..." >
+                    <MenuItem Header="Load"/>
+                    <MenuItem Header="Save"/>
+                    <MenuItem Header="Close"/>
+                </MenuItem>
+            </Menu>
+            <GroupBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Width="200" Background="red">
+                <TreeView>
+                </TreeView>
+            </GroupBox>
+            <int:WindowsFormsHost Grid.Column="2" Grid.Row="1" Width="270" Height="240" >
+                <cs:CustomOpenGLControl Name="myOpenGLControl" />
+            </int:WindowsFormsHost>
+            <GroupBox Grid.Column="2" Grid.Row="2" Background="GreenYellow">
+                <ListView>
+                </ListView>
+            </GroupBox>
+        </Grid>
+    </Grid>
+</UserControl>
