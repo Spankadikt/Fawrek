@@ -7,7 +7,8 @@
 #include "vector"
 
 #include "camera.h"
-#include "light.h"
+#include "lightingroutine.h"
+#include "skinningroutine.h"
 #include "engine.h"
 #include "quaternion.h"
 #include "skeleton.h"
@@ -21,7 +22,8 @@ public:
 	Model(const string& _filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string& _sAnimdataFilename = "");
 	~Model();
 
-	void Render(Camera* _camera, Light* _shader, float _fRunningTime);
+	void Render(Camera* _camera, SkinningRoutine* _shader, float _fRunningTime);
+	void Render(Camera* _camera, LightingRoutine* _shader, float _fRunningTime);
 
 	Vector3 m_scale;
 	Vector3 m_rotate;

@@ -379,8 +379,9 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 
 	pApp = new Fawrek();
 
-    if (!pApp->Init()) {
-        return 1;
+	int appInit = pApp->Init();
+    if (appInit != 0) {
+        return appInit;
     }
 
 

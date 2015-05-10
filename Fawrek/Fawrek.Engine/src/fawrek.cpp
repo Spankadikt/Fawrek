@@ -29,19 +29,28 @@ int Fawrek::Init()
     pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 	pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
 
-	pLight = new Light("shaders/skinning.vs","shaders/skinning.fs");
+	pSkinningRoutine = new SkinningRoutine("shaders/skinningroutine.vs","shaders/skinningroutine.fs");
+	//pLightingRoutine = new LightingRoutine("shaders/lightingroutine.vs","shaders/lightingroutine.fs");
 
-	int lightInit = pLight->Init();
+	int lightInit = pSkinningRoutine->Init();
+	//int lightInit = pLightingRoutine->Init();
+
 	if (lightInit != 0)
 	{
 		return lightInit;
 	}
 
-	pLight->Enable();
-	pLight->SetTextureUnit(0);
-	pLight->SetDirectionalLight(directionalLight);
-	pLight->SetMatSpecularIntensity(1.0f);
-	pLight->SetMatSpecularPower(32);
+	//pLightingRoutine->Enable();
+	//pLightingRoutine->SetTextureUnit(0);
+	//pLightingRoutine->SetDirectionalLight(directionalLight);
+	//pLightingRoutine->SetMatSpecularIntensity(1.0f);
+	//pLightingRoutine->SetMatSpecularPower(32);
+
+	pSkinningRoutine->Enable();
+	pSkinningRoutine->SetTextureUnit(0);
+	pSkinningRoutine->SetDirectionalLight(directionalLight);
+	pSkinningRoutine->SetMatSpecularIntensity(1.0f);
+	pSkinningRoutine->SetMatSpecularPower(32);
 
 	pModel = new Model("resources/ninja.b3d",Vector3(0.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f),"resources/animation_ninja.xml");
     pModel->m_pAnimation->CrossfadeToClip(18);
@@ -52,7 +61,8 @@ int Fawrek::Init()
 
 void Fawrek::Dispose()
 {
-    SAFE_DELETE(pLight);
+	SAFE_DELETE(pSkinningRoutine);
+    SAFE_DELETE(pLightingRoutine);
     SAFE_DELETE(pCamera);
 	SAFE_DELETE(pModel);
 }
@@ -63,7 +73,7 @@ void Fawrek::Render()
 
     float runningTime = GetRunningTime();
 
-	pModel->Render(pCamera,pLight,runningTime);
+	pModel->Render(pCamera,pSkinningRoutine,runningTime);
 }
 
 /*void Run()

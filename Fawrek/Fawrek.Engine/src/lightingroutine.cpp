@@ -1,20 +1,20 @@
 #include "assert.h"
 
-#include "light.h"
+#include "lightingroutine.h"
 #include "utils.h"
 
-Light::Light(const std::string& _sVertexShaderFilename,const std::string& _sFragmentShaderFilename)
+LightingRoutine::LightingRoutine(const std::string& _sVertexShaderFilename,const std::string& _sFragmentShaderFilename)
 {
     m_sVertexShaderFilename = _sVertexShaderFilename;
     m_sFragmentShaderFilename = _sFragmentShaderFilename;
 }
 
-Light::~Light()
+LightingRoutine::~LightingRoutine()
 {
 }
 
 
-int Light::Init()
+int LightingRoutine::Init()
 {
 	int shaderInit = Shader::Init();
     if (shaderInit != 0)
@@ -32,10 +32,10 @@ int Light::Init()
     m_wvpLocation = GetUniformLocation("gWVP");
 	m_worldMatrixLocation = GetUniformLocation("gWorld");
     m_samplerLocation = GetUniformLocation("gSampler");
-    m_dirLightLocation.m_color = GetUniformLocation("gDirectionalLight.Base.Color");
-    m_dirLightLocation.m_ambientIntensity = GetUniformLocation("gDirectionalLight.Base.AmbientIntensity");
+    m_dirLightLocation.m_color = GetUniformLocation("gDirectionalLight.Color");
+    m_dirLightLocation.m_ambientIntensity = GetUniformLocation("gDirectionalLight.AmbientIntensity");
 	m_dirLightLocation.m_direction = GetUniformLocation("gDirectionalLight.Direction");
-    m_dirLightLocation.m_diffuseIntensity = GetUniformLocation("gDirectionalLight.Base.DiffuseIntensity");
+    m_dirLightLocation.m_diffuseIntensity = GetUniformLocation("gDirectionalLight.DiffuseIntensity");
 	m_matSpecularIntensityLocation = GetUniformLocation("gMatSpecularIntensity");
     m_matSpecularPowerLocation = GetUniformLocation("gSpecularPower");
 
@@ -62,24 +62,24 @@ int Light::Init()
     return 0;
 }
 
-void Light::SetWVP(Matrix _WVP)
+void LightingRoutine::SetWVP(Matrix _WVP)
 {
 	glUniformMatrix4fv(m_wvpLocation, 1, GL_FALSE,&_WVP.m_m[0]);    
 }
 
-void Light::SetWorldMatrix(Matrix _worldInverse)
+void LightingRoutine::SetWorldMatrix(Matrix _worldInverse)
 {
 	glUniformMatrix4fv(m_worldMatrixLocation, 1, GL_FALSE, &_worldInverse.m_m[0]);
 }
 
 
-void Light::SetTextureUnit(unsigned int _textureUnit)
+void LightingRoutine::SetTextureUnit(unsigned int _textureUnit)
 {
     glUniform1i(m_samplerLocation, _textureUnit);
 }
 
 
-void Light::SetDirectionalLight(const DirectionalLight _light)
+void LightingRoutine::SetDirectionalLight(const DirectionalLight _light)
 {
     glUniform3f(m_dirLightLocation.m_color, _light.m_color.m_fX, _light.m_color.m_fY, _light.m_color.m_fZ);
     glUniform1f(m_dirLightLocation.m_ambientIntensity, _light.m_fAmbientIntensity);
@@ -89,22 +89,22 @@ void Light::SetDirectionalLight(const DirectionalLight _light)
     glUniform1f(m_dirLightLocation.m_diffuseIntensity, _light.m_fDiffuseIntensity);
 }
 
-void Light::SetEyeWorldPos(const Vector3 _eyeWorldPos)
+void LightingRoutine::SetEyeWorldPos(const Vector3 _eyeWorldPos)
 {
     glUniform3f(m_eyeWorldPosLocation, _eyeWorldPos.m_fX, _eyeWorldPos.m_fY, _eyeWorldPos.m_fZ);
 }
 
-void Light::SetMatSpecularIntensity(float _intensity)
+void LightingRoutine::SetMatSpecularIntensity(float _intensity)
 {
     glUniform1f(m_matSpecularIntensityLocation, _intensity);
 }
 
-void Light::SetMatSpecularPower(float _power)
+void LightingRoutine::SetMatSpecularPower(float _power)
 {
     glUniform1f(m_matSpecularPowerLocation, _power);
 }
 
-void Light::SetBoneTransform(uint _index, const Matrix _transform)
+void LightingRoutine::SetBoneTransform(uint _index, const Matrix _transform)
 {
     assert(_index < MAX_BONES);
 	glUniformMatrix4fv(m_boneLocation[_index], 1, GL_FALSE, &_transform.m_m[0]);       

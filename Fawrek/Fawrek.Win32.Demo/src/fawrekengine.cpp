@@ -1,4 +1,4 @@
-#include <fawrek.h>
+#include <fawrekengine.h>
 
 Fawrek::Fawrek()
 {   
@@ -21,7 +21,8 @@ bool Fawrek::Init()
     pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 	pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
 
-	pLight = new Light("shaders/skinning.vs","shaders/skinning.fs");
+	//pSkinningRoutine = new SkinningRoutine("shaders/skinning.vs","shaders/skinning.fs");
+	pLightingRoutine = new LightingRoutine("shaders/lighting.vs","shaders/lighting.fs");
 
 	int lightInit = pLight->Init();
 	if (lightInit != 0)
@@ -36,8 +37,9 @@ bool Fawrek::Init()
 	pLight->SetMatSpecularPower(32);
 
 	pModel = new Model("resources/ninja.b3d",Vector3(0.0f,-15.0f,0.0f),Vector3(0.0f,180.0f,0.0f),Vector3(1.5f,1.5f,1.5f),"resources/animation_ninja.xml");
-    pModel->m_pAnimation->CrossfadeToClip(18);
-    pModel->m_pAnimationBis->CrossfadeToClip(18);
+	//pModel = new Model("resources/ninja.b3d");
+    //pModel->m_pAnimation->CrossfadeToClip(18);
+    //pModel->m_pAnimationBis->CrossfadeToClip(18);
 
 	return true;
 }

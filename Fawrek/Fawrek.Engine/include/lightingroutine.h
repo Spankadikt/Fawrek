@@ -1,45 +1,19 @@
 #include "api.h"
 
-#ifndef LIGHT_H
-#define	LIGHT_H
+#ifndef LIGHTINGROUTINE_H
+#define	LIGHTINGROUTINE_H
 
 #include "shader.h"
-#include "vector3.h"
 #include "matrix.h"
 
-struct FAWREK_API BaseLight
-{
-    Vector3 m_color;
-    float m_fAmbientIntensity;
-    float m_fDiffuseIntensity;
-
-    BaseLight()
-    {
-        m_color = Vector3(0.0f, 0.0f, 0.0f);
-        m_fAmbientIntensity = 0.0f;
-        m_fDiffuseIntensity = 0.0f;
-    }
-
-};
-
-struct FAWREK_API DirectionalLight : public BaseLight
-{        
-    Vector3 m_direction;
-
-    DirectionalLight()
-    {
-        m_direction = Vector3(0.0f, 0.0f, 0.0f);
-    }
-};
-
-class FAWREK_API Light : public Shader
+class FAWREK_API LightingRoutine : public Shader
 {
 public:
 
 	static const uint MAX_BONES = 100;
 
-    Light(const std::string& _sVertexShaderFilename,const std::string& _sFragmentShaderFilename);
-    ~Light();
+    LightingRoutine(const std::string& _sVertexShaderFilename,const std::string& _sFragmentShaderFilename);
+    ~LightingRoutine();
 
     virtual int Init();
 
@@ -74,4 +48,4 @@ private:
 };
 
 
-#endif	//LIGHT_H
+#endif	//LIGHTINGROUTINE_H

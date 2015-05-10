@@ -11,7 +11,8 @@
 #include "camera.h"
 #include "texture.h"
 #include "engine.h"
-#include "light.h"
+#include "lightingroutine.h"
+#include "skinningroutine.h"
 
 using namespace std;
 
@@ -46,7 +47,8 @@ public:
 	void KeyboardManager(bool _keys[256]);
 
 private:
-    Light *pLight;
+	SkinningRoutine *pSkinningRoutine;
+    LightingRoutine *pLightingRoutine;
     Camera *pCamera;
 	Model *pModel;
     DirectionalLight directionalLight;

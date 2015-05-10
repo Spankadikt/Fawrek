@@ -9,7 +9,8 @@
 #include "camera.h"
 #include "texture.h"
 #include "engine.h"
-#include "light.h"
+#include "lightingroutine.h"
+#include "skinningroutine.h"
 
 using namespace std;
 

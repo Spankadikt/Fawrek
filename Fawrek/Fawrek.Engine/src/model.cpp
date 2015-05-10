@@ -67,7 +67,7 @@ bool Model::ModelInit(const std::string& _sFilename, const std::string& _sAnimda
 	return ret;
 }
 
-void Model::Render(Camera* _pCamera, Light* _pLight, float _fRunningTime)
+void Model::Render(Camera* _pCamera, LightingRoutine* _pLight, float _fRunningTime)
 {
 	_pLight->Enable();
 
@@ -112,3 +112,47 @@ void Model::Render(Camera* _pCamera, Light* _pLight, float _fRunningTime)
 	}
 }
 
+void Model::Render(Camera* _pCamera, SkinningRoutine* _pLight, float _fRunningTime)
+{
+	_pLight->Enable();
+
+	vector<Matrix> Transforms;
+
+    m_pAnimationBis->BoneTransform(_fRunningTime, Transforms);
+    m_pAnimation->BoneTransform(_fRunningTime, Transforms);
+
+        
+    for (uint i = 0 ; i < Transforms.size() ; i++) {
+        _pLight->SetBoneTransform(i, Transforms[i]);
+    }
+
+	Matrix modelMatrix = Matrix::Identity;
+
+	modelMatrix.Translate(m_translate);
+	Quaternion qRotate = qRotate.FromEuler(m_rotate.m_fX,m_rotate.m_fY,m_rotate.m_fZ);
+	modelMatrix.Rotate(qRotate);
+	modelMatrix.Scale(m_scale);
+
+	Matrix modelView = _pCamera->view * modelMatrix;
+	Matrix viewProjection = _pCamera->projection * modelView;
+		
+	_pLight->SetWVP(viewProjection);
+    _pLight->SetWorldMatrix(modelMatrix);
+
+	m_pMesh->Render();
+
+	if(m_pAnimation->m_pCurrentClip->m_state == Clip::ClipState::STOP)
+	{
+        if(!m_pAnimation->m_pCurrentClip->m_bLoop && m_pAnimation->m_pNextClip != NULL)
+		{
+            m_pAnimation->CrossfadeToClip(m_pAnimation->m_pNextClip);
+		}
+	}
+    if(m_pAnimationBis->m_pCurrentClip->m_state == Clip::ClipState::STOP)
+	{
+        if(!m_pAnimationBis->m_pCurrentClip->m_bLoop && m_pAnimationBis->m_pNextClip != NULL)
+		{
+            m_pAnimationBis->CrossfadeToClip(m_pAnimationBis->m_pNextClip);
+		}
+	}
+}
