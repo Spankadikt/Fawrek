@@ -19,10 +19,12 @@ int Fawrek::Init()
 		return 100+GlewInitResult;
 	}
 
-    directionalLight.m_color = Vector3(1.0f, 1.0f, 1.0f);
-    directionalLight.m_fAmbientIntensity = 0.85f;
-    directionalLight.m_fDiffuseIntensity = 0.2f;
-    directionalLight.m_direction = Vector3(0.0f, 1.0f, 1.0f);     
+	pDirectionalLight = new DirectionalLight();
+
+    pDirectionalLight->m_color = Vector3(1.0f, 1.0f, 1.0f);
+    pDirectionalLight->m_fAmbientIntensity = 0.85f;
+    pDirectionalLight->m_fDiffuseIntensity = 0.2f;
+    pDirectionalLight->m_direction = Vector3(0.0f, 1.0f, 1.0f);     
 
 	pCamera = new Camera();
 
@@ -48,7 +50,7 @@ int Fawrek::Init()
 
 	pSkinningRoutine->Enable();
 	pSkinningRoutine->SetTextureUnit(0);
-	pSkinningRoutine->SetDirectionalLight(directionalLight);
+	pSkinningRoutine->SetDirectionalLight(pDirectionalLight);
 	pSkinningRoutine->SetMatSpecularIntensity(1.0f);
 	pSkinningRoutine->SetMatSpecularPower(32);
 
@@ -61,6 +63,7 @@ int Fawrek::Init()
 
 void Fawrek::Dispose()
 {
+	SAFE_DELETE(pDirectionalLight);
 	SAFE_DELETE(pSkinningRoutine);
     SAFE_DELETE(pLightingRoutine);
     SAFE_DELETE(pCamera);

@@ -5,9 +5,9 @@
 
 #include "list"
 #include "GL/glew.h"
-#include "vector3.h"
+#include "directionallight.h"
 
-struct FAWREK_API BaseLight
+/*struct FAWREK_API BaseLight
 {
     Vector3 m_color;
     float m_fAmbientIntensity;
@@ -30,7 +30,7 @@ struct FAWREK_API DirectionalLight : public BaseLight
     {
         m_direction = Vector3(0.0f, 0.0f, 0.0f);
     }
-};
+};*/
 
 class FAWREK_API Shader
 {
@@ -40,6 +40,15 @@ public:
 
     virtual ~Shader();
     virtual int Init();
+
+	virtual void SetWVP(Matrix _WVP) = 0;
+	virtual void SetWorldMatrix(Matrix _W) = 0;
+    virtual void SetTextureUnit(unsigned int _uiTextureUnit) = 0;
+    virtual void SetDirectionalLight(DirectionalLight* _light) = 0;
+	virtual void SetEyeWorldPos(const Vector3 _eyeWorldPos) = 0;
+    virtual void SetMatSpecularIntensity(float _fIntensity) = 0;
+    virtual void SetMatSpecularPower(float _fPower) = 0;
+	virtual void SetBoneTransform(uint _uiIndex, const Matrix _transform) = 0;
 
     void Enable();
 

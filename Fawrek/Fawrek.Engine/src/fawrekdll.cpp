@@ -1,4 +1,4 @@
-#include "fawrekexport.h"
+#include "fawrekdll.h"
 
 Fawrek* FawrekCreate()
 {

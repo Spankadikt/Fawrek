@@ -3,6 +3,7 @@ using System.Windows.Forms;
 using Tao.OpenGl;
 using Tao.Platform.Windows;
 using Fawrek.Wrapper;
+using System.Windows.Media;
 
 namespace Fawrek.Editor.UserControls
 {
@@ -17,13 +18,22 @@ namespace Fawrek.Editor.UserControls
         {
             InitializeContexts();
 
+            CompositionTarget.Rendering += CompositionTarget_Rendering;
+
             fawrekPtr = Fawrek.Wrapper.Wrapper.RunFawrekCreate();
             int initResult = Fawrek.Wrapper.Wrapper.RunFawrekInit(fawrekPtr);
 
         }
 
+        void CompositionTarget_Rendering(object sender, EventArgs e)
+        {
+            //call this to refresh and draw
+            Draw();
+        }
+
         protected override void OnHandleDestroyed(EventArgs e)
         {
+            CompositionTarget.Rendering -= CompositionTarget_Rendering;
             Fawrek.Wrapper.Wrapper.RunFawrekDelete(fawrekPtr);
             base.OnHandleDestroyed(e);
         }
@@ -33,9 +43,6 @@ namespace Fawrek.Editor.UserControls
             Fawrek.Wrapper.Wrapper.RunFawrekRender(fawrekPtr);
 
             SwapBuffers();
-
-            //call this to refresh and draw
-            Draw();
         }
 
         protected override void OnLoad(EventArgs e)

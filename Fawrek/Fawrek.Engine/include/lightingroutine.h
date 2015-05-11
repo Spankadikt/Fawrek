@@ -4,7 +4,6 @@
 #define	LIGHTINGROUTINE_H
 
 #include "shader.h"
-#include "matrix.h"
 
 class FAWREK_API LightingRoutine : public Shader
 {
@@ -17,14 +16,14 @@ public:
 
     virtual int Init();
 
-    void SetWVP(Matrix _WVP);
-	void SetWorldMatrix(Matrix _W);
-    void SetTextureUnit(unsigned int _uiTextureUnit);
-    void SetDirectionalLight(const DirectionalLight _light);
-	void SetEyeWorldPos(const Vector3 _eyeWorldPos);
-    void SetMatSpecularIntensity(float _fIntensity);
-    void SetMatSpecularPower(float _fPower);
-	void SetBoneTransform(uint _uiIndex, const Matrix _transform);
+    virtual void SetWVP(Matrix _WVP);
+	virtual void SetWorldMatrix(Matrix _W);
+    virtual void SetTextureUnit(unsigned int _uiTextureUnit);
+    virtual void SetDirectionalLight(DirectionalLight* _light);
+	virtual void SetEyeWorldPos(const Vector3 _eyeWorldPos);
+    virtual void SetMatSpecularIntensity(float _fIntensity);
+    virtual void SetMatSpecularPower(float _fPower);
+	virtual void SetBoneTransform(uint _uiIndex, const Matrix _transform);
 
 private:
     string m_sVertexShaderFilename;

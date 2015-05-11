@@ -51,5 +51,5 @@ private:
     LightingRoutine *pLightingRoutine;
     Camera *pCamera;
 	Model *pModel;
-    DirectionalLight directionalLight;
+    DirectionalLight *pDirectionalLight;
 };

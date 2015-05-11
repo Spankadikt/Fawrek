@@ -90,9 +90,11 @@ xcopy /d /y "$(ProjectDir)lib\*.lib" "$(SolutionDir)Fawrek.Win32.Demo\lib"</Comm
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="src\animation.cpp" />
+    <ClCompile Include="src\baselight.cpp" />
     <ClCompile Include="src\camera.cpp" />
     <ClCompile Include="src\clip.cpp" />
-    <ClCompile Include="src\fawrekexport.cpp" />
+    <ClCompile Include="src\directionallight.cpp" />
+    <ClCompile Include="src\fawrekdll.cpp" />
     <ClCompile Include="src\engine.cpp" />
     <ClCompile Include="src\fawrek.cpp" />
     <ClCompile Include="src\lightingroutine.cpp" />
@@ -113,9 +115,11 @@ xcopy /d /y "$(ProjectDir)lib\*.lib" "$(SolutionDir)Fawrek.Win32.Demo\lib"</Comm
   <ItemGroup>
     <ClInclude Include="include\animation.h" />
     <ClInclude Include="include\api.h" />
+    <ClInclude Include="include\baselight.h" />
     <ClInclude Include="include\camera.h" />
     <ClInclude Include="include\clip.h" />
-    <ClInclude Include="include\fawrekexport.h" />
+    <ClInclude Include="include\directionallight.h" />
+    <ClInclude Include="include\fawrekdll.h" />
     <ClInclude Include="include\engine.h" />
     <ClInclude Include="include\fawrek.h" />
     <ClInclude Include="include\lightingroutine.h" />

@@ -22,8 +22,7 @@ public:
 	Model(const string& _filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string& _sAnimdataFilename = "");
 	~Model();
 
-	void Render(Camera* _camera, SkinningRoutine* _shader, float _fRunningTime);
-	void Render(Camera* _camera, LightingRoutine* _shader, float _fRunningTime);
+	void Render(Camera* _camera, Shader* _shader, float _fRunningTime);
 
 	Vector3 m_scale;
 	Vector3 m_rotate;

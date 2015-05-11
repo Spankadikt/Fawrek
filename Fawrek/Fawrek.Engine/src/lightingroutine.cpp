@@ -79,14 +79,14 @@ void LightingRoutine::SetTextureUnit(unsigned int _textureUnit)
 }
 
 
-void LightingRoutine::SetDirectionalLight(const DirectionalLight _light)
+void LightingRoutine::SetDirectionalLight(DirectionalLight* _light)
 {
-    glUniform3f(m_dirLightLocation.m_color, _light.m_color.m_fX, _light.m_color.m_fY, _light.m_color.m_fZ);
-    glUniform1f(m_dirLightLocation.m_ambientIntensity, _light.m_fAmbientIntensity);
-    Vector3 direction = _light.m_direction;
+    glUniform3f(m_dirLightLocation.m_color, _light->m_color.m_fX, _light->m_color.m_fY, _light->m_color.m_fZ);
+    glUniform1f(m_dirLightLocation.m_ambientIntensity, _light->m_fAmbientIntensity);
+    Vector3 direction = _light->m_direction;
     direction = direction.Normalize();
     glUniform3f(m_dirLightLocation.m_direction, direction.m_fX, direction.m_fY, direction.m_fZ);
-    glUniform1f(m_dirLightLocation.m_diffuseIntensity, _light.m_fDiffuseIntensity);
+    glUniform1f(m_dirLightLocation.m_diffuseIntensity, _light->m_fDiffuseIntensity);
 }
 
 void LightingRoutine::SetEyeWorldPos(const Vector3 _eyeWorldPos)
