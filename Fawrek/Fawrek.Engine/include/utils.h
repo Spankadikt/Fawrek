@@ -5,6 +5,8 @@
 
 #include <time.h>
 #include <string>
+#include <sstream>
+#include <vector>
 
 #include "types.h"
 
@@ -34,6 +36,8 @@ float FAWREK_API fmax(float a, float b);
 using namespace std;
 
 bool FAWREK_API ReadFile(const char* _cFileName, string& _sOutFile);
+std::vector<std::string> FAWREK_API &split(const std::string &s, char delim, std::vector<std::string> &elems);
+std::vector<std::string> FAWREK_API split(const std::string &s, char delim);
 
 long long FAWREK_API GetCurrentTimeMillis();
 

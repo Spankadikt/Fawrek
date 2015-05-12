@@ -15,7 +15,9 @@
 #include "mesh.h"
 #include "animation.h"
 
-class FAWREK_API Model
+#include "object.h"
+
+class FAWREK_API Model : Object
 {
 public:
 	Model(const string& _filename);
@@ -24,9 +26,9 @@ public:
 
 	void Render(Camera* _camera, Shader* _shader, float _fRunningTime);
 
-	Vector3 m_scale;
-	Vector3 m_rotate;
-	Vector3 m_translate;
+	//Vector3 m_scale;
+	//Vector3 m_rotate;
+	//Vector3 m_translate;
 
 	//mesh , skeleton and anim stuff
 	Assimp::Importer m_importer;
@@ -42,5 +44,5 @@ private:
 	bool ModelInit(const string& _sFilename, const std::string& _sAnimdataFilename = "");
 };
 
-#endif //MESH_H
+#endif //MODEL_H
 

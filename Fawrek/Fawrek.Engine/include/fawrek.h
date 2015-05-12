@@ -5,6 +5,7 @@
 #include <assert.h>
 #include <math.h>
 
+#include "scene.h"
 #include "quaternion.h"
 #include "model.h"
 #include "utils.h"
@@ -50,6 +51,7 @@ private:
 	SkinningRoutine *pSkinningRoutine;
     LightingRoutine *pLightingRoutine;
     Camera *pCamera;
-	Model *pModel;
+	//Model *pModel;
+	Scene *pScene;
     DirectionalLight *pDirectionalLight;
 };
