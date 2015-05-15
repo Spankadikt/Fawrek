@@ -11,16 +11,16 @@ namespace Fawrek.Wrapper
         public static class DllHelper
         {
 
-            [DllImport(@"F:\Work\Git Repositories\Fawrek\Fawrek\Debug\Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekCreate")]
+            [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekCreate")]
             public static extern IntPtr FawrekCreate();
 
-            [DllImport(@"F:\Work\Git Repositories\Fawrek\Fawrek\Debug\Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekInit")]
+            [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekInit")]
             public static extern int FawrekInit(IntPtr value);
 
-            [DllImport(@"F:\Work\Git Repositories\Fawrek\Fawrek\Debug\Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekRender")]
+            [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekRender")]
             public static extern void FawrekRender(IntPtr value);
 
-            [DllImport(@"F:\Work\Git Repositories\Fawrek\Fawrek\Debug\Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekDelete")]
+            [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekDelete")]
             public static extern void FawrekDelete(IntPtr value);
         }
 

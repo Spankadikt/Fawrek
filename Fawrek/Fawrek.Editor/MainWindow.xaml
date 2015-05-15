@@ -1,30 +1,34 @@
 ﻿<controls:MetroWindow x:Class="Fawrek.Editor.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:int="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
     xmlns:cs="clr-namespace:Fawrek.Editor.UserControls"
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:conv="clr-namespace:MahApps.Metro.Converters;assembly=MahApps.Metro"
-    Title="OpenGL Window" Height="800" Width="1280" WindowTransitionsEnabled="False">
+    Title="Fawrek" Height="800" Width="1280" WindowTransitionsEnabled="False">
     
     <Grid>
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="130"/>
             </Grid.RowDefinitions>
-            <GroupBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Background="Orange">
-            </GroupBox>
-            <TabControl Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2">
+            <TabControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
+                <TabItem Header="Scene Editor">
+                    <cs:SceneEditorControl/>
+                </TabItem>
                 <TabItem Header="Animation Editor">
                     <cs:AnimationEditorControl/>
                 </TabItem>
             </TabControl>
-            <GroupBox x:Name="logPanel" Grid.ColumnSpan="2" Grid.Column="1" Grid.Row="2" Background="Blue">
+            <int:WindowsFormsHost Grid.Column="1" Grid.Row="0" Width="540" Height="480" >
+                <cs:CustomOpenGLControl Name="OpenGLControl" />
+            </int:WindowsFormsHost>
+            <GroupBox x:Name="logPanel" Grid.Column="1"  Grid.Row="1" Header="Log">
                 <TextBlock/>
             </GroupBox>
         </Grid>

@@ -68,7 +68,8 @@
       <Command>xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)Fawrek.Freeglut.Demo\dll"
 xcopy /d /y "$(ProjectDir)lib\*.lib" "$(SolutionDir)Fawrek.Freeglut.Demo\lib"
 xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)Fawrek.Win32.Demo\dll"
-xcopy /d /y "$(ProjectDir)lib\*.lib" "$(SolutionDir)Fawrek.Win32.Demo\lib"</Command>
+xcopy /d /y "$(ProjectDir)lib\*.lib" "$(SolutionDir)Fawrek.Win32.Demo\lib"
+xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)Fawrek.Editor\bin\Debug"</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">

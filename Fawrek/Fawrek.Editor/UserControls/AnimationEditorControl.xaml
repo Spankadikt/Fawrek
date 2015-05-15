@@ -16,24 +16,25 @@
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
-                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Menu Grid.ColumnSpan="3" Grid.Row="0">
-                <MenuItem Header="File..." >
-                    <MenuItem Header="Load"/>
-                    <MenuItem Header="Save"/>
-                    <MenuItem Header="Close"/>
+                <MenuItem Header="Animation" >
+                    <MenuItem Header="Load Animation..."/>
+                    <MenuItem Header="Save Animation"/>
+                    <MenuItem Header="Close Animation"/>
                 </MenuItem>
             </Menu>
-            <GroupBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Width="200" Background="red">
+            <GroupBox Grid.Column="0" Grid.Row="1" Width="200" Header="Animations">
                 <TreeView>
                 </TreeView>
             </GroupBox>
-            <int:WindowsFormsHost Grid.Column="2" Grid.Row="1" Width="270" Height="240" >
-                <cs:CustomOpenGLControl Name="myOpenGLControl" />
-            </int:WindowsFormsHost>
-            <GroupBox Grid.Column="2" Grid.Row="2" Background="GreenYellow">
+            <GroupBox Grid.Column="0" Grid.Row="2" Width="200" Header="Bones">
+                <TreeView>
+                </TreeView>
+            </GroupBox>
+            <GroupBox Grid.Column="1" Grid.Row="1" Grid.RowSpan="2" Header="States">
                 <ListView>
                 </ListView>
             </GroupBox>
