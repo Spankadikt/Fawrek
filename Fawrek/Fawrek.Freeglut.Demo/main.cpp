@@ -13,7 +13,8 @@
 #include "texture.h"
 #include "window.h"
 #include "engine.h"
-#include "light.h"
+#include "lightingroutine.h"
+#include "skinningroutine.h"
 
 using namespace std;
 
@@ -35,17 +36,17 @@ public:
 
     bool Init()
     {
-        directionalLight.m_color = Vector3(1.0f, 1.0f, 1.0f);
-        directionalLight.m_fAmbientIntensity = 0.85f;
-        directionalLight.m_fDiffuseIntensity = 0.2f;
-        directionalLight.m_direction = Vector3(0.0f, 1.0f, 1.0f);     
+        pDirectionalLight->m_color = Vector3(1.0f, 1.0f, 1.0f);
+        pDirectionalLight->m_fAmbientIntensity = 0.85f;
+        pDirectionalLight->m_fDiffuseIntensity = 0.2f;
+        pDirectionalLight->m_direction = Vector3(0.0f, 1.0f, 1.0f);     
 
 		pCamera = new Camera();
 
         pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 		pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
 
-		pLight = new Light("shaders/skinning.vs","shaders/skinning.fs");
+		pLight = new LightingRoutine("shaders/skinning.vs","shaders/skinning.fs");
 
 		int initLight = pLight->Init();
 		if (initLight != 0 )
@@ -55,7 +56,7 @@ public:
 
 		pLight->Enable();
 		pLight->SetTextureUnit(0);
-		pLight->SetDirectionalLight(directionalLight);
+		pLight->SetDirectionalLight(pDirectionalLight);
 		pLight->SetMatSpecularIntensity(1.0f);
 		pLight->SetMatSpecularPower(32);
 
@@ -123,10 +124,10 @@ public:
 	}
 
 private:
-    Light *pLight;
+    LightingRoutine *pLight;
     Camera *pCamera;
 	Model *pModel;
-    DirectionalLight directionalLight;
+    DirectionalLight *pDirectionalLight;
 };
 
 int main(int argc, char *argv[])

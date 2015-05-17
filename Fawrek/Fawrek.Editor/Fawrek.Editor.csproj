@@ -90,6 +90,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="FawrekEngine.cs" />
+    <Compile Include="Model.cs" />
+    <Compile Include="Scene.cs" />
+    <Compile Include="SceneManager.cs" />
     <Compile Include="UserControls\SceneEditorControl.xaml.cs">
       <DependentUpon>SceneEditorControl.xaml</DependentUpon>
     </Compile>

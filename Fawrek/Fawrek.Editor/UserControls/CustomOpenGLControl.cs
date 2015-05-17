@@ -12,37 +12,44 @@ namespace Fawrek.Editor.UserControls
         private double m_dScaleX = 1.0;
         private double m_dScaleY = 1.0;
 
-        IntPtr fawrekPtr;
-
         public CustomOpenGLControl()
         {
             InitializeContexts();
 
             CompositionTarget.Rendering += CompositionTarget_Rendering;
-
-            fawrekPtr = Fawrek.Wrapper.Wrapper.RunFawrekCreate();
-            int initResult = Fawrek.Wrapper.Wrapper.RunFawrekInit(fawrekPtr);
-
         }
 
         void CompositionTarget_Rendering(object sender, EventArgs e)
         {
-            //call this to refresh and draw
-            Draw();
+            if (FawrekEngine.fawrekPtr != null && FawrekEngine.fawrekPtr != IntPtr.Zero)
+            {
+                Draw();
+            }
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
             CompositionTarget.Rendering -= CompositionTarget_Rendering;
-            Fawrek.Wrapper.Wrapper.RunFawrekDelete(fawrekPtr);
+
+            if (FawrekEngine.fawrekPtr != null && FawrekEngine.fawrekPtr != IntPtr.Zero)
+            {
+                Fawrek.Wrapper.Wrapper.RunFawrekDelete(FawrekEngine.fawrekPtr);
+            }
+
             base.OnHandleDestroyed(e);
         }
 
         protected override void OnPaint(PaintEventArgs e)
         {
-            Fawrek.Wrapper.Wrapper.RunFawrekRender(fawrekPtr);
-
-            SwapBuffers();
+            if (FawrekEngine.fawrekPtr != null && FawrekEngine.fawrekPtr != IntPtr.Zero)
+            {
+                Fawrek.Wrapper.Wrapper.RunFawrekRender(FawrekEngine.fawrekPtr);
+                SwapBuffers();
+            }
+            else
+            {
+                base.OnPaint(e);
+            }
         }
 
         protected override void OnLoad(EventArgs e)

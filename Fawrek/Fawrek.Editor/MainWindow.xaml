@@ -14,8 +14,8 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="130"/>
             </Grid.RowDefinitions>
             <TabControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
                 <TabItem Header="Scene Editor">
@@ -25,10 +25,12 @@
                     <cs:AnimationEditorControl/>
                 </TabItem>
             </TabControl>
-            <int:WindowsFormsHost Grid.Column="1" Grid.Row="0" Width="540" Height="480" >
-                <cs:CustomOpenGLControl Name="OpenGLControl" />
-            </int:WindowsFormsHost>
-            <GroupBox x:Name="logPanel" Grid.Column="1"  Grid.Row="1" Header="Log">
+            <Grid Grid.Column="1" Grid.Row="0" Margin="5,80,5,5">
+                <int:WindowsFormsHost  Width="540" Height="480">
+                    <cs:CustomOpenGLControl Name="OpenGLControl" />
+                </int:WindowsFormsHost>
+            </Grid>
+            <GroupBox x:Name="logPanel" Grid.Column="1"  Grid.Row="1" Header="Log" Margin="5,10">
                 <TextBlock/>
             </GroupBox>
         </Grid>

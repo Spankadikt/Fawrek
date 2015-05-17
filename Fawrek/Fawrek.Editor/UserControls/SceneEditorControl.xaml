@@ -6,7 +6,8 @@
              xmlns:int="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
              xmlns:cs="clr-namespace:Fawrek.Editor.UserControls"
              mc:Ignorable="d" 
-             d:DesignHeight="540" d:DesignWidth="400">
+             d:DesignHeight="540" d:DesignWidth="400"
+             DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
         <Grid Background="WhiteSmoke">
             <Grid.ColumnDefinitions>
@@ -20,13 +21,13 @@
             </Grid.RowDefinitions>
             <Menu Grid.ColumnSpan="2" Grid.Row="0">
                 <MenuItem Header="Scene" >
-                    <MenuItem Header="Load Scene..."/>
-                    <MenuItem Header="Save Scene"/>
-                    <MenuItem Header="Close Scene"/>
+                    <MenuItem Header="Load Scene..." Click="MenuItem_LoadScene_Click"/>
+                    <MenuItem Header="Save Scene" Click="MenuItem_SaveScene_Click"/>
+                    <MenuItem Header="Close Scene" Click="MenuItem_CloseScene_Click"/>
                 </MenuItem>
             </Menu>
             <GroupBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Header="Objects">
-                <ListView>
+                <ListView Name="LVSceneObjects" ItemsSource="{Binding LstModels}" DisplayMemberPath="Name">
                 </ListView>
             </GroupBox>
             <GroupBox Grid.Column="1" Grid.Row="1" Header="Tools">
