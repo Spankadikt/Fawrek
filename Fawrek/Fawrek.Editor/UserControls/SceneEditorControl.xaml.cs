@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,7 +36,7 @@ namespace Fawrek.Editor.UserControls
             InitializeComponent();
         }
 
-        private void MenuItem_LoadScene_Click(object sender, RoutedEventArgs e)
+        private void LoadScene_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog ofd = new OpenFileDialog();
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -47,14 +48,42 @@ namespace Fawrek.Editor.UserControls
             }
         }
 
-        private void MenuItem_SaveScene_Click(object sender, RoutedEventArgs e)
+        private void SaveScene_Click(object sender, RoutedEventArgs e)
         {
             SM.SaveScene();
         }
 
-        private void MenuItem_CloseScene_Click(object sender, RoutedEventArgs e)
+        private void CloseScene_Click(object sender, RoutedEventArgs e)
         {
             SM.CloseScene();
+        }
+
+        private void AddModel_Click(object sender, RoutedEventArgs e)
+        {
+            Model model = new Model();
+            LstModels.Add(model);
+        }
+
+        private void RemoveModel_Click(object sender, RoutedEventArgs e)
+        {
+            var frameworkElement = e.OriginalSource as FrameworkElement;
+            var model = frameworkElement.DataContext as Model;
+
+            if (null == model)
+            {
+                return;
+            }
+
+            LstModels.Remove(model);
+        }
+
+        private void LVSceneObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            System.Windows.Controls.ListView lv = (System.Windows.Controls.ListView)sender;
+            var model = lv.SelectedItem as Model;
+            
+            if(model != null)
+                LVProperties.ItemsSource = model.Properties();
         }
     }
 }

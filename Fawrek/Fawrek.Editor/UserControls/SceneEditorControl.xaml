@@ -17,17 +17,32 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Menu Grid.ColumnSpan="2" Grid.Row="0">
                 <MenuItem Header="Scene" >
-                    <MenuItem Header="Load Scene..." Click="MenuItem_LoadScene_Click"/>
-                    <MenuItem Header="Save Scene" Click="MenuItem_SaveScene_Click"/>
-                    <MenuItem Header="Close Scene" Click="MenuItem_CloseScene_Click"/>
+                    <MenuItem Header="Load Scene..." Click="LoadScene_Click"/>
+                    <MenuItem Header="Save Scene" Click="SaveScene_Click"/>
+                    <MenuItem Header="Close Scene" Click="CloseScene_Click"/>
                 </MenuItem>
             </Menu>
             <GroupBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Header="Objects">
-                <ListView Name="LVSceneObjects" ItemsSource="{Binding LstModels}" DisplayMemberPath="Name">
+                <ListView Name="LVSceneObjects" ItemsSource="{Binding LstModels,Mode= TwoWay}" DisplayMemberPath="Name" SelectionChanged="LVSceneObjects_SelectionChanged">
+                    <ListView.Resources>
+                        <ContextMenu x:Key="ItemContextMenu">
+                            <MenuItem Header="Remove" Click="RemoveModel_Click" Background="WhiteSmoke" />
+                        </ContextMenu>
+                    </ListView.Resources>
+                    <ListView.ItemContainerStyle>
+                        <Style TargetType="{x:Type ListViewItem}" >
+                            <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Add Model" Click="AddModel_Click"/>
+                        </ContextMenu>
+                    </ListView.ContextMenu>
                 </ListView>
             </GroupBox>
             <GroupBox Grid.Column="1" Grid.Row="1" Header="Tools">
@@ -35,7 +50,19 @@
                 </ListView>
             </GroupBox>
             <GroupBox Grid.Column="1" Grid.Row="2" Header="Properties">
-                <ListView>
+                <ListView Name="LVProperties">
+                    <ListView.View>
+                        <GridView>
+                            <GridViewColumn DisplayMemberBinding="{Binding Path=ModelPropertyName}" Width="Auto"/>
+                            <GridViewColumn  Width="Auto">
+                                <GridViewColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBox Text="{Binding Path=ModelPropertyValue,Mode=TwoWay}"/>
+                                    </DataTemplate>
+                                </GridViewColumn.CellTemplate>
+                            </GridViewColumn>
+                        </GridView>
+                    </ListView.View>
                 </ListView>
             </GroupBox>
         </Grid>

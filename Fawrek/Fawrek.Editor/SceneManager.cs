@@ -26,6 +26,9 @@ namespace Fawrek.Editor
             {
                 Scene scene = new Scene();
 
+                scene.Path = path;
+                scene.Name = Path.GetFileName(path);
+
                 XmlReader reader = XmlReader.Create(path);
 
                 while (reader.Read())
@@ -59,6 +62,8 @@ namespace Fawrek.Editor
                         }
                     }
                 }
+
+                reader.Close();
 
                 CurrentScene = scene;
                 FawrekEngine.InitFawrekPtr();
@@ -128,8 +133,9 @@ namespace Fawrek.Editor
         {
             if (CurrentScene != null && !string.IsNullOrEmpty(CurrentScene.Path))
             {
-                SaveScene();
-                CurrentScene = new Scene();
+                FawrekEngine.DisposeFawrekPtr();
+                CurrentScene.LstModels.Clear();
+                CurrentScene = null;
             }
         }
     }
