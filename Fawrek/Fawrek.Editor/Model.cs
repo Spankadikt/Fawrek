@@ -7,31 +7,7 @@ using System.Windows.Media.Media3D;
 
 namespace Fawrek.Editor
 {
-    public class ModelProperty
-    {
-        public Model Model;
-
-        public string ModelPropertyName
-        {
-            get { return ModelPropertyInfo.Name; }
-        }
-
-        public object ModelPropertyValue
-        {
-            get
-            {
-                return this.Model.GetType().GetProperty(ModelPropertyInfo.Name).GetValue(Model, null);
-            }
-            set
-            {
-                this.Model.GetType().GetProperty(ModelPropertyInfo.Name).SetValue(Model.GetType(), value, null);
-            }
-        }
-
-        public PropertyInfo ModelPropertyInfo { get; set; }
-    }
-
-    public class Model
+    public class Model : Object
     {
         private int id = -1;
 
@@ -92,24 +68,6 @@ namespace Fawrek.Editor
         public Model()
         {
             name = "model";
-        }
-
-        public List<ModelProperty> Properties()
-        {
-            System.Type type = this.GetType();
-            System.Reflection.PropertyInfo[] pi = type.GetProperties();
-
-            List<ModelProperty> lstProperties = new List<ModelProperty>();
-
-            foreach (PropertyInfo p in pi)
-            {
-                ModelProperty mp = new ModelProperty();
-                mp.ModelPropertyInfo = p;
-                mp.Model = this;
-                lstProperties.Add(mp);
-            }
-
-            return lstProperties;
         }
     }
 }

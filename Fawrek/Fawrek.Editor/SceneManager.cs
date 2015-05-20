@@ -8,12 +8,53 @@ using System.Xml;
 
 namespace Fawrek.Editor
 {
-    class SceneManager
+    public class SceneManager
     {
-        public Scene CurrentScene = new Scene();
+        private static SceneManager sceneManagerInstance;
+
+        private Scene currentScene = new Scene();
+
+        public Scene CurrentScene
+        {
+            get { return currentScene; }
+            set { currentScene = value; OnChange(); }
+        }
+
+
+        public delegate void SceneChangedHandler();
+        public event SceneChangedHandler Changed;
+
+        public delegate void SceneClosedHandler();
+        public event SceneClosedHandler Closed;
 
         public SceneManager()
         {
+        }
+
+
+        private void OnChange()
+        {
+            if (Changed != null)
+                Changed();
+        }
+
+        private void OnClose()
+        {
+            if (Closed != null)
+                Closed();
+        }
+
+        public static SceneManager GetInstance()
+        {
+            if (sceneManagerInstance != null)
+            {
+                return sceneManagerInstance;
+            }
+            else
+            {
+                sceneManagerInstance = new SceneManager();
+                return sceneManagerInstance;
+            }
         }
 
         public void OpenScene(string path)
@@ -135,7 +176,7 @@ namespace Fawrek.Editor
             {
                 FawrekEngine.DisposeFawrekPtr();
                 CurrentScene.LstModels.Clear();
-                CurrentScene = null;
+                OnClose();
             }
         }
     }

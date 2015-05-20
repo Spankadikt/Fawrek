@@ -5,11 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:int="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
              xmlns:cs="clr-namespace:Fawrek.Editor.UserControls"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              mc:Ignorable="d" 
              d:DesignHeight="540" d:DesignWidth="400"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
-        <Grid Background="WhiteSmoke">
+        <!--<Grid Background="WhiteSmoke">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
@@ -50,21 +52,8 @@
                 </ListView>
             </GroupBox>
             <GroupBox Grid.Column="1" Grid.Row="2" Header="Properties">
-                <ListView Name="LVProperties">
-                    <ListView.View>
-                        <GridView>
-                            <GridViewColumn DisplayMemberBinding="{Binding Path=ModelPropertyName}" Width="Auto"/>
-                            <GridViewColumn  Width="Auto">
-                                <GridViewColumn.CellTemplate>
-                                    <DataTemplate>
-                                        <TextBox Text="{Binding Path=ModelPropertyValue,Mode=TwoWay}"/>
-                                    </DataTemplate>
-                                </GridViewColumn.CellTemplate>
-                            </GridViewColumn>
-                        </GridView>
-                    </ListView.View>
-                </ListView>
+                <xctk:PropertyGrid Name="ObjectPropertyGrid"/>
             </GroupBox>
-        </Grid>
+        </Grid>-->
     </Grid>
 </UserControl>

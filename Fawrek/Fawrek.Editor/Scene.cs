@@ -29,7 +29,7 @@ namespace Fawrek.Editor
         internal ObservableCollection<Model> LstModels
         {
             get { return lstModels; }
-            set { lstModels = value; }
+            set { lstModels = value;}
         }
 
         public Scene()

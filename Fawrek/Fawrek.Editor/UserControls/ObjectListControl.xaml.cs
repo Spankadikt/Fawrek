@@ -2,61 +2,45 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Documents;
-using System.Windows.Forms;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace Fawrek.Editor.UserControls
 {
     /// <summary>
-    /// Logique d'interaction pour SceneEditorControl.xaml
+    /// Logique d'interaction pour ObjectListControl.xaml
     /// </summary>
-    public partial class SceneEditorControl : System.Windows.Controls.UserControl
+    public partial class ObjectListControl : UserControl
     {
-        /*SceneManager SM = new SceneManager();
 
         public ObservableCollection<Model> LstModels
         {
             get { return (ObservableCollection<Model>)GetValue(LstModelsProperty); }
             set { SetValue(LstModelsProperty, value); }
         }
-        public static readonly DependencyProperty LstModelsProperty = DependencyProperty.Register("LstModels", typeof(ObservableCollection<Model>), typeof(SceneEditorControl), null);
-        */
-        public SceneEditorControl()
+        public static readonly DependencyProperty LstModelsProperty = DependencyProperty.Register("LstModels", typeof(ObservableCollection<Model>), typeof(ObjectListControl), null);
+
+
+        public ObjectListControl()
         {
             InitializeComponent();
+
+            DataContext = this;
+            SceneManager.GetInstance().Changed += BindLstModels;
         }
 
-        /*private void LoadScene_Click(object sender, RoutedEventArgs e)
+        private void BindLstModels()
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                string path = ofd.FileName;
-                SM.OpenScene(path);
-
-                LstModels = SM.CurrentScene.LstModels;
-            }
-        }
-
-        private void SaveScene_Click(object sender, RoutedEventArgs e)
-        {
-            SM.SaveScene();
-        }
-
-        private void CloseScene_Click(object sender, RoutedEventArgs e)
-        {
-            ObjectPropertyGrid.SelectedObject = null;
-            SM.CloseScene();
+            LstModels = SceneManager.GetInstance().CurrentScene.LstModels;
         }
 
         private void AddModel_Click(object sender, RoutedEventArgs e)
@@ -81,10 +65,10 @@ namespace Fawrek.Editor.UserControls
         private void LVSceneObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             System.Windows.Controls.ListView lv = (System.Windows.Controls.ListView)sender;
-            object model = lv.SelectedItem;
-            
-            if(model != null)
-                ObjectPropertyGrid.SelectedObject = model;
-        }*/
+            Object obj = lv.SelectedItem as Object;
+
+            if (obj != null)
+                ObjectManager.GetInstance().CurrentObject = obj;
+        }
     }
 }
