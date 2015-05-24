@@ -20,6 +20,6 @@ public:
 	void Load(const std::string& _sFilename);
 	void Display();
 
-	vector<Model*> m_models;
+	ObjectManager* m_pObjectManager;
 };
 #endif//SCENE_H

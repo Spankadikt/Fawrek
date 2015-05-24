@@ -15,13 +15,13 @@
 #include "mesh.h"
 #include "animation.h"
 
-#include "object.h"
+#include "objectmanager.h"
 
-class FAWREK_API Model : Object
+class FAWREK_API Model : public Object
 {
 public:
 	Model(const string& _filename);
-	Model(const string& _filename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string& _sAnimdataFilename = "");
+	Model(const string& _filename, int _nId, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string& _sAnimdataFilename = "");
 	~Model();
 
 	void Render(Camera* _camera, Shader* _shader, float _fRunningTime);

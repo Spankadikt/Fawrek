@@ -22,6 +22,15 @@ namespace Fawrek.Wrapper
 
             [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekDelete")]
             public static extern void FawrekDelete(IntPtr value);
+
+            [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "ObjectRotate")]
+            public static extern void ObjectRotate(IntPtr value, int id, float x, float y, float z);
+
+            [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "ObjectTranslate")]
+            public static extern void ObjectTranslate(IntPtr value, int id, float x, float y, float z);
+
+            [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "ObjectScale")]
+            public static extern void ObjectScale(IntPtr value, int id, float x, float y, float z);
         }
 
         public static IntPtr RunFawrekCreate()
@@ -67,6 +76,42 @@ namespace Fawrek.Wrapper
             try
             {
                 DllHelper.FawrekDelete(value);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void RunObjectRotate(IntPtr value, int id, float x, float y, float z)
+        {
+            try
+            {
+                DllHelper.ObjectRotate(value,id,x,y,z);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void RunObjectTranslate(IntPtr value, int id, float x, float y, float z)
+        {
+            try
+            {
+                DllHelper.ObjectTranslate(value, id, x, y, z);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void RunObjectScale(IntPtr value, int id, float x, float y, float z)
+        {
+            try
+            {
+                DllHelper.ObjectScale(value, id, x, y, z);
             }
             catch (Exception ex)
             {

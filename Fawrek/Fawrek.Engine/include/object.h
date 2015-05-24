@@ -11,8 +11,20 @@ public:
 	Object();
 	~Object();
 
+	void Translate(Vector3 _vTranslation);
+	void Translate(float _fTranslationX, float _fTranslationY, float _fTranslationZ);
+
+	void Rotate(Vector3 _vRotation);
+	void Rotate(float _fRotateX, float _fRotateY, float _fRotateZ);
+
+	void Scale(Vector3 _vScale);
+	void Scale(float _fScaleX, float _fScaleY, float _fScaleZ);
+
+	int m_id;
+
+protected:
 	Vector3 m_scale;
-	Vector3 m_rotate;
-	Vector3 m_translate;
+	Vector3 m_rotation;
+	Vector3 m_translation;
 };
 #endif//OBJECT_H

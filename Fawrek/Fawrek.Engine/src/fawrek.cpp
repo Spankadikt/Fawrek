@@ -19,6 +19,10 @@ int Fawrek::Init()
 		return 100+GlewInitResult;
 	}
 
+	int initGlResult = InitGL();
+	if(initGlResult != 1)
+		return initGlResult;
+
 	pDirectionalLight = new DirectionalLight();
 
     pDirectionalLight->m_color = Vector3(1.0f, 1.0f, 1.0f);
@@ -61,10 +65,11 @@ int Fawrek::Init()
     pModel->m_pAnimation->CrossfadeToClip(18);
     pModel->m_pAnimationBis->CrossfadeToClip(18);*/
 
-	for(int i = 0 ; i < pScene->m_models.size() ; i++ )
+	for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
 	{
-		pScene->m_models[i]->m_pAnimation->CrossfadeToClip(18);
-		pScene->m_models[i]->m_pAnimationBis->CrossfadeToClip(18);
+		Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
+		pModel->m_pAnimation->CrossfadeToClip(18);
+		pModel->m_pAnimationBis->CrossfadeToClip(18);
 	}
 
 
@@ -87,11 +92,23 @@ void Fawrek::Render()
 
     float runningTime = GetRunningTime();
 
-	for(int i = 0 ; i < pScene->m_models.size() ; i++ )
+	for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
 	{
+		Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
 		//pModel->Render(pCamera,pSkinningRoutine,runningTime);
-		pScene->m_models[i]->Render(pCamera,pSkinningRoutine,runningTime);
+		pModel->Render(pCamera,pSkinningRoutine,runningTime);
 	}
+}
+
+int Fawrek::InitGL()
+{
+	glShadeModel(GL_SMOOTH);							// Enable Smooth Shading
+	glClearColor(0.0f, 0.0f, 0.0f, 0.5f);				// Black Background
+	glClearDepth(1.0f);									// Depth Buffer Setup
+	glEnable(GL_DEPTH_TEST);							// Enables Depth Testing
+	glDepthFunc(GL_LEQUAL);								// The Type Of Depth Testing To Do
+	glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);	// Really Nice Perspective Calculations
+	return TRUE;										// Initialization Went OK
 }
 
 /*void Run()

@@ -90,6 +90,7 @@ xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)Fawrek.Editor\bin\Debug"</Command>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\objectmanager.cpp" />
     <ClCompile Include="src\animation.cpp" />
     <ClCompile Include="src\baselight.cpp" />
     <ClCompile Include="src\camera.cpp" />
@@ -130,6 +131,7 @@ xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)Fawrek.Editor\bin\Debug"</Command>
     <ClInclude Include="include\mesh.h" />
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\object.h" />
+    <ClInclude Include="include\objectmanager.h" />
     <ClInclude Include="include\quaternion.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />

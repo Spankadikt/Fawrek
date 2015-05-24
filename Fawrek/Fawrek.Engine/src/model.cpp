@@ -8,14 +8,14 @@ Model::Model(const std::string& _sFilename)
         printf("Model init failed\n");   
     }
 
-	m_translate = Vector3(0.0f,0.0f,0.0f);
-	m_rotate = Vector3(0.0f,0.0f,0.0f);
+	m_translation = Vector3(0.0f,0.0f,0.0f);
+	m_rotation = Vector3(0.0f,0.0f,0.0f);
 	m_scale = Vector3(1.0f,1.0f,1.0f);
 
 
 }
 
-Model::Model(const std::string& _sFilename, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string& _sAnimdataFilename)
+Model::Model(const std::string& _sFilename, int _nId, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string& _sAnimdataFilename)
 {
 	m_pScene = NULL;
 
@@ -23,11 +23,11 @@ Model::Model(const std::string& _sFilename, Vector3 _vTranslate, Vector3 _vRotat
         printf("Model init failed\n");   
     }
 
-	m_translate = _vTranslate;
-	m_rotate = _vRotate;
-	m_scale = _vScale;
+	m_id = _nId;
 
-	
+	m_translation = _vTranslate;
+	m_rotation = _vRotate;
+	m_scale = _vScale;
 }
 
 Model::~Model()
@@ -83,8 +83,8 @@ void Model::Render(Camera* _pCamera, Shader* _pShader, float _fRunningTime)
 
 	Matrix modelMatrix = Matrix::Identity;
 
-	modelMatrix.Translate(m_translate);
-	Quaternion qRotate = qRotate.FromEuler(m_rotate.m_fX,m_rotate.m_fY,m_rotate.m_fZ);
+	modelMatrix.Translate(m_translation);
+	Quaternion qRotate = qRotate.FromEuler(m_rotation.m_fX,m_rotation.m_fY,m_rotation.m_fZ);
 	modelMatrix.Rotate(qRotate);
 	modelMatrix.Scale(m_scale);
 

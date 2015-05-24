@@ -28,6 +28,7 @@ public:
     ~Fawrek();
 
     int Init();
+	int InitGL();
     void Dispose();
     void Render();
 
@@ -45,6 +46,8 @@ public:
 		glutSwapBuffers();
 	}*/
 
+	Scene *pScene;
+
 	void KeyboardManager(bool _keys[256]);
 
 private:
@@ -52,6 +55,6 @@ private:
     LightingRoutine *pLightingRoutine;
     Camera *pCamera;
 	//Model *pModel;
-	Scene *pScene;
+	
     DirectionalLight *pDirectionalLight;
 };
