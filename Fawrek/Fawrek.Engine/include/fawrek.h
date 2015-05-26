@@ -14,6 +14,7 @@
 #include "engine.h"
 #include "lightingroutine.h"
 #include "skinningroutine.h"
+#include "coloringroutine.h"
 
 using namespace std;
 
@@ -49,10 +50,12 @@ public:
 	Scene *pScene;
 
 	void KeyboardManager(bool _keys[256]);
+	void MouseManager(int _nX,int _nY);
 
 private:
 	SkinningRoutine *pSkinningRoutine;
     LightingRoutine *pLightingRoutine;
+	ColoringRoutine *pColoringRoutine;
     Camera *pCamera;
 	//Model *pModel;
 	

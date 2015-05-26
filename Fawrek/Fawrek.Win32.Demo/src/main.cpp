@@ -344,6 +344,13 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 			ReSizeGLScene(LOWORD(lParam),HIWORD(lParam));  // LoWord=Width, HiWord=Height
 			return 0;								// Jump Back
 		}
+
+		case WM_LBUTTONUP:							// Is the left mouse button released ?
+		{
+			int x = LOWORD(lParam);					// X coordinate inside the window
+            int y = HIWORD(lParam);					// Y coordinate inside the window
+			return 0;
+		}
 	}
 
 	// Pass All Unhandled Messages To DefWindowProc
