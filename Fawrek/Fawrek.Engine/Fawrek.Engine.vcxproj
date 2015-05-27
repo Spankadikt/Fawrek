@@ -105,6 +105,8 @@ xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)Fawrek.Editor\bin\Debug"</Command>
     <ClCompile Include="src\mesh.cpp" />
     <ClCompile Include="src\model.cpp" />
     <ClCompile Include="src\object.cpp" />
+    <ClCompile Include="src\pickingroutine.cpp" />
+    <ClCompile Include="src\pickingtexture.cpp" />
     <ClCompile Include="src\quaternion.cpp" />
     <ClCompile Include="src\scene.cpp" />
     <ClCompile Include="src\shader.cpp" />
@@ -134,6 +136,8 @@ xcopy /d /y "$(OutDir)*.dll" "$(SolutionDir)Fawrek.Editor\bin\Debug"</Command>
     <ClInclude Include="include\model.h" />
     <ClInclude Include="include\object.h" />
     <ClInclude Include="include\objectmanager.h" />
+    <ClInclude Include="include\pickingroutine.h" />
+    <ClInclude Include="include\pickingtexture.h" />
     <ClInclude Include="include\quaternion.h" />
     <ClInclude Include="include\scene.h" />
     <ClInclude Include="include\shader.h" />

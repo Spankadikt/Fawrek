@@ -13,6 +13,7 @@
 #include "utils.h"
 #include "matrix.h"
 #include "skeleton.h"
+#include "pickingroutine.h"
 
 #include "assimp/Importer.hpp"
 #include "assimp/scene.h"
@@ -29,7 +30,7 @@ public:
 	~Mesh();
 
 	void Init();
-	void Render();
+	void Render(PickingRoutine *_pPickingRoutine);
 
 	bool InitFromScene(const aiScene *_pScene, const std::string &_sFilename);
 

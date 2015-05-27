@@ -34,26 +34,35 @@ int Fawrek::Init()
     pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
 	pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
 
+	pPickingTexture = new PickingTexture();
+
+	if(!pPickingTexture->Init(640,480))
+		return 30;
+
 	//pSkinningRoutine = new SkinningRoutine("shaders/skinningroutine.vs","shaders/skinningroutine.fs");
-	//pLightingRoutine = new LightingRoutine("shaders/lightingroutine.vs","shaders/lightingroutine.fs");
-	pColoringRoutine = new ColoringRoutine("shaders/coloringroutine.vs","shaders/coloringroutine.fs");
+	pLightingRoutine = new LightingRoutine("shaders/lightingroutine.vs","shaders/lightingroutine.fs");
+	//pColoringRoutine = new ColoringRoutine("shaders/coloringroutine.vs","shaders/coloringroutine.fs");
+	pPickingRoutine = new PickingRoutine("shaders/pickingroutine.vs","shaders/pickingroutine.fs");
 
 	//int lightInit = pSkinningRoutine->Init();
-	//int lightInit = pLightingRoutine->Init();
-	int lightInit = pColoringRoutine->Init();
+	int lightInit = pLightingRoutine->Init();
+	//int lightInit = pColoringRoutine->Init();
+	int pickInit = pPickingRoutine->Init();
 
 	if (lightInit != 0)
-	{
 		return lightInit;
-	}
 
-	pColoringRoutine->Enable();
+	if (pickInit != 0)
+		return pickInit;
 
-	//pLightingRoutine->Enable();
-	//pLightingRoutine->SetTextureUnit(0);
-	//pLightingRoutine->SetDirectionalLight(pDirectionalLight);
-	//pLightingRoutine->SetMatSpecularIntensity(1.0f);
-	//pLightingRoutine->SetMatSpecularPower(32);
+
+	//pColoringRoutine->Enable();
+
+	pLightingRoutine->Enable();
+	pLightingRoutine->SetTextureUnit(0);
+	pLightingRoutine->SetDirectionalLight(pDirectionalLight);
+	pLightingRoutine->SetMatSpecularIntensity(1.0f);
+	pLightingRoutine->SetMatSpecularPower(32);
 
 	//pSkinningRoutine->Enable();
 	//pSkinningRoutine->SetTextureUnit(0);
@@ -81,20 +90,38 @@ void Fawrek::Dispose()
 	SAFE_DELETE(pSkinningRoutine);
     SAFE_DELETE(pLightingRoutine);
 	SAFE_DELETE(pColoringRoutine);
+	SAFE_DELETE(pPickingRoutine);
     SAFE_DELETE(pCamera);
 	SAFE_DELETE(pScene);
 }
 
 void Fawrek::Render()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	float runningTime = GetRunningTime();
 
-    float runningTime = GetRunningTime();
+	//picking
+	pPickingTexture->EnableWriting();
+
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
+	{
+        pPickingRoutine->SetObjectIndex(i);
+        Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
+		pModel->Render(pCamera,pPickingRoutine,runningTime);
+    }
+
+    pPickingTexture->DisableWriting(); 
+
+	//coloring?
+
+	//rendering
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
 	{
 		Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
-		pModel->Render(pCamera,pColoringRoutine,runningTime);
+		pModel->Render(pCamera,pLightingRoutine,runningTime);
 	}
 }
 

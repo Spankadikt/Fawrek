@@ -94,7 +94,11 @@ void Model::Render(Camera* _pCamera, Shader* _pShader, float _fRunningTime)
 	_pShader->SetWVP(viewProjection);
     _pShader->SetWorldMatrix(modelMatrix);
 
-	m_pMesh->Render();
+	PickingRoutine *pr = dynamic_cast<PickingRoutine*>(_pShader);
+    if( pr )
+		m_pMesh->Render(pr);
+	else
+		m_pMesh->Render(NULL);
 
 	if(m_pAnimation->m_pCurrentClip->m_state == Clip::ClipState::STOP)
 	{

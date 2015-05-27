@@ -15,6 +15,8 @@
 #include "lightingroutine.h"
 #include "skinningroutine.h"
 #include "coloringroutine.h"
+#include "pickingroutine.h"
+#include "pickingtexture.h"
 
 using namespace std;
 
@@ -56,6 +58,8 @@ private:
 	SkinningRoutine *pSkinningRoutine;
     LightingRoutine *pLightingRoutine;
 	ColoringRoutine *pColoringRoutine;
+	PickingRoutine *pPickingRoutine;
+	PickingTexture *pPickingTexture;
     Camera *pCamera;
 	//Model *pModel;
 	

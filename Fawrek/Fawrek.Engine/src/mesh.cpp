@@ -226,7 +226,7 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 }
 
 
-void Mesh::Render()
+void Mesh::Render(PickingRoutine *_pPickingRoutine)
 {
     glBindVertexArray(m_VAO);
     
@@ -238,6 +238,11 @@ void Mesh::Render()
         if (m_textures[uiMaterialIndex]) {
             m_textures[uiMaterialIndex]->Bind(GL_TEXTURE0);
         }
+
+		if(_pPickingRoutine)
+		{
+			_pPickingRoutine->SetDrawIndex(i);
+		}
 
 		glDrawElementsBaseVertex(GL_TRIANGLES, 
                                  m_entries[i].m_uiNumIndices, 
