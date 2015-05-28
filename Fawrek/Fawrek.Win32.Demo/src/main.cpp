@@ -349,6 +349,8 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 		{
 			int x = LOWORD(lParam);					// X coordinate inside the window
             int y = HIWORD(lParam);					// Y coordinate inside the window
+			pApp->MouseManager(x,y);
+			
 			return 0;
 		}
 	}

@@ -254,3 +254,27 @@ void Mesh::Render(PickingRoutine *_pPickingRoutine)
     // Make sure the VAO is not changed from the outside    
     glBindVertexArray(0);
 }
+
+void Mesh::PickingRender(int _nObjectIndex=-1, int _nDrawIndex=-1, int _nPrimID=-1)
+{
+	glBindVertexArray(m_VAO);
+    
+	if(_nDrawIndex != -1)
+	{
+		const uint uiMaterialIndex = m_entries[_nDrawIndex].m_uiMaterialIndex;
+
+        assert(uiMaterialIndex < m_textures.size());
+        
+        if (m_textures[uiMaterialIndex]) {
+            m_textures[uiMaterialIndex]->Bind(GL_TEXTURE0);
+        }
+		glDrawElementsBaseVertex(GL_TRIANGLES, 
+                                 m_entries[_nDrawIndex].m_uiNumIndices, 
+                                 GL_UNSIGNED_INT, 
+                                 (void*)(sizeof(uint) * m_entries[_nDrawIndex].m_uiBaseIndex), 
+                                 m_entries[_nDrawIndex].m_uiBaseVertex);
+    }
+
+    // Make sure the VAO is not changed from the outside    
+    glBindVertexArray(0);
+}

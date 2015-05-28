@@ -54,6 +54,14 @@ public:
 	void KeyboardManager(bool _keys[256]);
 	void MouseManager(int _nX,int _nY);
 
+	struct
+	{
+		int _nX;
+		int _nY;
+		bool _bClicked;
+	} m_mouseLeftButton;
+
+
 private:
 	SkinningRoutine *pSkinningRoutine;
     LightingRoutine *pLightingRoutine;
@@ -64,4 +72,5 @@ private:
 	//Model *pModel;
 	
     DirectionalLight *pDirectionalLight;
+	PickingTexture::PixelInfo Pixel;
 };

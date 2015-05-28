@@ -40,6 +40,8 @@ public:
 	Animation* m_pAnimation;
     Animation* m_pAnimationBis;
 
+	bool m_bSelected;
+
 private:
 	bool ModelInit(const string& _sFilename, const std::string& _sAnimdataFilename = "");
 };

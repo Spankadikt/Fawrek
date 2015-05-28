@@ -31,6 +31,7 @@ public:
 
 	void Init();
 	void Render(PickingRoutine *_pPickingRoutine);
+	void PickingRender(int _nObjectIndex,int _nDrawIndex,int _nPrimID);
 
 	bool InitFromScene(const aiScene *_pScene, const std::string &_sFilename);
 

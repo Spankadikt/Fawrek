@@ -42,7 +42,7 @@ int PickingRoutine::Init()
 
 void PickingRoutine::SetWVP(Matrix _WVP)
 {
-    glUniformMatrix4fv(m_wvpLocation, 1, GL_TRUE, &_WVP.m_m[0]);    
+    glUniformMatrix4fv(m_wvpLocation, 1, GL_FALSE, &_WVP.m_m[0]);    
 }
 
 

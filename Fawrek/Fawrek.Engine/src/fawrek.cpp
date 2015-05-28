@@ -1,7 +1,8 @@
 #include <fawrek.h>
 
 Fawrek::Fawrek()
-{   
+{
+	m_mouseLeftButton._bClicked = false;
 }
 
 Fawrek::~Fawrek()
@@ -41,12 +42,12 @@ int Fawrek::Init()
 
 	//pSkinningRoutine = new SkinningRoutine("shaders/skinningroutine.vs","shaders/skinningroutine.fs");
 	pLightingRoutine = new LightingRoutine("shaders/lightingroutine.vs","shaders/lightingroutine.fs");
-	//pColoringRoutine = new ColoringRoutine("shaders/coloringroutine.vs","shaders/coloringroutine.fs");
+	pColoringRoutine = new ColoringRoutine("shaders/coloringroutine.vs","shaders/coloringroutine.fs");
 	pPickingRoutine = new PickingRoutine("shaders/pickingroutine.vs","shaders/pickingroutine.fs");
 
 	//int lightInit = pSkinningRoutine->Init();
 	int lightInit = pLightingRoutine->Init();
-	//int lightInit = pColoringRoutine->Init();
+	int colorInit = pColoringRoutine->Init();
 	int pickInit = pPickingRoutine->Init();
 
 	if (lightInit != 0)
@@ -55,8 +56,11 @@ int Fawrek::Init()
 	if (pickInit != 0)
 		return pickInit;
 
+	if (colorInit != 0)
+		return pickInit;
 
-	//pColoringRoutine->Enable();
+
+	pColoringRoutine->Enable();
 
 	pLightingRoutine->Enable();
 	pLightingRoutine->SetTextureUnit(0);
@@ -104,6 +108,8 @@ void Fawrek::Render()
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	pPickingRoutine->Enable();
+
     for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
 	{
         pPickingRoutine->SetObjectIndex(i);
@@ -113,15 +119,88 @@ void Fawrek::Render()
 
     pPickingTexture->DisableWriting(); 
 
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	//coloring?
+	if(m_mouseLeftButton._bClicked)
+	{
+		Pixel = pPickingTexture->ReadPixel(m_mouseLeftButton._nX, 480 - m_mouseLeftButton._nY - 1);
+
+		for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
+		{
+			Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
+			pModel->m_bSelected = false;
+		}
+
+        if (Pixel.PrimID != 0)
+		{
+			Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[Pixel.ObjectID]);
+			pModel->m_bSelected = true;
+        }
+
+		m_mouseLeftButton._bClicked = false;
+	}
 
 	//rendering
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
 	{
 		Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
-		pModel->Render(pCamera,pLightingRoutine,runningTime);
+		if(true)
+		{
+			if(pModel->m_bSelected)
+			{
+				pColoringRoutine->Enable();
+				pModel->Render(pCamera,pColoringRoutine,runningTime);
+			}
+			else
+			{
+				pLightingRoutine->Enable();
+				pModel->Render(pCamera,pLightingRoutine,runningTime);
+			}
+		}
+		else
+		{
+			if(pModel->m_bSelected)
+			{	
+				for(int i=0;i<pModel->m_pMesh->m_entries.size();i++)
+				{
+					Matrix modelMatrix = Matrix::Identity;
+
+					modelMatrix.Translate(pModel->m_translation);
+					Quaternion qRotate = qRotate.FromEuler(pModel->m_rotation.m_fX,pModel->m_rotation.m_fY,pModel->m_rotation.m_fZ);
+					modelMatrix.Rotate(qRotate);
+					modelMatrix.Scale(pModel->m_scale);
+
+					Matrix modelView = pCamera->view * modelMatrix;
+					Matrix viewProjection = pCamera->projection * modelView;
+
+					if(i==(int)Pixel.DrawID)
+					{
+						pColoringRoutine->Enable();
+
+						pColoringRoutine->SetWVP(viewProjection);
+						pColoringRoutine->SetWorldMatrix(modelMatrix);
+
+
+						pModel->m_pMesh->PickingRender((int)Pixel.ObjectID,i,(int)Pixel.PrimID);
+					}
+					else
+					{
+						pLightingRoutine->Enable();
+
+						pLightingRoutine->SetWVP(viewProjection);
+						pLightingRoutine->SetWorldMatrix(modelMatrix);
+
+						pModel->m_pMesh->PickingRender((int)Pixel.ObjectID,i,(int)Pixel.PrimID);
+					}
+				}
+			}
+			else
+			{
+				pLightingRoutine->Enable();
+				pModel->Render(pCamera,pLightingRoutine,runningTime);
+			}
+		}
 	}
 }
 
@@ -165,5 +244,8 @@ void Fawrek::KeyboardManager(bool _keys[256])
 
 void Fawrek::MouseManager(int _nX,int _nY)
 {
+	m_mouseLeftButton._bClicked = true;
+	m_mouseLeftButton._nX = _nX;
+	m_mouseLeftButton._nY = _nY;
 }
 

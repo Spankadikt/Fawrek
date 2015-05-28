@@ -22,9 +22,10 @@ public:
 
 	int m_id;
 
-protected:
 	Vector3 m_scale;
 	Vector3 m_rotation;
 	Vector3 m_translation;
+protected:
+
 };
 #endif//OBJECT_H

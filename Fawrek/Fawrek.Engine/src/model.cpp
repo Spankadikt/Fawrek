@@ -12,7 +12,7 @@ Model::Model(const std::string& _sFilename)
 	m_rotation = Vector3(0.0f,0.0f,0.0f);
 	m_scale = Vector3(1.0f,1.0f,1.0f);
 
-
+	m_bSelected = false;
 }
 
 Model::Model(const std::string& _sFilename, int _nId, Vector3 _vTranslate, Vector3 _vRotate, Vector3 _vScale, const std::string& _sAnimdataFilename)
@@ -28,6 +28,8 @@ Model::Model(const std::string& _sFilename, int _nId, Vector3 _vTranslate, Vecto
 	m_translation = _vTranslate;
 	m_rotation = _vRotate;
 	m_scale = _vScale;
+
+	m_bSelected = false;
 }
 
 Model::~Model()
@@ -69,7 +71,7 @@ bool Model::ModelInit(const std::string& _sFilename, const std::string& _sAnimda
 
 void Model::Render(Camera* _pCamera, Shader* _pShader, float _fRunningTime)
 {
-	_pShader->Enable();
+	//_pShader->Enable();
 
 	vector<Matrix> Transforms;
 

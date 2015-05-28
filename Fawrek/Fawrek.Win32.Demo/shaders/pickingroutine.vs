@@ -1,8 +1,10 @@
 #version 330                                                                        
                                                                                     
-layout(location = 0) out vec4 FragColor;                                            
+layout (location = 0) in vec3 Position;                                             
+                                                                                    
+uniform mat4 gWVP;                                                                  
                                                                                     
 void main()                                                                         
 {                                                                                   
-    FragColor = vec4(0.0, 1.0, 0.0, 1.0);                                           
+    gl_Position = gWVP * vec4(Position, 1.0);                                       
 }
