@@ -54,6 +54,7 @@ public:
 	void InitCrossfade();
 
     void LoadClips(const std::string& _sFilename);
+	void LoadBonePack(tinyxml2::XMLNode *_pNode,NodePack *_pNodePack);
     void PlayClip();
 
     const aiScene* m_pScene;

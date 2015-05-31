@@ -3,6 +3,7 @@
 //#include "GL/glew.h"
 #include "assert.h"
 #include "quaternion.h"
+#include <sys/stat.h>
 
 #define POSITION_LOCATION    0
 #define TEX_COORD_LOCATION   1
@@ -203,8 +204,11 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
 
 				string::size_type SlashIndex = p.find_last_of("/");
 				string::size_type backSlashIndex = p.find_last_of("\\");
+				struct stat buffer;   
+				bool fileExist = stat(p.c_str(), &buffer)==0;
+
 				string FullPath = "";
-				if (SlashIndex == string::npos && backSlashIndex == string::npos)////hack for absolute texture path..
+				if ((SlashIndex == string::npos && backSlashIndex == string::npos) || !fileExist)//hack for relative texture path..
 				{
 					SlashIndex++;
 					p = p.substr(SlashIndex, p.size()-SlashIndex);

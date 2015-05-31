@@ -22,37 +22,27 @@ int Fawrek::Init()
 	int initGlResult = InitGL();
 	if(initGlResult != 1)
 		return initGlResult;
-
-	/*pDirectionalLight = new DirectionalLight();
-
-    pDirectionalLight->m_color = Vector3(1.0f, 1.0f, 1.0f);
-    pDirectionalLight->m_fAmbientIntensity = 0.85f;
-    pDirectionalLight->m_fDiffuseIntensity = 0.2f;
-    pDirectionalLight->m_direction = Vector3(0.0f, 1.0f, 1.0f); */
-
 	
 	pScene = new Scene();
-	pScene->Load("resources/scene_demo.xml");
-
-	//pCamera = new Camera();
-
-	//pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
-	//pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
+	pScene->Load("resources/scene_demo_heavy.xml");
 
 	pPickingTexture = new PickingTexture();
 
 	if(!pPickingTexture->Init(640,480))
 		return 30;
 
-	//pSkinningRoutine = new SkinningRoutine("shaders/skinningroutine.vs","shaders/skinningroutine.fs");
+	pSkinningRoutine = new SkinningRoutine("shaders/skinningroutine.vs","shaders/skinningroutine.fs");
 	pLightingRoutine = new LightingRoutine("shaders/lightingroutine.vs","shaders/lightingroutine.fs");
 	pColoringRoutine = new ColoringRoutine("shaders/coloringroutine.vs","shaders/coloringroutine.fs");
 	pPickingRoutine = new PickingRoutine("shaders/pickingroutine.vs","shaders/pickingroutine.fs");
 
-	//int lightInit = pSkinningRoutine->Init();
+	int skinInit = pSkinningRoutine->Init();
 	int lightInit = pLightingRoutine->Init();
 	int colorInit = pColoringRoutine->Init();
 	int pickInit = pPickingRoutine->Init();
+
+	if (skinInit != 0)
+		return skinInit;
 
 	if (lightInit != 0)
 		return lightInit;
@@ -61,7 +51,7 @@ int Fawrek::Init()
 		return pickInit;
 
 	if (colorInit != 0)
-		return pickInit;
+		return colorInit;
 
 
 	pColoringRoutine->Enable();
@@ -72,21 +62,21 @@ int Fawrek::Init()
 	pLightingRoutine->SetMatSpecularIntensity(1.0f);
 	pLightingRoutine->SetMatSpecularPower(32);
 
-	//pSkinningRoutine->Enable();
-	//pSkinningRoutine->SetTextureUnit(0);
-	//pSkinningRoutine->SetDirectionalLight(pDirectionalLight);
-	//pSkinningRoutine->SetMatSpecularIntensity(1.0f);
-	//pSkinningRoutine->SetMatSpecularPower(32);
+	pSkinningRoutine->Enable();
+	pSkinningRoutine->SetTextureUnit(0);
+	pSkinningRoutine->SetDirectionalLight(pScene->m_pObjectManager->GetDirectionalLight());
+	pSkinningRoutine->SetMatSpecularIntensity(1.0f);
+	pSkinningRoutine->SetMatSpecularPower(32);
 
-	pScene = new Scene();
-	pScene->Load("resources/scene_demo.xml");
-
-	/*for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
+	for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
 	{
-		Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
-		pModel->m_pAnimation->CrossfadeToClip(18);
-		pModel->m_pAnimationBis->CrossfadeToClip(18);
-	}*/
+		Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->GetModels()[i]);
+		if(pModel->m_pScene->HasAnimations())
+		{
+			pModel->m_pAnimation->CrossfadeToClip(0);
+			//pModel->m_pAnimationBis->CrossfadeToClip(0);
+		}
+	}
 
 
 	return 0;
@@ -94,12 +84,10 @@ int Fawrek::Init()
 
 void Fawrek::Dispose()
 {
-	//SAFE_DELETE(pDirectionalLight);
 	SAFE_DELETE(pSkinningRoutine);
     SAFE_DELETE(pLightingRoutine);
 	SAFE_DELETE(pColoringRoutine);
 	SAFE_DELETE(pPickingRoutine);
-    //SAFE_DELETE(pCamera);
 	SAFE_DELETE(pScene);
 }
 
@@ -157,8 +145,16 @@ void Fawrek::Render()
 			}
 			else
 			{
-				pLightingRoutine->Enable();
-				pModel->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
+				if(pModel->m_pScene->HasAnimations())
+				{
+					pSkinningRoutine->Enable();
+					pModel->Render(pScene->m_pObjectManager->GetCamera(),pSkinningRoutine,runningTime);
+				}
+				else
+				{
+					pLightingRoutine->Enable();
+					pModel->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
+				}
 			}
 		}
 		else
@@ -189,10 +185,10 @@ void Fawrek::Render()
 					}
 					else
 					{
-						pLightingRoutine->Enable();
+						pSkinningRoutine->Enable();
 
-						pLightingRoutine->SetWVP(viewProjection);
-						pLightingRoutine->SetWorldMatrix(modelMatrix);
+						pSkinningRoutine->SetWVP(viewProjection);
+						pSkinningRoutine->SetWorldMatrix(modelMatrix);
 
 						pModel->m_pMesh->PickingRender((int)Pixel.ObjectID,i,(int)Pixel.PrimID);
 					}
@@ -200,8 +196,8 @@ void Fawrek::Render()
 			}
 			else
 			{
-				pLightingRoutine->Enable();
-				pModel->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
+				pSkinningRoutine->Enable();
+				pModel->Render(pScene->m_pObjectManager->GetCamera(),pSkinningRoutine,runningTime);
 			}
 		}
 		

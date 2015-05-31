@@ -48,41 +48,17 @@ void Animation::LoadClips(const std::string& _sFilename)
 	    tinyxml2::XMLNode* child;
 	    for( child = animElement->FirstChild(); child; child = child->NextSibling() )
 	    {
-            /*string bodyPart = child->ToElement()->Attribute( "body_part" );
-            
-            bool addClip = false;
-            switch(bodyPartAffected)
-            {
-            case BodyPart::FULL_BODY:
-                if(bodyPart == "full_body")
-                    addClip = true;
-                break;
-            case BodyPart::LOWER_BODY:
-                if(bodyPart == "lower_body")
-                    addClip = true;
-                break;
-            case BodyPart::UPPER_BODY:
-                if(bodyPart == "upper_body")
-                    addClip = true;
-                break;
-            default:
-                break;
-            }
+			int id;
+			child->ToElement()->QueryIntAttribute( "id", &id );
+		    float startTime;
+		    child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
+		    float endTime;
+		    child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
+            bool loop;
+            child->ToElement()->QueryBoolAttribute( "loop", &loop );
 
-            if(addClip)
-            {*/
-			    int id;
-			    child->ToElement()->QueryIntAttribute( "id", &id );
-		        float startTime;
-		        child->ToElement()->QueryFloatAttribute( "start_time", &startTime );
-		        float endTime;
-		        child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
-                bool loop;
-                child->ToElement()->QueryBoolAttribute( "loop", &loop );
-
-		        Clip clip(this,id,startTime,endTime,loop);
-		        m_clips.push_back(clip);
-            //}
+		    Clip clip(this,id,startTime,endTime,loop);
+		    m_clips.push_back(clip);
 	    }
 
         tinyxml2::XMLElement* skeletonElement = doc.FirstChildElement( "SKELETON" );
@@ -90,7 +66,6 @@ void Animation::LoadClips(const std::string& _sFilename)
         tinyxml2::XMLNode* np;
         for( np = skeletonElement->FirstChild(); np; np = np->NextSibling() )
 	    {
-
             string packName = np->ToElement()->Attribute( "name" );
 
             bool addNodePack = false;
@@ -119,18 +94,37 @@ void Animation::LoadClips(const std::string& _sFilename)
                 np->ToElement()->QueryIntAttribute( "nb_node", &nbNode );
 
                 m_pNodePack = new NodePack(id, packName, nbNode);
-
-                for( child = np->FirstChild(); child; child = child->NextSibling() )
-	            {
-                    const char *nodeId = child->ToElement()->Attribute( "nodeId" );
-                    m_pNodePack->AddBoneToPack(nodeId);
-                }
+				LoadBonePack(np,m_pNodePack);
+     //           for( child = np->FirstChild(); child; child = child->NextSibling() )
+	    //        {
+     //               /*const char *nodeId = child->ToElement()->Attribute( "nodeId" );
+     //               m_pNodePack->AddBoneToPack(nodeId);*/
+					//LoadBonePack(child,m_pNodePack);
+     //           }
             }
         }
     }
 
 	m_pCurrentClip = &m_clips[0];
 	m_pLastClip = &m_clips[0];
+}
+
+void Animation::LoadBonePack(tinyxml2::XMLNode *_pNode,NodePack *_pNodePack)
+{
+	const char *nodeId = _pNode->ToElement()->Attribute( "nodeId" );
+	if(nodeId)
+		m_pNodePack->AddBoneToPack(nodeId);
+
+	//tinyxml2::XMLElement* pNode = _pNode->ToElement()->FirstChildElement( "NODE" );
+	tinyxml2::XMLElement* pNode = _pNode->ToElement();
+	if(pNode)
+	{
+		tinyxml2::XMLNode* child;
+		for( child = pNode->FirstChild(); child; child = child->NextSibling() )
+		{
+			LoadBonePack(child,_pNodePack);
+		}
+	}
 }
 
 void Animation::SetCurrentClip(Clip* _pClip)

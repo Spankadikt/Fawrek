@@ -93,7 +93,7 @@ namespace Fawrek.Editor
                                 model.Rotation = new Vector3D(double.Parse(rotation[0]), double.Parse(rotation[1]), double.Parse(rotation[2]));
 
                                 string[] scale = reader.GetAttribute(4).Split(',').ToArray();
-                                model.Scale = new Vector3D(double.Parse(scale[0]), double.Parse(scale[1]), double.Parse(scale[2]));
+                                model.Scale = new Vector3D(double.Parse(scale[0].Replace('.', ',')), double.Parse(scale[1].Replace('.', ',')), double.Parse(scale[2].Replace('.', ',')));
 
                                 model.Filename = reader.GetAttribute(5);
                                 model.AnimationFileName = reader.GetAttribute(6);

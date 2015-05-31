@@ -18,6 +18,7 @@ namespace Fawrek.Editor
         public static void DisposeFawrekPtr()
         {
             Fawrek.Wrapper.Wrapper.RunFawrekDelete(FawrekEngine.fawrekPtr);
+            FawrekEngine.fawrekPtr = IntPtr.Zero;
         }
     }
 }

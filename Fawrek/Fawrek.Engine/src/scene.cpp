@@ -48,19 +48,6 @@ void Scene::LoadModels(tinyxml2::XMLElement *_pSceneElement)
         bool hide;
         child->ToElement()->QueryBoolAttribute( "hide", &hide );
 
-		if(!translation.empty() && !rotation.empty() && !scale.empty() && !animationfilename.empty())
-		{
-			std::vector<std::string> splitedTranslation = split(translation, ',');
-			std::vector<std::string> splitedRotation = split(rotation, ',');
-			std::vector<std::string> splitedScale = split(scale, ',');
-
-			Vector3 vTranslation(stof(splitedTranslation[0].c_str()),stof(splitedTranslation[1].c_str()),stof(splitedTranslation[2].c_str()));
-			Vector3 vRotation(stof(splitedRotation[0].c_str()),stof(splitedRotation[1].c_str()),stof(splitedRotation[2].c_str()));
-			Vector3 vScale(stof(splitedScale[0].c_str()),stof(splitedScale[1].c_str()),stof(splitedScale[2].c_str()));
-
-			Model *pModel = new Model(filename,id,vTranslation,vRotation,vScale,animationfilename);
-			m_pObjectManager->m_objects.push_back(pModel);
-		}
 		if(!translation.empty() && !rotation.empty() && !scale.empty())
 		{
 			std::vector<std::string> splitedTranslation = split(translation, ',');
