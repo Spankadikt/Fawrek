@@ -23,17 +23,21 @@ int Fawrek::Init()
 	if(initGlResult != 1)
 		return initGlResult;
 
-	pDirectionalLight = new DirectionalLight();
+	/*pDirectionalLight = new DirectionalLight();
 
     pDirectionalLight->m_color = Vector3(1.0f, 1.0f, 1.0f);
     pDirectionalLight->m_fAmbientIntensity = 0.85f;
     pDirectionalLight->m_fDiffuseIntensity = 0.2f;
-    pDirectionalLight->m_direction = Vector3(0.0f, 1.0f, 1.0f);     
+    pDirectionalLight->m_direction = Vector3(0.0f, 1.0f, 1.0f); */
 
-	pCamera = new Camera();
+	
+	pScene = new Scene();
+	pScene->Load("resources/scene_demo.xml");
 
-    pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
-	pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
+	//pCamera = new Camera();
+
+	//pCamera->PerspectiveFOV(120.0f,4/3,0.01f,100.0f);
+	//pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
 
 	pPickingTexture = new PickingTexture();
 
@@ -64,7 +68,7 @@ int Fawrek::Init()
 
 	pLightingRoutine->Enable();
 	pLightingRoutine->SetTextureUnit(0);
-	pLightingRoutine->SetDirectionalLight(pDirectionalLight);
+	pLightingRoutine->SetDirectionalLight(pScene->m_pObjectManager->GetDirectionalLight());
 	pLightingRoutine->SetMatSpecularIntensity(1.0f);
 	pLightingRoutine->SetMatSpecularPower(32);
 
@@ -90,17 +94,19 @@ int Fawrek::Init()
 
 void Fawrek::Dispose()
 {
-	SAFE_DELETE(pDirectionalLight);
+	//SAFE_DELETE(pDirectionalLight);
 	SAFE_DELETE(pSkinningRoutine);
     SAFE_DELETE(pLightingRoutine);
 	SAFE_DELETE(pColoringRoutine);
 	SAFE_DELETE(pPickingRoutine);
-    SAFE_DELETE(pCamera);
+    //SAFE_DELETE(pCamera);
 	SAFE_DELETE(pScene);
 }
 
 void Fawrek::Render()
 {
+
+
 	float runningTime = GetRunningTime();
 
 	//picking
@@ -110,11 +116,10 @@ void Fawrek::Render()
 
 	pPickingRoutine->Enable();
 
-    for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
+	for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
 	{
         pPickingRoutine->SetObjectIndex(i);
-        Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
-		pModel->Render(pCamera,pPickingRoutine,runningTime);
+		pScene->m_pObjectManager->GetModels()[i]->Render(pScene->m_pObjectManager->GetCamera(),pPickingRoutine,runningTime);
     }
 
     pPickingTexture->DisableWriting(); 
@@ -126,36 +131,34 @@ void Fawrek::Render()
 	{
 		Pixel = pPickingTexture->ReadPixel(m_mouseLeftButton._nX, 480 - m_mouseLeftButton._nY - 1);
 
-		for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
+		for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
 		{
-			Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
-			pModel->m_bSelected = false;
+			pScene->m_pObjectManager->GetModels()[i]->m_bSelected = false;
 		}
 
         if (Pixel.PrimID != 0)
 		{
-			Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[Pixel.ObjectID]);
-			pModel->m_bSelected = true;
+			pScene->m_pObjectManager->GetModels()[Pixel.ObjectID]->m_bSelected = true;
         }
 
 		m_mouseLeftButton._bClicked = false;
 	}
 
 	//rendering
-	for(int i = 0 ; i < pScene->m_pObjectManager->m_objects.size() ; i++ )
+	for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
 	{
-		Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->m_objects[i]);
+		Model *pModel = pScene->m_pObjectManager->GetModels()[i];
 		if(true)
 		{
 			if(pModel->m_bSelected)
 			{
 				pColoringRoutine->Enable();
-				pModel->Render(pCamera,pColoringRoutine,runningTime);
+				pModel->Render(pScene->m_pObjectManager->GetCamera(),pColoringRoutine,runningTime);
 			}
 			else
 			{
 				pLightingRoutine->Enable();
-				pModel->Render(pCamera,pLightingRoutine,runningTime);
+				pModel->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
 			}
 		}
 		else
@@ -171,8 +174,8 @@ void Fawrek::Render()
 					modelMatrix.Rotate(qRotate);
 					modelMatrix.Scale(pModel->m_scale);
 
-					Matrix modelView = pCamera->view * modelMatrix;
-					Matrix viewProjection = pCamera->projection * modelView;
+					Matrix modelView = pScene->m_pObjectManager->GetCamera()->view * modelMatrix;
+					Matrix viewProjection = pScene->m_pObjectManager->GetCamera()->projection * modelView;
 
 					if(i==(int)Pixel.DrawID)
 					{
@@ -198,9 +201,10 @@ void Fawrek::Render()
 			else
 			{
 				pLightingRoutine->Enable();
-				pModel->Render(pCamera,pLightingRoutine,runningTime);
+				pModel->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
 			}
 		}
+		
 	}
 }
 

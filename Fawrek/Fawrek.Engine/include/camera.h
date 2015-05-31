@@ -5,13 +5,14 @@
 
 #include "vector3.h"
 #include "matrix.h"
+#include "object.h"
 
-class FAWREK_API Camera
+class FAWREK_API Camera : public Object
 {
 public:
 
     Camera();
-    Camera(const Vector3 _pos, const Vector3 _target, const Vector3 _up);
+    Camera(Vector3 _pos, Vector3 _target, Vector3 _up);
 	~Camera();
 
 	void PerspectiveFOV(float _fFovAngle, float _fAspectRation, float _fNearZ, float _fFarZ);

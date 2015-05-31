@@ -68,9 +68,9 @@ private:
 	ColoringRoutine *pColoringRoutine;
 	PickingRoutine *pPickingRoutine;
 	PickingTexture *pPickingTexture;
-    Camera *pCamera;
+    //Camera *pCamera;
 	//Model *pModel;
 	
-    DirectionalLight *pDirectionalLight;
+    //DirectionalLight *pDirectionalLight;
 	PickingTexture::PixelInfo Pixel;
 };

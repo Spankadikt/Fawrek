@@ -15,8 +15,6 @@
 #include "mesh.h"
 #include "animation.h"
 
-#include "objectmanager.h"
-
 class FAWREK_API Model : public Object
 {
 public:
@@ -25,10 +23,6 @@ public:
 	~Model();
 
 	void Render(Camera* _camera, Shader* _shader, float _fRunningTime);
-
-	//Vector3 m_scale;
-	//Vector3 m_rotate;
-	//Vector3 m_translate;
 
 	//mesh , skeleton and anim stuff
 	Assimp::Importer m_importer;

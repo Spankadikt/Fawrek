@@ -5,8 +5,9 @@
 
 #include "vector3.h"
 #include "matrix.h"
+#include "object.h"
 
-class FAWREK_API BaseLight
+class FAWREK_API BaseLight : public Object
 {
 public:
     BaseLight();

@@ -9,7 +9,7 @@
 
 #include "utils.h"
 #include "tinyxml2.h"
-#include "model.h"
+#include "objectmanager.h"
 
 class FAWREK_API Scene
 {
@@ -18,6 +18,10 @@ public:
 	~Scene();
 
 	void Load(const std::string& _sFilename);
+	void LoadModels(tinyxml2::XMLElement *_pDoc);
+	void LoadLights(tinyxml2::XMLElement *_pDoc);
+	void LoadCameras(tinyxml2::XMLElement *_pDoc);
+
 	void Display();
 
 	ObjectManager* m_pObjectManager;

@@ -9,7 +9,7 @@ class FAWREK_API SkinningRoutine : public Shader
 {
 public:
 
-	static const uint MAX_BONES = 100;
+	static const uint MAX_BONES = 200;
 
     SkinningRoutine(const std::string& _sVertexShaderFilename,const std::string& _sFragmentShaderFilename);
     ~SkinningRoutine();

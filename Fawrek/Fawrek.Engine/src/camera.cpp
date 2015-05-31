@@ -10,6 +10,13 @@ Camera::Camera()
 	up = Vector3(0.0f,1.0f,0.0f);
 }
 
+Camera::Camera(Vector3 _pos, Vector3 _target, Vector3 _up)
+{
+	pos = _pos;
+	target = _target;
+	up = _up;
+}
+
 Camera::~Camera()
 {
 }

@@ -7,7 +7,9 @@
 #include "map"
 #include "vector"
 #include "utils.h"
-#include "object.h"
+#include "model.h"
+#include "directionallight.h"
+#include "camera.h"
 
 class FAWREK_API ObjectManager
 {
@@ -15,6 +17,9 @@ public:
 	ObjectManager();
 	~ObjectManager();
 
+	vector<Model*> GetModels();
+	DirectionalLight* GetDirectionalLight();
+	Camera* GetCamera();
 	Object* GetObjectById(int _nId);
 
 	vector<Object*> m_objects;

@@ -200,12 +200,20 @@ bool Mesh::InitMaterials(const aiScene* pScene, const string& Filename)
                 if (p.substr(0, 2) == ".\\") {                    
                     p = p.substr(2, p.size() - 2);
                 }
-				//hack for absolute texture path...
+
 				string::size_type SlashIndex = p.find_last_of("/");
-				SlashIndex++;
-				p = p.substr(SlashIndex, p.size()-SlashIndex);
-				//end hack
-                string FullPath = sDir + "/" + p;
+				string::size_type backSlashIndex = p.find_last_of("\\");
+				string FullPath = "";
+				if (SlashIndex == string::npos && backSlashIndex == string::npos)////hack for absolute texture path..
+				{
+					SlashIndex++;
+					p = p.substr(SlashIndex, p.size()-SlashIndex);
+					FullPath = sDir + "/" + p;
+				}
+				else
+				{
+					FullPath = p;
+				}
                     
                 m_textures[i] = new Texture(FullPath.c_str(),GL_TEXTURE_2D);
 

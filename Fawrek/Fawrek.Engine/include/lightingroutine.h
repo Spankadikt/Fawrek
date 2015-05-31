@@ -9,7 +9,7 @@ class FAWREK_API LightingRoutine : public Shader
 {
 public:
 
-	static const uint MAX_BONES = 100;
+	static const uint MAX_BONES = 200;
 
     LightingRoutine(const std::string& _sVertexShaderFilename,const std::string& _sFragmentShaderFilename);
     ~LightingRoutine();
