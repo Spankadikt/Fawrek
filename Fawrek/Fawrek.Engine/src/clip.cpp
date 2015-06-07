@@ -49,6 +49,7 @@ void Clip::SetClipCurrentTime(float _fTimeInSeconds)
     float TicksPerSecond = (float)(m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond != 0 ? m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond * m_fClipSpeed : 25.0f * m_fClipSpeed);
     float stampTime = _fTimeInSeconds - m_fStampStartTime;
 	float TimeInTicks = stampTime + TicksPerSecond * stampTime ;
+
     float AnimationTime = fmod(TimeInTicks, GetClipLength());
 
     if(m_bLoop)

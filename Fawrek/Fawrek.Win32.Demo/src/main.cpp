@@ -12,6 +12,8 @@
 #include <GL\gl.h>			// Header File For The OpenGL32 Library
 #include <GL\glu.h>			// Header File For The GLu32 Library
 
+#include "GL\wglext.h"
+
 #include "fawrek.h"
 //#include <gl\glaux.h>		// Header File For The Glaux Library
 
@@ -359,6 +361,24 @@ LRESULT CALLBACK WndProc(	HWND	hWnd,			// Handle For This Window
 	return DefWindowProc(hWnd,uMsg,wParam,lParam);
 }
 
+bool WGLExtensionSupported(const char *extension_name)
+{
+    // this is pointer to function which returns pointer to string with list of all wgl extensions
+    PFNWGLGETEXTENSIONSSTRINGEXTPROC _wglGetExtensionsStringEXT = NULL;
+
+    // determine pointer to wglGetExtensionsStringEXT function
+    _wglGetExtensionsStringEXT = (PFNWGLGETEXTENSIONSSTRINGEXTPROC) wglGetProcAddress("wglGetExtensionsStringEXT");
+
+    if (strstr(_wglGetExtensionsStringEXT(), extension_name) == NULL)
+    {
+        // string was not found
+        return false;
+    }
+
+    // extension is supported
+    return true;
+}
+
 int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 					HINSTANCE	hPrevInstance,		// Previous Instance
 					LPSTR		lpCmdLine,			// Command Line Parameters
@@ -385,6 +405,21 @@ int WINAPI WinMain(	HINSTANCE	hInstance,			// Instance
 		printf("ERROR: %s\n",glewGetErrorString(GlewInitResult));
 		exit(EXIT_FAILURE);
 	}
+
+	PFNWGLSWAPINTERVALEXTPROC       wglSwapIntervalEXT = NULL;
+	PFNWGLGETSWAPINTERVALEXTPROC    wglGetSwapIntervalEXT = NULL;
+
+	if (WGLExtensionSupported("WGL_EXT_swap_control"))
+	{
+		// Extension is supported, init pointers.
+		wglSwapIntervalEXT = (PFNWGLSWAPINTERVALEXTPROC) wglGetProcAddress("wglSwapIntervalEXT");
+
+		// this is another function from WGL_EXT_swap_control extension
+		wglGetSwapIntervalEXT = (PFNWGLGETSWAPINTERVALEXTPROC) wglGetProcAddress("wglGetSwapIntervalEXT");
+	}
+
+	if(wglGetSwapIntervalEXT() == 0)
+		wglSwapIntervalEXT(1);
 
 	pApp = new Fawrek();
 
