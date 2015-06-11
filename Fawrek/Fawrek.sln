@@ -3,11 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fawrek.Engine", "Fawrek.Engine\Fawrek.Engine.vcxproj", "{52500702-5513-43AE-B328-9A930C0065FD}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fawrek.Freeglut.Demo", "Fawrek.Freeglut.Demo\Fawrek.Freeglut.Demo.vcxproj", "{5FF46808-1D07-4514-9629-F117FBE0E051}"
-	ProjectSection(ProjectDependencies) = postProject
-		{52500702-5513-43AE-B328-9A930C0065FD} = {52500702-5513-43AE-B328-9A930C0065FD}
-	EndProjectSection
-EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Fawrek.Win32.Demo", "Fawrek.Win32.Demo\Fawrek.Win32.Demo.vcxproj", "{A9D722D8-C905-4811-AED3-59AA06594A6B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tao.OpenGl", "Tao.OpenGl\Tao.OpenGl.csproj", "{6292109B-6BB4-4120-AD56-F409C0285AB6}"
@@ -38,16 +33,6 @@ Global
 		{52500702-5513-43AE-B328-9A930C0065FD}.Release|Mixed Platforms.Build.0 = Release|Win32
 		{52500702-5513-43AE-B328-9A930C0065FD}.Release|Win32.ActiveCfg = Release|Win32
 		{52500702-5513-43AE-B328-9A930C0065FD}.Release|Win32.Build.0 = Release|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Debug|Any CPU.ActiveCfg = Debug|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Debug|Mixed Platforms.Build.0 = Debug|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Debug|Win32.ActiveCfg = Debug|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Debug|Win32.Build.0 = Debug|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Release|Any CPU.ActiveCfg = Release|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Release|Win32.ActiveCfg = Release|Win32
-		{5FF46808-1D07-4514-9629-F117FBE0E051}.Release|Win32.Build.0 = Release|Win32
 		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Debug|Any CPU.ActiveCfg = Debug|Win32
 		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
 		{A9D722D8-C905-4811-AED3-59AA06594A6B}.Debug|Mixed Platforms.Build.0 = Debug|Win32

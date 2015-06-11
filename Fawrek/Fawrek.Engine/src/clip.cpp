@@ -9,7 +9,7 @@ Clip::Clip(Clip&& clip)
 	*this = clip;
 }
 
-Clip::Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime, bool _bLoop)
+Clip::Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime, bool _bLoop,float _fBaseSpeed)
 {
     m_pAnimation = _pAnimation;
 
@@ -18,7 +18,7 @@ Clip::Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime,
     m_fClipEndTime = _fEndTime;
     m_bLoop = _bLoop;
 
-    SetClipSpeed(0.5f);
+    SetClipSpeed(_fBaseSpeed);
     Stop();
 
 	
@@ -43,14 +43,15 @@ float Clip::GetClipSpeed()
 
 void Clip::SetClipCurrentTime(float _fTimeInSeconds)
 {
-    if(m_fStampStartTime < 0)
-        m_fStampStartTime = _fTimeInSeconds + m_fStampLastStartTime;
+    //if(m_fStampStartTime < 0)
+    //    m_fStampStartTime = _fTimeInSeconds + m_fStampLastStartTime;
 
-    float TicksPerSecond = (float)(m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond != 0 ? m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond * m_fClipSpeed : 25.0f * m_fClipSpeed);
-    float stampTime = _fTimeInSeconds - m_fStampStartTime;
-	float TimeInTicks = stampTime + TicksPerSecond * stampTime ;
+    float TicksPerSecond = (float)(m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond != 0 ? m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond * m_fClipSpeed : 30.0f * m_fClipSpeed);
+    //float stampTime = _fTimeInSeconds - m_fStampStartTime;
+	//float TimeInTicks = stampTime + TicksPerSecond * stampTime ;
+	float TimeInTicks = _fTimeInSeconds * TicksPerSecond;
 
-    float AnimationTime = fmod(TimeInTicks, GetClipLength());
+    float AnimationTime = fmod(TimeInTicks, (float)(m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond != 0 ?GetClipLengthInSec():GetClipLength()));
 
     if(m_bLoop)
     {

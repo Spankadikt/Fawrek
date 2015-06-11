@@ -34,11 +34,16 @@ public:
     ClipState m_state;
     float m_fClipSpeed;
 
-	Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime, bool _bLoop);
+	Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime, bool _bLoop, float _bBaseSpeed);
 
     float GetClipLength()
     {
         return m_fClipEndTime - m_fClipStartTime;
+    }
+
+	float GetClipLengthInSec()
+    {
+        return (m_fClipEndTime - m_fClipStartTime)/30.0f;
     }
 
     void SetClipSpeed(float _fSpeed);

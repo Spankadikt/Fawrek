@@ -34,7 +34,7 @@ void Animation::LoadClips(const std::string& _sFilename)
 {
     if(_sFilename.empty())
     {
-        Clip clip(this,0,0.0f,(float)m_pScene->mAnimations[0]->mDuration,false);
+        Clip clip(this,0,0.0f,(float)m_pScene->mAnimations[0]->mDuration,false,0.5f);
 		m_clips.push_back(clip);
     }
     else
@@ -56,8 +56,10 @@ void Animation::LoadClips(const std::string& _sFilename)
 		    child->ToElement()->QueryFloatAttribute( "end_time", &endTime );
             bool loop;
             child->ToElement()->QueryBoolAttribute( "loop", &loop );
+			float baseSpeed;
+		    child->ToElement()->QueryFloatAttribute( "base_speed", &baseSpeed );
 
-		    Clip clip(this,id,startTime,endTime,loop);
+		    Clip clip(this,id,startTime,endTime,loop,baseSpeed);
 		    m_clips.push_back(clip);
 	    }
 
