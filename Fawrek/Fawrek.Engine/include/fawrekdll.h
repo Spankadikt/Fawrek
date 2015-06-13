@@ -2,7 +2,7 @@
 #include "api.h"
 #include "fawrek.h"
 
-extern "C" FAWREK_API Fawrek*	FawrekCreate();
+extern "C" FAWREK_API Fawrek*	FawrekCreate(const char * _sScenePath);
 extern "C" FAWREK_API int		FawrekInit(Fawrek* _pFawrek); 
 extern "C" FAWREK_API void		FawrekRender(Fawrek* _pFawrek);
 extern "C" FAWREK_API void		FawrekDelete(Fawrek* _pFawrek);

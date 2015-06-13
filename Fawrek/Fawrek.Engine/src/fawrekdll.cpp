@@ -1,8 +1,8 @@
 #include "fawrekdll.h"
 
-Fawrek* FawrekCreate()
+Fawrek* FawrekCreate(const char * _sScenePath)
 {
-	return new Fawrek();
+	return new Fawrek(_sScenePath);
 }
 
 int FawrekInit(Fawrek* _pFawrek)

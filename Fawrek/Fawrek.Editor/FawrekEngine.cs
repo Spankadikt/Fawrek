@@ -9,9 +9,9 @@ namespace Fawrek.Editor
     {
         public static IntPtr fawrekPtr;
 
-        public static void InitFawrekPtr()
+        public static void InitFawrekPtr(string scenePath)
         {
-            fawrekPtr = Fawrek.Wrapper.Wrapper.RunFawrekCreate();
+            fawrekPtr = Fawrek.Wrapper.Wrapper.RunFawrekCreate(scenePath);
             int initResult = Fawrek.Wrapper.Wrapper.RunFawrekInit(fawrekPtr);
         }
 

@@ -28,6 +28,7 @@ class FAWREK_API Fawrek : public Engine
 public:
 
     Fawrek();
+	Fawrek(const std::string& _sSceneFilename);
     ~Fawrek();
 
     int Init();
@@ -68,9 +69,7 @@ private:
 	ColoringRoutine *pColoringRoutine;
 	PickingRoutine *pPickingRoutine;
 	PickingTexture *pPickingTexture;
-    //Camera *pCamera;
-	//Model *pModel;
-	
-    //DirectionalLight *pDirectionalLight;
 	PickingTexture::PixelInfo Pixel;
+
+	std::string m_sSceneFilename;
 };

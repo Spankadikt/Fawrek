@@ -107,7 +107,7 @@ namespace Fawrek.Editor
                 reader.Close();
 
                 CurrentScene = scene;
-                FawrekEngine.InitFawrekPtr();
+                FawrekEngine.InitFawrekPtr(path);
             }
         }
 

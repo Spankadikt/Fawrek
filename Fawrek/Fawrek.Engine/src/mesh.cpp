@@ -35,12 +35,6 @@ void Mesh::Clear()
     }
        
     if (m_VAO != 0) {
-
-		//typedef void (APIENTRY *_glDeleteVertexArrays) (GLsizei , GLuint*); 
-		//_glDeleteVertexArrays glDeleteVertexArrays;
-		//QOpenGLContext qglcont(QOpenGLContext::currentContext());
-		//PFNGLDELETEVERTEXARRAYSPROC  glDeleteVertexArrays = (PFNGLDELETEVERTEXARRAYSPROC  ) qglcont.getProcAddress("glDeleteVertexArrays");
-		
 		glDeleteVertexArrays(1, &m_VAO);
         m_VAO = 0;
     }

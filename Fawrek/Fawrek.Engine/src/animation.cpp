@@ -97,12 +97,6 @@ void Animation::LoadClips(const std::string& _sFilename)
 
                 m_pNodePack = new NodePack(id, packName, nbNode);
 				LoadBonePack(np,m_pNodePack);
-     //           for( child = np->FirstChild(); child; child = child->NextSibling() )
-	    //        {
-     //               /*const char *nodeId = child->ToElement()->Attribute( "nodeId" );
-     //               m_pNodePack->AddBoneToPack(nodeId);*/
-					//LoadBonePack(child,m_pNodePack);
-     //           }
             }
         }
     }
@@ -117,7 +111,6 @@ void Animation::LoadBonePack(tinyxml2::XMLNode *_pNode,NodePack *_pNodePack)
 	if(nodeId)
 		m_pNodePack->AddBoneToPack(nodeId);
 
-	//tinyxml2::XMLElement* pNode = _pNode->ToElement()->FirstChildElement( "NODE" );
 	tinyxml2::XMLElement* pNode = _pNode->ToElement();
 	if(pNode)
 	{

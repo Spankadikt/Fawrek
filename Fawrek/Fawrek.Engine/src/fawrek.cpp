@@ -3,6 +3,13 @@
 Fawrek::Fawrek()
 {
 	m_mouseLeftButton._bClicked = false;
+	m_sSceneFilename = "resources/scene_demo_light.xml";
+}
+
+Fawrek::Fawrek(const std::string& _sSceneFilename)
+{
+	m_mouseLeftButton._bClicked = false;
+	m_sSceneFilename = _sSceneFilename;
 }
 
 Fawrek::~Fawrek()
@@ -24,7 +31,7 @@ int Fawrek::Init()
 		return initGlResult;
 	
 	pScene = new Scene();
-	pScene->Load("resources/scene_demo_heavy.xml");
+	pScene->Load(m_sSceneFilename);
 
 	pPickingTexture = new PickingTexture();
 
@@ -94,9 +101,9 @@ void Fawrek::Dispose()
 void Fawrek::Render()
 {
 
-
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	float runningTime = GetRunningTime();
-
+	/*
 	//picking
 	pPickingTexture->EnableWriting();
 
@@ -131,20 +138,20 @@ void Fawrek::Render()
 
 		m_mouseLeftButton._bClicked = false;
 	}
-
+	*/
 	//rendering
 	for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
 	{
 		Model *pModel = pScene->m_pObjectManager->GetModels()[i];
-		if(true)
-		{
-			if(pModel->m_bSelected)
+		//if(true)
+		//{
+			/*if(pModel->m_bSelected)
 			{
 				pColoringRoutine->Enable();
 				pModel->Render(pScene->m_pObjectManager->GetCamera(),pColoringRoutine,runningTime);
-			}
-			else
-			{
+			}*/
+			//else
+			//{
 				if(pModel->m_pScene->HasAnimations())
 				{
 					pSkinningRoutine->Enable();
@@ -155,9 +162,9 @@ void Fawrek::Render()
 					pLightingRoutine->Enable();
 					pModel->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
 				}
-			}
-		}
-		else
+			//}
+		//}
+		/*else
 		{
 			if(pModel->m_bSelected)
 			{	
@@ -199,7 +206,7 @@ void Fawrek::Render()
 				pSkinningRoutine->Enable();
 				pModel->Render(pScene->m_pObjectManager->GetCamera(),pSkinningRoutine,runningTime);
 			}
-		}
+		}*/
 		
 	}
 }

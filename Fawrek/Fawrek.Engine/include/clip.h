@@ -59,8 +59,7 @@ public:
 
 private:
 	
-	float m_fStampLastStartTime;
-	float m_fStampStartTime;
+
 };
 
 #endif // CLIP_H

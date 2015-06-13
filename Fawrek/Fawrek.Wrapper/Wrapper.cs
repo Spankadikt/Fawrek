@@ -12,7 +12,7 @@ namespace Fawrek.Wrapper
         {
 
             [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekCreate")]
-            public static extern IntPtr FawrekCreate();
+            public static extern IntPtr FawrekCreate(string scenePath);
 
             [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "FawrekInit")]
             public static extern int FawrekInit(IntPtr value);
@@ -33,11 +33,11 @@ namespace Fawrek.Wrapper
             public static extern void ObjectScale(IntPtr value, int id, float x, float y, float z);
         }
 
-        public static IntPtr RunFawrekCreate()
+        public static IntPtr RunFawrekCreate(string scenePath)
         {
             try
             {
-                return DllHelper.FawrekCreate();
+                return DllHelper.FawrekCreate(scenePath);
             }
             catch (Exception ex)
             {

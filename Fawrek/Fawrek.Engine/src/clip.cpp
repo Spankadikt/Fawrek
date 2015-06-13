@@ -20,10 +20,6 @@ Clip::Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime,
 
     SetClipSpeed(_fBaseSpeed);
     Stop();
-
-	
-	m_fStampLastStartTime = 0.0f;
-	m_fStampStartTime = -1.0f;
 }
 
 bool Clip::operator==(const Clip& _clip)
@@ -43,12 +39,7 @@ float Clip::GetClipSpeed()
 
 void Clip::SetClipCurrentTime(float _fTimeInSeconds)
 {
-    //if(m_fStampStartTime < 0)
-    //    m_fStampStartTime = _fTimeInSeconds + m_fStampLastStartTime;
-
     float TicksPerSecond = (float)(m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond != 0 ? m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond * m_fClipSpeed : 30.0f * m_fClipSpeed);
-    //float stampTime = _fTimeInSeconds - m_fStampStartTime;
-	//float TimeInTicks = stampTime + TicksPerSecond * stampTime ;
 	float TimeInTicks = _fTimeInSeconds * TicksPerSecond;
 
     float AnimationTime = fmod(TimeInTicks, (float)(m_pAnimation->m_pScene->mAnimations[0]->mTicksPerSecond != 0 ?GetClipLengthInSec():GetClipLength()));
@@ -73,8 +64,6 @@ float Clip::GetClipCurrentTime()
 
 void Clip::Init()
 {
-    m_fStampStartTime = -1.0f;
-	m_fStampLastStartTime = 0.0f;
 }
 
 void Clip::Play()
@@ -85,8 +74,6 @@ void Clip::Play()
 void Clip::Pause()
 {
     m_state = PAUSE;
-    m_fStampLastStartTime = m_fStampStartTime;
-    m_fStampStartTime = -1.0f;
 }
 
 void Clip::Stop()
