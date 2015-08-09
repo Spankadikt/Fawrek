@@ -21,45 +21,59 @@ namespace Fawrek.Editor.UserControls
     /// </summary>
     public partial class ObjectListControl : UserControl
     {
-
-        public ObservableCollection<Model> LstModels
+        public ObservableCollection<Object> LstObjects
         {
-            get { return (ObservableCollection<Model>)GetValue(LstModelsProperty); }
-            set { SetValue(LstModelsProperty, value); }
+            get { return (ObservableCollection<Object>)GetValue(LstObjectsProperty); }
+            set { SetValue(LstObjectsProperty, value); }
         }
-        public static readonly DependencyProperty LstModelsProperty = DependencyProperty.Register("LstModels", typeof(ObservableCollection<Model>), typeof(ObjectListControl), null);
+        public static readonly DependencyProperty LstObjectsProperty = DependencyProperty.Register("LstObjects", typeof(ObservableCollection<Object>), typeof(ObjectListControl), null);
 
 
         public ObjectListControl()
         {
             InitializeComponent();
-
+            LstObjects = new ObservableCollection<Object>();
             DataContext = this;
-            SceneManager.GetInstance().Changed += BindLstModels;
+            SceneManager.GetInstance().Changed += BindLstObjects;
         }
 
-        private void BindLstModels()
+        private void BindLstObjects()
         {
-            LstModels = SceneManager.GetInstance().CurrentScene.LstModels;
+            LstObjects = SceneManager.GetInstance().CurrentScene.LstObjects;
         }
 
         private void AddModel_Click(object sender, RoutedEventArgs e)
         {
             Model model = new Model();
-            LstModels.Add(model);
+            LstObjects.Add(model);
+            SceneManager.GetInstance().CurrentScene.LstModels.Add(model);
         }
 
-        private void RemoveModel_Click(object sender, RoutedEventArgs e)
+        private void AddCamera_Click(object sender, RoutedEventArgs e)
+        {
+            Camera camera = new Camera();
+            LstObjects.Add(camera);
+            SceneManager.GetInstance().CurrentScene.LstCameras.Add(camera);
+        }
+
+        private void AddLight_Click(object sender, RoutedEventArgs e)
+        {
+            Light light = new Light();
+            LstObjects.Add(light);
+            SceneManager.GetInstance().CurrentScene.LstLights.Add(light);
+        }
+
+        private void RemoveObject_Click(object sender, RoutedEventArgs e)
         {
             var frameworkElement = e.OriginalSource as FrameworkElement;
-            var model = frameworkElement.DataContext as Model;
+            var obj = frameworkElement.DataContext as Object;
 
-            if (null == model)
+            if (null == obj)
             {
                 return;
             }
 
-            LstModels.Remove(model);
+            LstObjects.Remove(obj);
         }
 
         private void LVSceneObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)

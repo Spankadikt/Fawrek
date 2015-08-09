@@ -24,12 +24,36 @@ namespace Fawrek.Editor
             set { path = value; }
         }
 
-        private ObservableCollection<Model> lstModels = new ObservableCollection<Model>();
+        private List<Model> lstModels = new List<Model>();
 
-        internal ObservableCollection<Model> LstModels
+        public List<Model> LstModels
         {
             get { return lstModels; }
-            set { lstModels = value;}
+            set { lstModels = value; }
+        }
+
+        private List<Camera> lstCameras = new List<Camera>();
+
+        public List<Camera> LstCameras
+        {
+            get { return lstCameras; }
+            set { lstCameras = value; }
+        }
+
+        private List<Light> lstLights = new List<Light>();
+
+        public List<Light> LstLights
+        {
+            get { return lstLights; }
+            set { lstLights = value; }
+        }
+
+        private ObservableCollection<Object> lstObjects = new ObservableCollection<Object>();
+
+        internal ObservableCollection<Object> LstObjects
+        {
+            get { return lstObjects; }
+            set { lstObjects = value; }
         }
 
         public Scene()

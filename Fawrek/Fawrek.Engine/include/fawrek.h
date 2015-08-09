@@ -62,10 +62,11 @@ public:
 		bool _bClicked;
 	} m_mouseLeftButton;
 
+	LightingRoutine *pLightingRoutine;
+	SkinningRoutine *pSkinningRoutine;
 
 private:
-	SkinningRoutine *pSkinningRoutine;
-    LightingRoutine *pLightingRoutine;
+
 	ColoringRoutine *pColoringRoutine;
 	PickingRoutine *pPickingRoutine;
 	PickingTexture *pPickingTexture;

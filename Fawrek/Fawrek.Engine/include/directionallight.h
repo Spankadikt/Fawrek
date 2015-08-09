@@ -11,6 +11,8 @@ public:
     DirectionalLight();
 	DirectionalLight(Vector3 _direction);
 
+	void SetDirection(float _fX, float _fY, float _fZ);
+
 	Vector3 m_direction;
 };
 #endif//DIRECTIONALLIGHT_H

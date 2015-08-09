@@ -6,10 +6,10 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView Name="LVSceneObjects" ItemsSource="{Binding LstModels,Mode= TwoWay}" DisplayMemberPath="Name" SelectionChanged="LVSceneObjects_SelectionChanged" SelectionMode="Single">
+        <ListView Name="LVSceneObjects" ItemsSource="{Binding LstObjects,Mode= TwoWay}" DisplayMemberPath="Name" SelectionChanged="LVSceneObjects_SelectionChanged" SelectionMode="Single">
             <ListView.Resources>
                 <ContextMenu x:Key="ItemContextMenu">
-                    <MenuItem Header="Remove" Click="RemoveModel_Click" Background="WhiteSmoke" />
+                    <MenuItem Header="Remove" Click="RemoveObject_Click" Background="WhiteSmoke" />
                 </ContextMenu>
             </ListView.Resources>
             <ListView.ItemContainerStyle>
@@ -20,6 +20,8 @@
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add Model" Click="AddModel_Click"/>
+                    <MenuItem Header="Add Camera" Click="AddCamera_Click"/>
+                    <MenuItem Header="Add Light" Click="AddLight_Click"/>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>

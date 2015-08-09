@@ -21,9 +21,12 @@ public:
 	Matrix view;
 	Matrix projection;
 
-	Vector3 pos;
-    Vector3 target;
-    Vector3 up;
+	float m_fFovAngle;
+	float m_fAspectRation;
+	float m_fNearZ;
+	float m_fFarZ;
+    Vector3 m_target;
+    Vector3 m_up;
 
 };
 

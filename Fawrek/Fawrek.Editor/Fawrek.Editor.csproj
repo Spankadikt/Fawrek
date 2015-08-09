@@ -108,7 +108,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Camera.cs" />
     <Compile Include="FawrekEngine.cs" />
+    <Compile Include="Light.cs" />
     <Compile Include="Model.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="Scene.cs" />

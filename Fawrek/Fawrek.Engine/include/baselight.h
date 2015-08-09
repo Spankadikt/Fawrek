@@ -13,6 +13,8 @@ public:
     BaseLight();
 	BaseLight(float _fAmbientIntensity, float _fDiffuseIntensity, Vector3 _color);
 
+	void SetColor(float _fR, float _fG, float _fB);
+
 	Vector3 m_color;
     float m_fAmbientIntensity;
     float m_fDiffuseIntensity;

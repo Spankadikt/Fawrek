@@ -115,7 +115,7 @@ void Scene::LoadCameras(tinyxml2::XMLElement *_pSceneElement)
 			int id;
 			child->ToElement()->QueryIntAttribute( "id", &id );
 			const char *name = child->ToElement()->Attribute( "name" );
-			std::string position ( child->ToElement()->Attribute( "position" ) );
+			std::string position ( child->ToElement()->Attribute( "translation" ) );
 			std::string target ( child->ToElement()->Attribute( "target" ) );
 			std::string up ( child->ToElement()->Attribute( "up" ) );
 			float fov;
@@ -139,7 +139,7 @@ void Scene::LoadCameras(tinyxml2::XMLElement *_pSceneElement)
 
 			Camera *pCamera = new Camera(vPosition,vTarget,vUp);
 			pCamera->PerspectiveFOV(fov,aspectRatioWidth/aspectRatioHeight,nearZ,farZ);
-			pCamera->LookAt(pCamera->pos,pCamera->target,pCamera->up);
+			pCamera->LookAt(pCamera->m_translation,pCamera->m_target,pCamera->m_up);
 
 			m_pObjectManager->m_objects.push_back(pCamera);
 
