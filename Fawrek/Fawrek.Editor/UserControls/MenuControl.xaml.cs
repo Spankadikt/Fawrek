@@ -46,5 +46,20 @@ namespace Fawrek.Editor.UserControls
         {
             SceneManager.GetInstance().CloseScene();
         }
+
+        private void LoadAnimation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SaveAnimation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CloseAnimation_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 }

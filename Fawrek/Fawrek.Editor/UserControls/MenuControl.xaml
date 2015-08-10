@@ -7,10 +7,17 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Menu Grid.ColumnSpan="2" Grid.Row="0">
-            <MenuItem Header="Scene" >
-                <MenuItem Header="Load Scene..." Click="LoadScene_Click"/>
-                <MenuItem Header="Save Scene" Click="SaveScene_Click"/>
-                <MenuItem Header="Close Scene" Click="CloseScene_Click"/>
+            <MenuItem Header="File">
+                <MenuItem Header="Scene" >
+                    <MenuItem Header="Load Scene..." Click="LoadScene_Click"/>
+                    <MenuItem Header="Save Scene" Click="SaveScene_Click"/>
+                    <MenuItem Header="Close Scene" Click="CloseScene_Click"/>
+                </MenuItem>
+                <MenuItem Header="Animation" >
+                    <MenuItem Header="Load Animation..." Click="LoadAnimation_Click"/>
+                    <MenuItem Header="Save Animation" Click="SaveAnimation_Click"/>
+                    <MenuItem Header="Close Animation" Click="CloseAnimation_Click"/>
+                </MenuItem>
             </MenuItem>
         </Menu>
     </Grid>

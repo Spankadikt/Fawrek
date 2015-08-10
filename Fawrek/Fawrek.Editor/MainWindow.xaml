@@ -8,7 +8,7 @@
     xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
     Title="Fawrek" Height="800" Width="1280" WindowTransitionsEnabled="False">
     
-    <Grid>
+    <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
@@ -22,10 +22,12 @@
                             <xcad:LayoutAnchorable Title="Objects">
                                 <uc:ObjectListControl/>
                             </xcad:LayoutAnchorable>
+                            <xcad:LayoutAnchorable Title="Clips">
+                            </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
                         <xcad:LayoutDocumentPaneGroup>
                             <xcad:LayoutDocumentPane >
-                                <xcad:LayoutAnchorable Title="Scene View">
+                                <xcad:LayoutAnchorable Title="Viewport" CanClose="False">
                                     <int:WindowsFormsHost>
                                         <uc:CustomOpenGLControl Name="OpenGLControl" />
                                     </int:WindowsFormsHost>
@@ -39,7 +41,7 @@
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutPanel>
                     <xcad:LayoutPanel DockHeight="150">
-                        <xcad:LayoutAnchorablePane>
+                        <xcad:LayoutAnchorablePane DockWidth="250">
                             <xcad:LayoutAnchorable Title="Log">
                                 <uc:LogControl/>
                             </xcad:LayoutAnchorable>
