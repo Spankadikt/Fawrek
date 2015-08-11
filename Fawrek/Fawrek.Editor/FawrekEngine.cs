@@ -8,6 +8,7 @@ namespace Fawrek.Editor
     public static class FawrekEngine
     {
         public static IntPtr fawrekPtr;
+        
 
         public static void InitFawrekPtr(string scenePath)
         {

@@ -19,6 +19,7 @@ public:
 
 	void Load(const std::string& _sFilename);
 	void LoadModels(tinyxml2::XMLElement *_pDoc);
+	void LoadCharacters(tinyxml2::XMLElement *_pDoc);
 	void LoadLights(tinyxml2::XMLElement *_pDoc);
 	void LoadCameras(tinyxml2::XMLElement *_pDoc);
 

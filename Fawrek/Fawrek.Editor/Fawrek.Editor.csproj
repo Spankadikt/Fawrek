@@ -108,13 +108,20 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Character.cs" />
     <Compile Include="Camera.cs" />
+    <Compile Include="CharacterManager.cs" />
+    <Compile Include="Clip.cs" />
     <Compile Include="FawrekEngine.cs" />
     <Compile Include="Light.cs" />
     <Compile Include="Model.cs" />
+    <Compile Include="Skeleton.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="SceneManager.cs" />
+    <Compile Include="UserControls\CharacterListControl.xaml.cs">
+      <DependentUpon>CharacterListControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\LogControl.xaml.cs">
       <DependentUpon>LogControl.xaml</DependentUpon>
     </Compile>
@@ -148,6 +155,10 @@
     <Page Include="UserControls\AnimationEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\CharacterListControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="UserControls\LogControl.xaml">
       <SubType>Designer</SubType>

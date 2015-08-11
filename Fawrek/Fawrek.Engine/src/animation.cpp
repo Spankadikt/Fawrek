@@ -42,7 +42,7 @@ void Animation::LoadClips(const std::string& _sFilename)
         tinyxml2::XMLDocument doc;
         doc.LoadFile(_sFilename.c_str());
 
-	    tinyxml2::XMLElement* animElement = doc.FirstChildElement( "CLIPS" );
+	    tinyxml2::XMLElement* animElement = doc.FirstChildElement( "CHARACTER" )->FirstChildElement( "CLIPS" );
 	    animElement->QueryIntAttribute( "nb_clip", &m_iNbClip );
 
 	    tinyxml2::XMLNode* child;
@@ -63,7 +63,7 @@ void Animation::LoadClips(const std::string& _sFilename)
 		    m_clips.push_back(clip);
 	    }
 
-        tinyxml2::XMLElement* skeletonElement = doc.FirstChildElement( "SKELETON" );
+        tinyxml2::XMLElement* skeletonElement = doc.FirstChildElement( "CHARACTER" )->FirstChildElement( "SKELETON" );
 
         tinyxml2::XMLNode* np;
         for( np = skeletonElement->FirstChild(); np; np = np->NextSibling() )

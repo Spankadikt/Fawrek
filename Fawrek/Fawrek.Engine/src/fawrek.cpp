@@ -75,14 +75,10 @@ int Fawrek::Init()
 	pSkinningRoutine->SetMatSpecularIntensity(1.0f);
 	pSkinningRoutine->SetMatSpecularPower(32);
 
-	for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
+	for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
 	{
-		Model* pModel = static_cast<Model*>(pScene->m_pObjectManager->GetModels()[i]);
-		if(pModel->m_pScene->HasAnimations())
-		{
-			pModel->m_pAnimation->CrossfadeToClip(0);
-			//pModel->m_pAnimationBis->CrossfadeToClip(0);
-		}
+		pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimation->CrossfadeToClip(0);
+		//pModel->m_pAnimationBis->CrossfadeToClip(0);
 	}
 
 
@@ -103,111 +99,17 @@ void Fawrek::Render()
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	float runningTime = GetRunningTime();
-	/*
-	//picking
-	pPickingTexture->EnableWriting();
-
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-	pPickingRoutine->Enable();
-
+	
 	for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
 	{
-        pPickingRoutine->SetObjectIndex(i);
-		pScene->m_pObjectManager->GetModels()[i]->Render(pScene->m_pObjectManager->GetCamera(),pPickingRoutine,runningTime);
-    }
-
-    pPickingTexture->DisableWriting(); 
-
-
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	//coloring?
-	if(m_mouseLeftButton._bClicked)
-	{
-		Pixel = pPickingTexture->ReadPixel(m_mouseLeftButton._nX, 480 - m_mouseLeftButton._nY - 1);
-
-		for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
-		{
-			pScene->m_pObjectManager->GetModels()[i]->m_bSelected = false;
-		}
-
-        if (Pixel.PrimID != 0)
-		{
-			pScene->m_pObjectManager->GetModels()[Pixel.ObjectID]->m_bSelected = true;
-        }
-
-		m_mouseLeftButton._bClicked = false;
+		pLightingRoutine->Enable();
+		pScene->m_pObjectManager->GetModels()[i]->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
 	}
-	*/
-	//rendering
-	for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
+
+	for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
 	{
-		Model *pModel = pScene->m_pObjectManager->GetModels()[i];
-		//if(true)
-		//{
-			/*if(pModel->m_bSelected)
-			{
-				pColoringRoutine->Enable();
-				pModel->Render(pScene->m_pObjectManager->GetCamera(),pColoringRoutine,runningTime);
-			}*/
-			//else
-			//{
-				if(pModel->m_pScene->HasAnimations())
-				{
-					pSkinningRoutine->Enable();
-					pModel->Render(pScene->m_pObjectManager->GetCamera(),pSkinningRoutine,runningTime);
-				}
-				else
-				{
-					pLightingRoutine->Enable();
-					pModel->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
-				}
-			//}
-		//}
-		/*else
-		{
-			if(pModel->m_bSelected)
-			{	
-				for(int i=0;i<pModel->m_pMesh->m_entries.size();i++)
-				{
-					Matrix modelMatrix = Matrix::Identity;
-
-					modelMatrix.Translate(pModel->m_translation);
-					Quaternion qRotate = qRotate.FromEuler(pModel->m_rotation.m_fX,pModel->m_rotation.m_fY,pModel->m_rotation.m_fZ);
-					modelMatrix.Rotate(qRotate);
-					modelMatrix.Scale(pModel->m_scale);
-
-					Matrix modelView = pScene->m_pObjectManager->GetCamera()->view * modelMatrix;
-					Matrix viewProjection = pScene->m_pObjectManager->GetCamera()->projection * modelView;
-
-					if(i==(int)Pixel.DrawID)
-					{
-						pColoringRoutine->Enable();
-
-						pColoringRoutine->SetWVP(viewProjection);
-						pColoringRoutine->SetWorldMatrix(modelMatrix);
-
-
-						pModel->m_pMesh->PickingRender((int)Pixel.ObjectID,i,(int)Pixel.PrimID);
-					}
-					else
-					{
-						pSkinningRoutine->Enable();
-
-						pSkinningRoutine->SetWVP(viewProjection);
-						pSkinningRoutine->SetWorldMatrix(modelMatrix);
-
-						pModel->m_pMesh->PickingRender((int)Pixel.ObjectID,i,(int)Pixel.PrimID);
-					}
-				}
-			}
-			else
-			{
-				pSkinningRoutine->Enable();
-				pModel->Render(pScene->m_pObjectManager->GetCamera(),pSkinningRoutine,runningTime);
-			}
-		}*/
-		
+		pSkinningRoutine->Enable();
+		pScene->m_pObjectManager->GetCharacters()[i]->Render(pScene->m_pObjectManager->GetCamera(),pSkinningRoutine,runningTime);
 	}
 }
 

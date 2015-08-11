@@ -19,15 +19,19 @@ void Scene::Load(const std::string& _sFilename)
 	tinyxml2::XMLDocument doc;
     doc.LoadFile(_sFilename.c_str());
 
-	tinyxml2::XMLElement* pSceneLights = doc.FirstChildElement( "OBJECTS" )->FirstChildElement( "LIGHTS" );
+	tinyxml2::XMLElement* pSceneLights = doc.FirstChildElement( "SCENE" )->FirstChildElement( "OBJECTS" )->FirstChildElement( "LIGHTS" );
 	if(pSceneLights)
 		LoadLights(pSceneLights);
 
-	tinyxml2::XMLElement* pSceneModels = doc.FirstChildElement( "OBJECTS" )->FirstChildElement( "MODELS" );
+	tinyxml2::XMLElement* pSceneModels = doc.FirstChildElement( "SCENE" )->FirstChildElement( "OBJECTS" )->FirstChildElement( "MODELS" );
 	if(pSceneModels)
 		LoadModels(pSceneModels);
 
-	tinyxml2::XMLElement* pSceneCameras = doc.FirstChildElement( "OBJECTS" )->FirstChildElement( "CAMERAS" );
+	tinyxml2::XMLElement* pSceneCharacters = doc.FirstChildElement( "SCENE" )->FirstChildElement( "OBJECTS" )->FirstChildElement( "CHARACTERS" );
+	if(pSceneCharacters)
+		LoadCharacters(pSceneCharacters);
+
+	tinyxml2::XMLElement* pSceneCameras = doc.FirstChildElement( "SCENE" )->FirstChildElement( "OBJECTS" )->FirstChildElement( "CAMERAS" );
 	if(pSceneCameras)
 		LoadCameras(pSceneCameras);
 }
@@ -70,6 +74,48 @@ void Scene::LoadModels(tinyxml2::XMLElement *_pSceneElement)
 		{
 			Model *pModel = new Model(filename);
 			m_pObjectManager->m_objects.push_back(pModel);
+		}
+	}
+}
+
+void Scene::LoadCharacters(tinyxml2::XMLElement *_pSceneElement)
+{
+	tinyxml2::XMLNode* child;
+	for( child = _pSceneElement->FirstChild(); child; child = child->NextSibling() )
+	{
+		int id;
+		child->ToElement()->QueryIntAttribute( "id", &id );
+		const char *name = child->ToElement()->Attribute( "name" );
+		std::string translation ( child->ToElement()->Attribute( "translation" ) );
+		std::string rotation ( child->ToElement()->Attribute( "rotation" ) );
+		std::string scale ( child->ToElement()->Attribute( "scale" ) );
+		std::string filename (child->ToElement()->Attribute( "filename" ));
+		std::string animationfilename (child->ToElement()->Attribute( "animationfilename" ));
+        bool hide;
+        child->ToElement()->QueryBoolAttribute( "hide", &hide );
+
+		if(!translation.empty() && !rotation.empty() && !scale.empty())
+		{
+			std::vector<std::string> splitedTranslation = split(translation, ',');
+			std::vector<std::string> splitedRotation = split(rotation, ',');
+			std::vector<std::string> splitedScale = split(scale, ',');
+
+			Vector3 vTranslation(stof(splitedTranslation[0].c_str()),stof(splitedTranslation[1].c_str()),stof(splitedTranslation[2].c_str()));
+			Vector3 vRotation(stof(splitedRotation[0].c_str()),stof(splitedRotation[1].c_str()),stof(splitedRotation[2].c_str()));
+			Vector3 vScale(stof(splitedScale[0].c_str()),stof(splitedScale[1].c_str()),stof(splitedScale[2].c_str()));
+
+			Character *pCharacter;
+			if(!animationfilename.empty())
+				pCharacter = new Character(filename,id,vTranslation,vRotation,vScale,animationfilename);
+			else
+				pCharacter = new Character(filename,id,vTranslation,vRotation,vScale);
+
+			m_pObjectManager->m_objects.push_back(pCharacter);
+		}
+		else
+		{
+			Character *pCharacter = new Character(filename);
+			m_pObjectManager->m_objects.push_back(pCharacter);
 		}
 	}
 }

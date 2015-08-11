@@ -8,6 +8,7 @@
 #include "vector"
 #include "utils.h"
 #include "model.h"
+#include "character.h"
 #include "directionallight.h"
 #include "camera.h"
 
@@ -18,6 +19,7 @@ public:
 	~ObjectManager();
 
 	vector<Model*> GetModels();
+	vector<Character*> GetCharacters();
 	DirectionalLight* GetDirectionalLight();
 	Camera* GetCamera();
 	Object* GetObjectById(int _nId);

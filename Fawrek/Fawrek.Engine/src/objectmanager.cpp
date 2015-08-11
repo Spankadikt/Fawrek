@@ -21,6 +21,19 @@ vector<Model*> ObjectManager::GetModels()
 	return lstModel;
 }
 
+vector<Character*> ObjectManager::GetCharacters()
+{
+	vector<Character*> lstCharacter;
+	for(int i=0; i<m_objects.size();i++)
+	{
+		Character* pCharacter = dynamic_cast<Character*>(m_objects[i]);
+		if(pCharacter)
+			lstCharacter.push_back(pCharacter);
+	}
+
+	return lstCharacter;
+}
+
 DirectionalLight* ObjectManager::GetDirectionalLight()
 {
 	for(int i=0; i<m_objects.size();i++)

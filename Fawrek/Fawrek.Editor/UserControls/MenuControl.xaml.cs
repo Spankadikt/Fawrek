@@ -47,19 +47,25 @@ namespace Fawrek.Editor.UserControls
             SceneManager.GetInstance().CloseScene();
         }
 
-        private void LoadAnimation_Click(object sender, RoutedEventArgs e)
+        private void LoadCharacter_Click(object sender, RoutedEventArgs e)
         {
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = ofd.FileName;
+                CharacterManager.GetInstance().OpenCharacter(path);
 
+            }
         }
 
-        private void SaveAnimation_Click(object sender, RoutedEventArgs e)
+        private void SaveCharacter_Click(object sender, RoutedEventArgs e)
         {
-
+            CharacterManager.GetInstance().SaveCharacter();
         }
 
-        private void CloseAnimation_Click(object sender, RoutedEventArgs e)
+        private void CloseCharacter_Click(object sender, RoutedEventArgs e)
         {
-
+            CharacterManager.GetInstance().CloseCharacter();
         }
     }
 }

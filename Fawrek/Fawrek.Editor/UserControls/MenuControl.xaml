@@ -13,10 +13,10 @@
                     <MenuItem Header="Save Scene" Click="SaveScene_Click"/>
                     <MenuItem Header="Close Scene" Click="CloseScene_Click"/>
                 </MenuItem>
-                <MenuItem Header="Animation" >
-                    <MenuItem Header="Load Animation..." Click="LoadAnimation_Click"/>
-                    <MenuItem Header="Save Animation" Click="SaveAnimation_Click"/>
-                    <MenuItem Header="Close Animation" Click="CloseAnimation_Click"/>
+                <MenuItem Header="Character" >
+                    <MenuItem Header="Load Character..." Click="LoadCharacter_Click"/>
+                    <MenuItem Header="Save Character" Click="SaveCharacter_Click"/>
+                    <MenuItem Header="Close Character" Click="CloseCharacter_Click"/>
                 </MenuItem>
             </MenuItem>
         </Menu>
