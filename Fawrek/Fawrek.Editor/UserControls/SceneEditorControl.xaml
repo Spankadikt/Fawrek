@@ -4,56 +4,32 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:int="clr-namespace:System.Windows.Forms.Integration;assembly=WindowsFormsIntegration"
-             xmlns:cs="clr-namespace:Fawrek.Editor.UserControls"
+             xmlns:uc="clr-namespace:Fawrek.Editor.UserControls"
              xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
              mc:Ignorable="d" 
-             d:DesignHeight="540" d:DesignWidth="400"
+             d:DesignHeight="540" d:DesignWidth="210"
              DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <Grid>
-        <!--<Grid Background="WhiteSmoke">
+        <Grid Background="WhiteSmoke">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="*"/>
-                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Menu Grid.ColumnSpan="2" Grid.Row="0">
-                <MenuItem Header="Scene" >
+                <MenuItem Header="File" >
                     <MenuItem Header="Load Scene..." Click="LoadScene_Click"/>
                     <MenuItem Header="Save Scene" Click="SaveScene_Click"/>
                     <MenuItem Header="Close Scene" Click="CloseScene_Click"/>
                 </MenuItem>
             </Menu>
-            <GroupBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Header="Objects">
-                <ListView Name="LVSceneObjects" ItemsSource="{Binding LstModels,Mode= TwoWay}" DisplayMemberPath="Name" SelectionChanged="LVSceneObjects_SelectionChanged">
-                    <ListView.Resources>
-                        <ContextMenu x:Key="ItemContextMenu">
-                            <MenuItem Header="Remove" Click="RemoveModel_Click" Background="WhiteSmoke" />
-                        </ContextMenu>
-                    </ListView.Resources>
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="{x:Type ListViewItem}" >
-                            <Setter Property="ContextMenu" Value="{StaticResource ItemContextMenu}" />
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ContextMenu>
-                        <ContextMenu>
-                            <MenuItem Header="Add Model" Click="AddModel_Click"/>
-                        </ContextMenu>
-                    </ListView.ContextMenu>
-                </ListView>
+            <GroupBox Grid.Column="0" Grid.Row="1" Grid.RowSpan="2" Header="Objects" Width="200">
+                <uc:SceneListControl/>
             </GroupBox>
-            <GroupBox Grid.Column="1" Grid.Row="1" Header="Tools">
-                <ListView>
-                </ListView>
-            </GroupBox>
-            <GroupBox Grid.Column="1" Grid.Row="2" Header="Properties">
-                <xctk:PropertyGrid Name="ObjectPropertyGrid"/>
-            </GroupBox>
-        </Grid>-->
+        </Grid>
     </Grid>
 </UserControl>

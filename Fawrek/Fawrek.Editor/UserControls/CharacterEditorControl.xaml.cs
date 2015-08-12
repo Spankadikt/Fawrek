@@ -11,40 +11,37 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace Fawrek.Editor.UserControls
 {
     /// <summary>
-    /// Logique d'interaction pour MenuControl.xaml
+    /// Logique d'interaction pour CharacterEditorControl.xaml
     /// </summary>
-    public partial class MenuControl : System.Windows.Controls.UserControl
+    public partial class CharacterEditorControl : UserControl
     {
-        public MenuControl()
+        public CharacterEditorControl()
         {
             InitializeComponent();
-
         }
 
-        private void LoadScene_Click(object sender, RoutedEventArgs e)
+        private void LoadCharacter_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
             if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string path = ofd.FileName;
-                SceneManager.GetInstance().OpenScene(path);
-
+                CharacterManager.GetInstance().OpenCharacter(path);
             }
         }
 
-        private void SaveScene_Click(object sender, RoutedEventArgs e)
+        private void SaveCharacter_Click(object sender, RoutedEventArgs e)
         {
-            SceneManager.GetInstance().SaveScene();
+            CharacterManager.GetInstance().SaveCharacter();
         }
 
-        private void CloseScene_Click(object sender, RoutedEventArgs e)
+        private void CloseCharacter_Click(object sender, RoutedEventArgs e)
         {
-            SceneManager.GetInstance().CloseScene();
+            CharacterManager.GetInstance().CloseCharacter();
         }
     }
 }

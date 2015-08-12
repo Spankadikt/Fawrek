@@ -111,6 +111,7 @@
     <Compile Include="Character.cs" />
     <Compile Include="Camera.cs" />
     <Compile Include="CharacterManager.cs" />
+    <Compile Include="CharacterModel.cs" />
     <Compile Include="Clip.cs" />
     <Compile Include="FawrekEngine.cs" />
     <Compile Include="Light.cs" />
@@ -122,14 +123,11 @@
     <Compile Include="UserControls\CharacterListControl.xaml.cs">
       <DependentUpon>CharacterListControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\LogControl.xaml.cs">
-      <DependentUpon>LogControl.xaml</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\MenuControl.xaml.cs">
       <DependentUpon>MenuControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ObjectListControl.xaml.cs">
-      <DependentUpon>ObjectListControl.xaml</DependentUpon>
+    <Compile Include="UserControls\SceneListControl.xaml.cs">
+      <DependentUpon>SceneListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="ObjectManager.cs" />
     <Compile Include="UserControls\PropertyListControl.xaml.cs">
@@ -152,7 +150,7 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="UserControls\AnimationEditorControl.xaml">
+    <Page Include="UserControls\CharacterEditorControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -160,15 +158,11 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="UserControls\LogControl.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="UserControls\MenuControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\ObjectListControl.xaml">
+    <Page Include="UserControls\SceneListControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -182,10 +176,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UserControls\AnimationEditorControl.xaml.cs">
-      <DependentUpon>AnimationEditorControl.xaml</DependentUpon>
+    <Compile Include="UserControls\CharacterEditorControl.xaml.cs">
+      <DependentUpon>CharacterEditorControl.xaml</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\CustomOpenGLControl.cs">
+    <Compile Include="UserControls\ViewportControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">

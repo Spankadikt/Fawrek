@@ -17,14 +17,6 @@ namespace Fawrek.Editor
             set { filename = value; }
         }
 
-        private string animationFileName = "";
-
-        public string AnimationFileName
-        {
-            get { return animationFileName; }
-            set { animationFileName = value; }
-        }
-
         private Vector3D translation = new Vector3D();
 
         public Vector3D Translation

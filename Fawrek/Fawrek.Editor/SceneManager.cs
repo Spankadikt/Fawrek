@@ -156,10 +156,39 @@ namespace Fawrek.Editor
                                 model.Scale = new Vector3D(double.Parse(scale[0].Replace('.', ',')), double.Parse(scale[1].Replace('.', ',')), double.Parse(scale[2].Replace('.', ',')));
 
                                 model.Filename = reader.GetAttribute(5);
-                                model.AnimationFileName = reader.GetAttribute(6);
 
                                 scene.LstModels.Add(model);
                                 scene.LstObjects.Add(model);
+                            }
+                        }
+                    }
+
+                    if (reader.NodeType == XmlNodeType.Element && reader.Name == "CHARACTERS")
+                    {
+                        while (reader.NodeType != XmlNodeType.EndElement)
+                        {
+                            reader.Read();
+                            if (reader.Name == "CHARACTER")
+                            {
+                                CharacterModel characterModel = new CharacterModel();
+
+                                characterModel.Id = int.Parse(reader.GetAttribute(0));
+                                characterModel.Name = reader.GetAttribute(1);
+
+                                string[] translation = reader.GetAttribute(2).Split(',').ToArray();
+                                characterModel.Translation = new Vector3D(double.Parse(translation[0]), double.Parse(translation[1]), double.Parse(translation[2]));
+
+                                string[] rotation = reader.GetAttribute(3).Split(',').ToArray();
+                                characterModel.Rotation = new Vector3D(double.Parse(rotation[0]), double.Parse(rotation[1]), double.Parse(rotation[2]));
+
+                                string[] scale = reader.GetAttribute(4).Split(',').ToArray();
+                                characterModel.Scale = new Vector3D(double.Parse(scale[0].Replace('.', ',')), double.Parse(scale[1].Replace('.', ',')), double.Parse(scale[2].Replace('.', ',')));
+
+                                characterModel.Filename = reader.GetAttribute(5);
+                                characterModel.AnimationFileName = reader.GetAttribute(6);
+
+                                scene.LstModels.Add(characterModel);
+                                scene.LstObjects.Add(characterModel);
                             }
                         }
                     }
@@ -168,7 +197,7 @@ namespace Fawrek.Editor
                 reader.Close();
 
                 CurrentScene = scene;
-                FawrekEngine.InitFawrekPtr(path);
+                FawrekEngine.InitFawrekScenePtr(path);
             }
         }
 
@@ -283,7 +312,30 @@ namespace Fawrek.Editor
                 writer.WriteAttributeString("scale", scale);
 
                 writer.WriteAttributeString("filename", model.Filename);
-                writer.WriteAttributeString("animationfilename", model.AnimationFileName);
+
+                writer.WriteEndElement();
+            }
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("CHARACTERS");
+            foreach (CharacterModel characterModel in CurrentScene.LstModels)
+            {
+                writer.WriteStartElement("CHARACTER");
+
+                writer.WriteAttributeString("id", characterModel.Id.ToString());
+                writer.WriteAttributeString("name", characterModel.Name);
+
+                string translation = characterModel.Translation.X.ToString() + "," + characterModel.Translation.Y.ToString() + "," + characterModel.Translation.Z.ToString();
+                writer.WriteAttributeString("translation", translation);
+
+                string rotation = characterModel.Rotation.X.ToString() + "," + characterModel.Rotation.Y.ToString() + "," + characterModel.Rotation.Z.ToString();
+                writer.WriteAttributeString("rotation", rotation);
+
+                string scale = characterModel.Scale.X.ToString() + "," + characterModel.Scale.Y.ToString() + "," + characterModel.Scale.Z.ToString();
+                writer.WriteAttributeString("scale", scale);
+
+                writer.WriteAttributeString("filename", characterModel.Filename);
+                writer.WriteAttributeString("animationfilename", characterModel.AnimationFileName);
 
                 writer.WriteEndElement();
             }
@@ -301,7 +353,7 @@ namespace Fawrek.Editor
         {
             if (CurrentScene != null && !string.IsNullOrEmpty(CurrentScene.Path))
             {
-                FawrekEngine.DisposeFawrekPtr();
+                FawrekEngine.DisposeFawrekScenePtr();
                 CurrentScene.LstModels.Clear();
                 OnClose();
             }

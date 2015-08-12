@@ -21,40 +21,39 @@ namespace Fawrek.Editor.UserControls
     /// </summary>
     public partial class CharacterListControl : UserControl
     {
-        public ObservableCollection<Object> LstObjects
+        public ObservableCollection<Object> LstCharacterObjects
         {
             get { return (ObservableCollection<Object>)GetValue(LstObjectsProperty); }
             set { SetValue(LstObjectsProperty, value); }
         }
-        public static readonly DependencyProperty LstObjectsProperty = DependencyProperty.Register("LstObjects", typeof(ObservableCollection<Object>), typeof(ObjectListControl), null);
+        public static readonly DependencyProperty LstObjectsProperty = DependencyProperty.Register("LstCharacterObjects", typeof(ObservableCollection<Object>), typeof(CharacterListControl), null);
 
 
         public CharacterListControl()
         {
             InitializeComponent();
-            LstObjects = new ObservableCollection<Object>();
+            LstCharacterObjects = new ObservableCollection<Object>();
             DataContext = this;
-            CharacterManager.GetInstance().Changed += BindLstObjects;
             CharacterManager.GetInstance().Changed += BindLstObjects;
         }
 
         private void BindLstObjects()
         {
-            LstObjects = CharacterManager.GetInstance().CurrentCharacter.LstObjects;
+            LstCharacterObjects = CharacterManager.GetInstance().CurrentCharacter.LstObjects;
         }
 
 
         private void AddClip_Click(object sender, RoutedEventArgs e)
         {
             Clip clip = new Clip();
-            LstObjects.Add(clip);
+            LstCharacterObjects.Add(clip);
             CharacterManager.GetInstance().CurrentCharacter.LstClips.Add(clip);
         }
 
         private void AddNodePack_Click(object sender, RoutedEventArgs e)
         {
             Skeleton.NodePack nodePack = new Skeleton.NodePack();
-            LstObjects.Add(nodePack);
+            LstCharacterObjects.Add(nodePack);
             CharacterManager.GetInstance().CurrentCharacter.Skeleton.LstNodePack.Add(nodePack);
         }
 
@@ -68,10 +67,10 @@ namespace Fawrek.Editor.UserControls
                 return;
             }
 
-            LstObjects.Remove(obj);
+            LstCharacterObjects.Remove(obj);
         }
 
-        private void LVSceneObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private void LVCharacterObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             System.Windows.Controls.ListView lv = (System.Windows.Controls.ListView)sender;
             Object obj = lv.SelectedItem as Object;

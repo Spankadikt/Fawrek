@@ -115,35 +115,35 @@ namespace Fawrek.Editor
                     if (reader.NodeType == XmlNodeType.Element && reader.Name == "SKELETON")
                     {
                         Skeleton skeleton = new Skeleton();
-
-                        while (reader.NodeType != XmlNodeType.EndElement)
+                        while (reader.NodeType != XmlNodeType.EndElement || reader.Name == "NODEPACK")
                         {
                             reader.Read();
-                            if (reader.Name == "NODEPACK")
-                            {
-                                Skeleton.NodePack nodePack = new Skeleton.NodePack();
 
-                                nodePack.Id = int.Parse(reader.GetAttribute(0));
-                                nodePack.Name = reader.GetAttribute(1);
-
-                                while (reader.NodeType != XmlNodeType.EndElement)
+                                if (reader.Name == "NODEPACK")
                                 {
-                                    reader.Read();
-                                    if (reader.Name == "NODE")
+                                    Skeleton.NodePack nodePack = new Skeleton.NodePack();
+
+                                    nodePack.Id = int.Parse(reader.GetAttribute(0));
+                                    nodePack.Name = reader.GetAttribute(1);
+                                    while (reader.NodeType != XmlNodeType.EndElement)
                                     {
-                                        Skeleton.Node node = new Skeleton.Node();
+                                        reader.Read();
+                                        if (reader.Name == "NODE")
+                                        {
+                                            Skeleton.Node node = new Skeleton.Node();
 
-                                        node.NodeId = reader.GetAttribute("nodeId");
+                                            node.NodeId = reader.GetAttribute("nodeId");
 
-                                        ReadNode(node, reader);
+                                            //ReadNode(node, reader);
 
-                                        nodePack.LstNode.Add(node);
+                                            nodePack.LstNode.Add(node);
+                                        }
                                     }
-                                }
 
-                                character.LstObjects.Add(nodePack);
-                                skeleton.LstNodePack.Add(nodePack);
-                            }
+                                    character.LstObjects.Add(nodePack);
+                                    skeleton.LstNodePack.Add(nodePack);
+                                }
+                            
                         }
                     }
                 }
@@ -245,6 +245,7 @@ namespace Fawrek.Editor
             if (CurrentCharacter != null && !string.IsNullOrEmpty(CurrentCharacter.Path))
             {
                 CurrentCharacter.LstClips.Clear();
+                CurrentCharacter.LstObjects.Clear();
                 OnClose();
             }
         }

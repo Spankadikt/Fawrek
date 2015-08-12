@@ -22,69 +22,30 @@ namespace Fawrek.Editor.UserControls
     /// </summary>
     public partial class SceneEditorControl : System.Windows.Controls.UserControl
     {
-        /*SceneManager SM = new SceneManager();
-
-        public ObservableCollection<Model> LstModels
-        {
-            get { return (ObservableCollection<Model>)GetValue(LstModelsProperty); }
-            set { SetValue(LstModelsProperty, value); }
-        }
-        public static readonly DependencyProperty LstModelsProperty = DependencyProperty.Register("LstModels", typeof(ObservableCollection<Model>), typeof(SceneEditorControl), null);
-        */
         public SceneEditorControl()
         {
             InitializeComponent();
         }
 
-        /*private void LoadScene_Click(object sender, RoutedEventArgs e)
+        private void LoadScene_Click(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog ofd = new OpenFileDialog();
-            if (ofd.ShowDialog() == DialogResult.OK)
+            System.Windows.Forms.OpenFileDialog ofd = new System.Windows.Forms.OpenFileDialog();
+            if (ofd.ShowDialog() == System.Windows.Forms.DialogResult.OK)
             {
                 string path = ofd.FileName;
-                SM.OpenScene(path);
+                SceneManager.GetInstance().OpenScene(path);
 
-                LstModels = SM.CurrentScene.LstModels;
             }
         }
 
         private void SaveScene_Click(object sender, RoutedEventArgs e)
         {
-            SM.SaveScene();
+            SceneManager.GetInstance().SaveScene();
         }
 
         private void CloseScene_Click(object sender, RoutedEventArgs e)
         {
-            ObjectPropertyGrid.SelectedObject = null;
-            SM.CloseScene();
+            SceneManager.GetInstance().CloseScene();
         }
-
-        private void AddModel_Click(object sender, RoutedEventArgs e)
-        {
-            Model model = new Model();
-            LstModels.Add(model);
-        }
-
-        private void RemoveModel_Click(object sender, RoutedEventArgs e)
-        {
-            var frameworkElement = e.OriginalSource as FrameworkElement;
-            var model = frameworkElement.DataContext as Model;
-
-            if (null == model)
-            {
-                return;
-            }
-
-            LstModels.Remove(model);
-        }
-
-        private void LVSceneObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            System.Windows.Controls.ListView lv = (System.Windows.Controls.ListView)sender;
-            object model = lv.SelectedItem;
-            
-            if(model != null)
-                ObjectPropertyGrid.SelectedObject = model;
-        }*/
     }
 }

@@ -7,12 +7,12 @@ using System.Windows.Media;
 
 namespace Fawrek.Editor.UserControls
 {
-    class CustomOpenGLControl : SimpleOpenGlControl
+    class ViewportControl : SimpleOpenGlControl
     {
         private double m_dScaleX = 1.0;
         private double m_dScaleY = 1.0;
 
-        public CustomOpenGLControl()
+        public ViewportControl()
         {
             InitializeContexts();
 
@@ -43,6 +43,7 @@ namespace Fawrek.Editor.UserControls
         {
             if (FawrekEngine.fawrekPtr != null && FawrekEngine.fawrekPtr != IntPtr.Zero)
             {
+                MakeCurrent();
                 Fawrek.Wrapper.Wrapper.RunFawrekRender(FawrekEngine.fawrekPtr);
                 SwapBuffers();
             }

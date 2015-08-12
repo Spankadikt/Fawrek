@@ -6,7 +6,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
-        <ListView Name="LVSceneObjects" ItemsSource="{Binding LstObjects,Mode= TwoWay}" DisplayMemberPath="Name" SelectionChanged="LVSceneObjects_SelectionChanged" SelectionMode="Single">
+        <ListView Name="LVCharacterObjects" ItemsSource="{Binding LstCharacterObjects,Mode= TwoWay}" DisplayMemberPath="Name" SelectionChanged="LVCharacterObjects_SelectionChanged" SelectionMode="Single">
             <ListView.Resources>
                 <ContextMenu x:Key="ItemContextMenu">
                     <MenuItem Header="Remove" Click="RemoveObject_Click" Background="WhiteSmoke" />

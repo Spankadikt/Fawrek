@@ -13,66 +13,37 @@
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <uc:MenuControl Grid.Row="0"/>
         <xcad:DockingManager Grid.Row="1">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel Orientation="Vertical">
                     <xcad:LayoutPanel>
-                        <xcad:LayoutAnchorablePane DockWidth="250">
-                            <xcad:LayoutAnchorable Title="Objects">
-                                <uc:ObjectListControl/>
-                            </xcad:LayoutAnchorable>
-                            <xcad:LayoutAnchorable Title="Clips">
+                        <xcad:LayoutAnchorablePaneGroup>
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable Title="Character Editor" CanClose="False">
+                                    <uc:CharacterEditorControl/>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable Title="Scene Editor" CanClose="False">
+                                    <uc:SceneEditorControl/>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                        </xcad:LayoutAnchorablePaneGroup>
+                        <xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorable Title="Viewport">
+                                <int:WindowsFormsHost Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
+                                    <uc:ViewportControl Name="ViewportControl" />
+                                </int:WindowsFormsHost>
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
-                        <xcad:LayoutDocumentPaneGroup>
-                            <xcad:LayoutDocumentPane >
-                                <xcad:LayoutAnchorable Title="Viewport" CanClose="False">
-                                    <int:WindowsFormsHost>
-                                        <uc:CustomOpenGLControl Name="OpenGLControl" />
-                                    </int:WindowsFormsHost>
-                                </xcad:LayoutAnchorable>
-                            </xcad:LayoutDocumentPane>
-                        </xcad:LayoutDocumentPaneGroup>
                         <xcad:LayoutAnchorablePane DockWidth="250">
                             <xcad:LayoutAnchorable Title="Properties">
                                 <uc:PropertyListControl/>
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutAnchorablePane>
                     </xcad:LayoutPanel>
-                    <xcad:LayoutPanel DockHeight="150">
-                        <xcad:LayoutAnchorablePane DockWidth="250">
-                            <xcad:LayoutAnchorable Title="Log">
-                                <uc:LogControl/>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutPanel>
                 </xcad:LayoutPanel>
             </xcad:LayoutRoot>
         </xcad:DockingManager>
-        <!--<Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="auto"/>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="auto"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <TabControl Grid.Column="0" Grid.Row="0" Grid.RowSpan="2">
-                <TabItem Header="Scene Editor">
-                    <cs:SceneEditorControl/>
-                </TabItem>
-                <TabItem Header="Animation Editor">
-                    <cs:AnimationEditorControl/>
-                </TabItem>
-            </TabControl>
-            <Grid Grid.Column="1" Grid.Row="0" Margin="5,80,5,5">
-
-            </Grid>
-            <GroupBox x:Name="logPanel" Grid.Column="1"  Grid.Row="1" Header="Log" Margin="5,10">
-                <TextBlock/>
-            </GroupBox>
-        </Grid>-->
     </Grid>
 </controls:MetroWindow>

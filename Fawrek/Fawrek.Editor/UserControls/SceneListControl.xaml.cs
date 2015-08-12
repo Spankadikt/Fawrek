@@ -17,19 +17,19 @@ using Xceed.Wpf.Toolkit.PropertyGrid;
 namespace Fawrek.Editor.UserControls
 {
     /// <summary>
-    /// Logique d'interaction pour ObjectListControl.xaml
+    /// Logique d'interaction pour SceneListControl.xaml
     /// </summary>
-    public partial class ObjectListControl : UserControl
+    public partial class SceneListControl : UserControl
     {
         public ObservableCollection<Object> LstObjects
         {
             get { return (ObservableCollection<Object>)GetValue(LstObjectsProperty); }
             set { SetValue(LstObjectsProperty, value); }
         }
-        public static readonly DependencyProperty LstObjectsProperty = DependencyProperty.Register("LstObjects", typeof(ObservableCollection<Object>), typeof(ObjectListControl), null);
+        public static readonly DependencyProperty LstObjectsProperty = DependencyProperty.Register("LstObjects", typeof(ObservableCollection<Object>), typeof(SceneListControl), null);
 
 
-        public ObjectListControl()
+        public SceneListControl()
         {
             InitializeComponent();
             LstObjects = new ObservableCollection<Object>();
