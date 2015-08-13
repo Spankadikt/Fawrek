@@ -24,9 +24,9 @@ namespace Fawrek.Editor
             set { path = value; }
         }
 
-        private List<Clip> lstClips = new List<Clip>();
+        private ObservableCollection<Clip> lstClips = new ObservableCollection<Clip>();
 
-        internal List<Clip> LstClips
+        internal ObservableCollection<Clip> LstClips
         {
             get { return lstClips; }
             set { lstClips = value; }

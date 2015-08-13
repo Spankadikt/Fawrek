@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -51,9 +52,9 @@ namespace Fawrek.Editor
             }
         }
 
-        private List<NodePack> lstNodePack = new List<NodePack>();
+        private ObservableCollection<NodePack> lstNodePack = new ObservableCollection<NodePack>();
 
-        public List<NodePack> LstNodePack
+        public ObservableCollection<NodePack> LstNodePack
         {
             get { return lstNodePack; }
             set { lstNodePack = value; }
