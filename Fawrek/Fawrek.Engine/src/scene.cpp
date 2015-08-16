@@ -48,7 +48,6 @@ void Scene::LoadModels(tinyxml2::XMLElement *_pSceneElement)
 		std::string rotation ( child->ToElement()->Attribute( "rotation" ) );
 		std::string scale ( child->ToElement()->Attribute( "scale" ) );
 		std::string filename (child->ToElement()->Attribute( "filename" ));
-		std::string animationfilename (child->ToElement()->Attribute( "animationfilename" ));
         bool hide;
         child->ToElement()->QueryBoolAttribute( "hide", &hide );
 
@@ -63,10 +62,7 @@ void Scene::LoadModels(tinyxml2::XMLElement *_pSceneElement)
 			Vector3 vScale(stof(splitedScale[0].c_str()),stof(splitedScale[1].c_str()),stof(splitedScale[2].c_str()));
 
 			Model *pModel;
-			if(!animationfilename.empty())
-				pModel = new Model(filename,id,vTranslation,vRotation,vScale,animationfilename);
-			else
-				pModel = new Model(filename,id,vTranslation,vRotation,vScale);
+			pModel = new Model(filename,id,vTranslation,vRotation,vScale);
 
 			m_pObjectManager->m_objects.push_back(pModel);
 		}

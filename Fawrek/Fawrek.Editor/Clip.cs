@@ -78,6 +78,7 @@ namespace Fawrek.Editor
         public Clip()
         {
             Name = "clip";
+            Id = CharacterManager.GetInstance().CurrentCharacter.LstClips.Count();
         }
     }
 }

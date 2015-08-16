@@ -92,8 +92,8 @@ namespace Fawrek.Editor
                                 string[] color = reader.GetAttribute(3).Split(',').ToArray();
                                 light.Color = new Vector3D(double.Parse(color[0]), double.Parse(color[1]), double.Parse(color[2]));
 
-                                light.AmbiantIntensity = float.Parse(reader.GetAttribute(4).Replace('.', ','));
-                                light.DiffuseIntensity = float.Parse(reader.GetAttribute(5).Replace('.', ','));
+                                light.AmbiantIntensity = float.Parse(reader.GetAttribute(4));
+                                light.DiffuseIntensity = float.Parse(reader.GetAttribute(5));
 
                                 scene.LstLights.Add(light);
                                 scene.LstObjects.Add(light);
@@ -120,13 +120,13 @@ namespace Fawrek.Editor
                                 camera.Target = new Vector3D(double.Parse(target[0]), double.Parse(target[1]), double.Parse(target[2]));
 
                                 string[] up = reader.GetAttribute(4).Split(',').ToArray();
-                                camera.Up = new Vector3D(double.Parse(up[0].Replace('.', ',')), double.Parse(up[1].Replace('.', ',')), double.Parse(up[2].Replace('.', ',')));
+                                camera.Up = new Vector3D(double.Parse(up[0]), double.Parse(up[1]), double.Parse(up[2]));
 
-                                camera.FOV = float.Parse(reader.GetAttribute(5).Replace('.', ','));
-                                camera.NearZ = float.Parse(reader.GetAttribute(6).Replace('.', ','));
-                                camera.FarZ = float.Parse(reader.GetAttribute(7).Replace('.', ','));
-                                camera.AspectRatioWidth = float.Parse(reader.GetAttribute(8).Replace('.', ','));
-                                camera.AspectRatioHeight = float.Parse(reader.GetAttribute(9).Replace('.', ','));
+                                camera.FOV = float.Parse(reader.GetAttribute(5));
+                                camera.NearZ = float.Parse(reader.GetAttribute(6));
+                                camera.FarZ = float.Parse(reader.GetAttribute(7));
+                                camera.AspectRatioWidth = float.Parse(reader.GetAttribute(8));
+                                camera.AspectRatioHeight = float.Parse(reader.GetAttribute(9));
 
                                 scene.LstCameras.Add(camera);
                                 scene.LstObjects.Add(camera);
@@ -153,7 +153,7 @@ namespace Fawrek.Editor
                                 model.Rotation = new Vector3D(double.Parse(rotation[0]), double.Parse(rotation[1]), double.Parse(rotation[2]));
 
                                 string[] scale = reader.GetAttribute(4).Split(',').ToArray();
-                                model.Scale = new Vector3D(double.Parse(scale[0].Replace('.', ',')), double.Parse(scale[1].Replace('.', ',')), double.Parse(scale[2].Replace('.', ',')));
+                                model.Scale = new Vector3D(double.Parse(scale[0]), double.Parse(scale[1]), double.Parse(scale[2]));
 
                                 model.Filename = reader.GetAttribute(5);
 
@@ -182,12 +182,12 @@ namespace Fawrek.Editor
                                 characterModel.Rotation = new Vector3D(double.Parse(rotation[0]), double.Parse(rotation[1]), double.Parse(rotation[2]));
 
                                 string[] scale = reader.GetAttribute(4).Split(',').ToArray();
-                                characterModel.Scale = new Vector3D(double.Parse(scale[0].Replace('.', ',')), double.Parse(scale[1].Replace('.', ',')), double.Parse(scale[2].Replace('.', ',')));
+                                characterModel.Scale = new Vector3D(double.Parse(scale[0]), double.Parse(scale[1]), double.Parse(scale[2]));
 
                                 characterModel.Filename = reader.GetAttribute(5);
                                 characterModel.AnimationFileName = reader.GetAttribute(6);
 
-                                scene.LstModels.Add(characterModel);
+                                scene.LstCharacterModels.Add(characterModel);
                                 scene.LstObjects.Add(characterModel);
                             }
                         }
@@ -318,7 +318,7 @@ namespace Fawrek.Editor
             writer.WriteEndElement();
 
             writer.WriteStartElement("CHARACTERS");
-            foreach (CharacterModel characterModel in CurrentScene.LstModels)
+            foreach (CharacterModel characterModel in CurrentScene.LstCharacterModels)
             {
                 writer.WriteStartElement("CHARACTER");
 

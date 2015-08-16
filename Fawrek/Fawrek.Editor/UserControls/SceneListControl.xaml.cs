@@ -74,6 +74,23 @@ namespace Fawrek.Editor.UserControls
             }
 
             LstObjects.Remove(obj);
+
+            if (obj.GetType().Name == "Light")
+            {
+                SceneManager.GetInstance().CurrentScene.LstLights.Remove((Light)obj);
+            }
+            else if (obj.GetType().Name == "Model")
+            {
+                SceneManager.GetInstance().CurrentScene.LstModels.Remove((Model)obj);
+            }
+            else if (obj.GetType().Name == "CharacterModel")
+            {
+                SceneManager.GetInstance().CurrentScene.LstCharacterModels.Remove((CharacterModel)obj);
+            }
+            else if (obj.GetType().Name == "Camera")
+            {
+                SceneManager.GetInstance().CurrentScene.LstCameras.Remove((Camera)obj);
+            }
         }
 
         private void LVSceneObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)

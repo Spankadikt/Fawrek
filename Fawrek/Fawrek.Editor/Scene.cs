@@ -32,6 +32,14 @@ namespace Fawrek.Editor
             set { lstModels = value; }
         }
 
+        private List<CharacterModel> lstCharacterModels = new List<CharacterModel>();
+
+        public List<CharacterModel> LstCharacterModels
+        {
+            get { return lstCharacterModels; }
+            set { lstCharacterModels = value; }
+        }
+
         private List<Camera> lstCameras = new List<Camera>();
 
         public List<Camera> LstCameras

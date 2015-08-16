@@ -68,6 +68,11 @@ namespace Fawrek.Editor.UserControls
             }
 
             LstCharacterObjects.Remove(obj);
+
+            if (obj.GetType().Name == "Clips")
+            {
+                CharacterManager.GetInstance().CurrentCharacter.LstClips.Remove((Clip)obj);
+            }
         }
 
         private void LVCharacterObjects_SelectionChanged(object sender, SelectionChangedEventArgs e)

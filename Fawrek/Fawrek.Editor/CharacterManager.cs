@@ -86,8 +86,8 @@ namespace Fawrek.Editor
                                 clip.Id = int.Parse(reader.GetAttribute(0));
                                 clip.Name = reader.GetAttribute(1);
 
-                                clip.StartTime = int.Parse(reader.GetAttribute(2).Replace('.', ','));
-                                clip.EndTime = int.Parse(reader.GetAttribute(3).Replace('.', ','));
+                                clip.StartTime = int.Parse(reader.GetAttribute(2));
+                                clip.EndTime = int.Parse(reader.GetAttribute(3));
                                 clip.Loop = bool.Parse(reader.GetAttribute(4));
 
                                 string sBodyPart = reader.GetAttribute(5);
@@ -104,7 +104,7 @@ namespace Fawrek.Editor
                                     clip.BodyPart = Clip.BODYPART.full_body;
                                 }
                                 
-                                clip.BaseSpeed = float.Parse(reader.GetAttribute(6).Replace('.', ','));
+                                clip.BaseSpeed = float.Parse(reader.GetAttribute(6));
 
                                 character.LstObjects.Add(clip);
                                 character.LstClips.Add(clip);
@@ -118,33 +118,31 @@ namespace Fawrek.Editor
                         while (reader.NodeType != XmlNodeType.EndElement || reader.Name == "NODEPACK")
                         {
                             reader.Read();
+                            if (reader.Name == "NODEPACK")
+                            {
+                                Skeleton.NodePack nodePack = new Skeleton.NodePack();
 
-                                if (reader.Name == "NODEPACK")
+                                nodePack.Id = int.Parse(reader.GetAttribute(0));
+                                nodePack.Name = reader.GetAttribute(1);
+                                while (reader.NodeType != XmlNodeType.EndElement)
                                 {
-                                    Skeleton.NodePack nodePack = new Skeleton.NodePack();
-
-                                    nodePack.Id = int.Parse(reader.GetAttribute(0));
-                                    nodePack.Name = reader.GetAttribute(1);
-                                    while (reader.NodeType != XmlNodeType.EndElement)
+                                    reader.Read();
+                                    if (reader.Name == "NODE")
                                     {
-                                        reader.Read();
-                                        if (reader.Name == "NODE")
-                                        {
-                                            Skeleton.Node node = new Skeleton.Node();
+                                        Skeleton.Node node = new Skeleton.Node();
 
-                                            node.NodeId = reader.GetAttribute("nodeId");
+                                        node.NodeId = reader.GetAttribute("nodeId");
 
-                                            //ReadNode(node, reader);
+                                        //ReadNode(node, reader);
 
-                                            nodePack.LstNode.Add(node);
-                                        }
+                                        nodePack.LstNode.Add(node);
                                     }
-
-                                    character.LstObjects.Add(nodePack);
-                                    skeleton.LstNodePack.Add(nodePack);
                                 }
-                            
+                                character.LstObjects.Add(nodePack);
+                                skeleton.LstNodePack.Add(nodePack);
+                            }
                         }
+                        character.Skeleton = skeleton;
                     }
                 }
 

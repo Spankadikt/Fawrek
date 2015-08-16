@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fawrek.Editor
 {
-    class CharacterModel : Model
+    public class CharacterModel : Model
     {
 
         private string animationFileName = "";
