@@ -35,7 +35,7 @@ public:
 	int InitGL();
     void Dispose();
     void Render();
-
+	void Update();
     /*void Run()
     {
         GLUTBackendRun(this);

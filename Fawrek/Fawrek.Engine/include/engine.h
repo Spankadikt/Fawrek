@@ -18,13 +18,26 @@
 
 class FAWREK_API Engine
 {
+public:
+	enum EngineState
+	{
+		Play,
+		Pause,
+		Stop
+	};
+
+	EngineState GetEngineState();
+	void PlayEngine();
+	void PauseEngine();
+	void StopEngine();
+
 protected:
 	Engine();
 
 	float GetRunningTime();
 
 private:
-
+	EngineState m_engineState;
 	long long m_lStartTime;
 };
 

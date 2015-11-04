@@ -78,7 +78,7 @@ int Fawrek::Init()
 	for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
 	{
 		pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimation->CrossfadeToClip(0);
-		//pModel->m_pAnimationBis->CrossfadeToClip(0);
+		pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->CrossfadeToClip(0);
 	}
 
 
@@ -96,7 +96,6 @@ void Fawrek::Dispose()
 
 void Fawrek::Render()
 {
-
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	float runningTime = GetRunningTime();
 	
@@ -130,26 +129,43 @@ void Fawrek::KeyboardManager(bool _keys[256])
 	if (_keys[0x41])//A
 	{
 		//pModel->m_pAnimation->CrossfadeToClip(0);
-        //pModel->m_pAnimationBis->CrossfadeToClip(0);
+		//pModel->m_pAnimationBis->CrossfadeToClip(0);
+		for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
+		{
+			pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimation->CrossfadeToClip(0);
+			pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->CrossfadeToClip(0);
+		}
 	}
-	if (_keys[0x42])//Z
+	if (_keys[0x5A])//Z
 	{
 		//pModel->m_pAnimation->CrossfadeToClip(18);
-        //pModel->m_pAnimationBis->CrossfadeToClip(18);
+		//pModel->m_pAnimationBis->CrossfadeToClip(18);
+		for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
+		{
+			pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimation->CrossfadeToClip(18);
+			pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->CrossfadeToClip(18);
+		}
 	}
-	if (_keys[0x41])//B
+	if (_keys[0x45])//E
 	{
-        //pModel->m_pAnimationBis->CrossfadeToClip(2);
-        //pModel->m_pAnimationBis->GetLastClip().Init();
-        //pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
+		//pModel->m_pAnimationBis->CrossfadeToClip(2);
+		//pModel->m_pAnimationBis->GetLastClip().Init();
+		//pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
+		for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
+		{
+			pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->CrossfadeToClip(2);
+			//Clip* clip = &(pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->GetLastClip());
+			//pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->QueueNextClip(clip);
+		}
 	}
-    if (_keys[0x4E])
+	if (_keys[0x4E])
 	{
 		//pModel->m_pAnimation->CrossfadeToClip(2);
-        //pModel->m_pAnimation->QueueNextClip(&pModel->m_pAnimation->GetLastClip());
-        //pModel->m_pAnimationBis->CrossfadeToClip(2);
-        //pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
+		//pModel->m_pAnimation->QueueNextClip(&pModel->m_pAnimation->GetLastClip());
+		//pModel->m_pAnimationBis->CrossfadeToClip(2);
+		//pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
 	}
+	
 }
 
 void Fawrek::MouseManager(int _nX,int _nY)
