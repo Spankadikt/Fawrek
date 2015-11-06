@@ -29,6 +29,7 @@ public:
 	float m_fClipStartTime;
 	float m_fClipEndTime;
     float m_fClipCurrentTime;
+	float m_fClipTempTime;
 
     bool m_bLoop;
     ClipState m_state;

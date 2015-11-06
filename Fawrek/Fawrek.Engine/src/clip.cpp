@@ -16,6 +16,7 @@ Clip::Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime,
 	m_iId = _iId;
     m_fClipStartTime = _fStartTime;
     m_fClipEndTime = _fEndTime;
+	m_fClipTempTime = 0.f;
     m_bLoop = _bLoop;
 
     SetClipSpeed(_fBaseSpeed);
@@ -50,10 +51,14 @@ void Clip::SetClipCurrentTime(float _fTimeInSeconds)
     }
     else
     {
-		if(TimeInTicks < GetClipLength())
-            m_fClipCurrentTime = m_fClipStartTime + AnimationTime;
-		else if (m_state != ClipState::STOP)
+		m_fClipTempTime += GetClipLength()- fmod(GetClipLength(),AnimationTime);
+		m_fClipCurrentTime = m_fClipStartTime + AnimationTime;
+
+		if (m_fClipTempTime / _fTimeInSeconds > GetClipLength())
+		{
 			Stop();
+			m_fClipTempTime = 0;
+		}
     }
 }
 

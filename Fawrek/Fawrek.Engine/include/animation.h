@@ -50,7 +50,7 @@ public:
     Clip &GetLastClip();
     void CrossfadeToClip(int _iNum);
     void CrossfadeToClip(Clip* _clip);
-    void QueueNextClip(Clip* _clip);
+    void QueueNextClip(int _iId);
 	void InitCrossfade();
 
     void LoadClips(const std::string& _sFilename);

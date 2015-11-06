@@ -153,9 +153,11 @@ void Fawrek::KeyboardManager(bool _keys[256])
 		//pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
 		for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
 		{
-			pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->CrossfadeToClip(2);
-			//Clip* clip = &(pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->GetLastClip());
-			//pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->QueueNextClip(clip);
+			if(pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->GetCurrentClip().m_iId != 2)
+			{
+				pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->CrossfadeToClip(2);
+				pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->QueueNextClip(pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->GetLastClip().m_iId);
+			}
 		}
 	}
 	if (_keys[0x4E])

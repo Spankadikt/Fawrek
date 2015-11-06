@@ -141,13 +141,15 @@ void Animation::CrossfadeToClip(int _iNum)
 {
 	if(m_pCurrentClip->m_iId != m_clips[_iNum].m_iId || !m_clips[_iNum].m_bLoop)
 	{
-		m_pLastClip = new Clip(*m_pCurrentClip);
+		//m_pLastClip = new Clip(*m_pCurrentClip);
+		m_pLastClip = &(*m_pCurrentClip);
 
         for(std::size_t i=0;i<m_clips.size();i++)
         {
             if(m_clips[i].m_iId == _iNum)
             {
-                m_pCurrentClip = new Clip(m_clips[i]);
+                //m_pCurrentClip = new Clip(m_clips[i]);
+				m_pCurrentClip = &m_clips[i];
                 break;
             }
         }
@@ -159,10 +161,10 @@ void Animation::CrossfadeToClip(int _iNum)
 	}
 	else if(m_pCurrentClip == &m_clips[0] && m_pLastClip == &m_clips[0])//first time
 	{
-		m_pLastClip = new Clip(*m_pCurrentClip);
-
-		m_pCurrentClip = new Clip(m_clips[_iNum]);
-
+		//m_pLastClip = new Clip(*m_pCurrentClip);
+		m_pLastClip = &(*m_pCurrentClip);
+		//m_pCurrentClip = new Clip(m_clips[_iNum]);
+		m_pCurrentClip = &m_clips[_iNum];
 		InitCrossfade();
 
 		GetCurrentClip().Play();
@@ -174,13 +176,14 @@ void Animation::CrossfadeToClip(Clip *_pClip)
 {
 	if(m_pCurrentClip->m_iId != _pClip->m_iId || !_pClip->m_bLoop)
 	{
-		m_pLastClip = new Clip(*m_pCurrentClip);
-
+		//m_pLastClip = new Clip(*m_pCurrentClip);
+		m_pLastClip = &(*m_pCurrentClip);
         for(std::size_t i=0;i<m_clips.size();i++)
         {
             if(m_clips[i].m_iId == _pClip->m_iId)
             {
-		        m_pCurrentClip = new Clip(m_clips[i]);
+		        //m_pCurrentClip = new Clip(m_clips[i]);
+				m_pCurrentClip = &(m_clips[i]);
             }
         }
 
@@ -191,10 +194,10 @@ void Animation::CrossfadeToClip(Clip *_pClip)
 	}
 	else if(*m_pCurrentClip == *_pClip && *m_pLastClip == *_pClip)//first time
 	{
-		m_pLastClip = new Clip(*m_pCurrentClip);
-
-		m_pCurrentClip = new Clip(*_pClip);
-
+		//m_pLastClip = new Clip(*m_pCurrentClip);
+		m_pLastClip = &(*m_pCurrentClip);
+		//m_pCurrentClip = new Clip(*_pClip);
+		m_pCurrentClip = &(*_pClip);
 		InitCrossfade();
 
 		GetCurrentClip().Play();
@@ -207,9 +210,15 @@ Clip& Animation::GetLastClip()
     return *m_pLastClip;
 }
 
-void Animation::QueueNextClip(Clip* _pClip)
+void Animation::QueueNextClip(int _iId)
 {
-    m_pNextClip = _pClip;
+	if(m_pNextClip != NULL)
+	{
+		if(m_pNextClip->m_iId != _iId)
+			m_pNextClip = &(m_clips[_iId]);
+	}
+
+	m_pNextClip = &(m_clips[_iId]);
 }
 
 uint Animation::FindPosition(float _fAnimationTime, const aiNodeAnim* _pNodeAnim)
