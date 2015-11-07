@@ -386,7 +386,7 @@ void Animation::ReadNodeHierarchy(const aiNode* _pNode, const Matrix& _parentTra
 {    
     Matrix GlobalTransformation = _parentTransform ;
 
-    for(int i=0;i<m_pNodePack->m_iNbNode;i++)
+	for(int i=0;i<m_pNodePack->m_pack.size();i++)
 	{
 		if(strcmp(m_pNodePack->m_pack[i].c_str(),_pNode->mName.C_Str())==0)
 		{

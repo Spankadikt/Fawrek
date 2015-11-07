@@ -3,7 +3,8 @@
 Fawrek::Fawrek()
 {
 	m_mouseLeftButton._bClicked = false;
-	m_sSceneFilename = "resources/scene_demo_light_test.xml";
+	//m_sSceneFilename = "resources/scene_demo_light_test.xml";
+	m_sSceneFilename = "resources/scene_demo_heavy.xml";
 }
 
 Fawrek::Fawrek(const std::string& _sSceneFilename)
@@ -75,13 +76,6 @@ int Fawrek::Init()
 	pSkinningRoutine->SetMatSpecularIntensity(1.0f);
 	pSkinningRoutine->SetMatSpecularPower(32);
 
-	for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
-	{
-		pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimation->CrossfadeToClip(0);
-		pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->CrossfadeToClip(0);
-	}
-
-
 	return 0;
 }
 
@@ -96,19 +90,145 @@ void Fawrek::Dispose()
 
 void Fawrek::Render()
 {
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	float runningTime = GetRunningTime();
-	
+
+	//picking
+ 	pPickingTexture->EnableWriting();
+    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	pPickingRoutine->Enable();
+
+    for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
+ 	{
+		pPickingRoutine->SetObjectIndex(i);
+		pScene->m_pObjectManager->GetModels()[i]->Render(pScene->m_pObjectManager->GetCamera(),pPickingRoutine,runningTime);
+    }
+
+	for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
+ 	{
+		pPickingRoutine->SetObjectIndex(pScene->m_pObjectManager->GetModels().size() + i);
+		pScene->m_pObjectManager->GetCharacters()[i]->Render(pScene->m_pObjectManager->GetCamera(),pPickingRoutine,runningTime);
+    }
+ 
+    pPickingTexture->DisableWriting();
+
+
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	//coloring
+	if(m_mouseLeftButton._bClicked)
+	{
+		Pixel = pPickingTexture->ReadPixel(m_mouseLeftButton._nX, 480 - m_mouseLeftButton._nY - 1);
+
+		for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
+		{
+			pScene->m_pObjectManager->GetModels()[i]->m_bSelected = false;
+		}
+
+		for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
+		{
+			pScene->m_pObjectManager->GetCharacters()[i]->m_bSelected = false;
+		}
+
+        if (Pixel.PrimID != 0)
+		{
+			if((int)Pixel.ObjectID < pScene->m_pObjectManager->GetModels().size())
+			{
+				pScene->m_pObjectManager->GetModels()[Pixel.ObjectID]->m_bSelected = true;
+			}
+			else
+			{
+				pScene->m_pObjectManager->GetCharacters()[Pixel.ObjectID - pScene->m_pObjectManager->GetModels().size()]->m_bSelected = true;
+			}
+        }
+ 
+		m_mouseLeftButton._bClicked = false;
+	}
+
+	//rendering
 	for(int i = 0 ; i < pScene->m_pObjectManager->GetModels().size() ; i++ )
 	{
-		pLightingRoutine->Enable();
-		pScene->m_pObjectManager->GetModels()[i]->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
+		if(pScene->m_pObjectManager->GetModels()[i]->m_bSelected)
+		{
+			pColoringRoutine->Enable();
+			pScene->m_pObjectManager->GetModels()[i]->Render(pScene->m_pObjectManager->GetCamera(),pColoringRoutine,runningTime);
+		}
+		else
+		{
+			pLightingRoutine->Enable();
+			pScene->m_pObjectManager->GetModels()[i]->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
+		}
 	}
 
 	for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
 	{
-		pSkinningRoutine->Enable();
-		pScene->m_pObjectManager->GetCharacters()[i]->Render(pScene->m_pObjectManager->GetCamera(),pSkinningRoutine,runningTime);
+		bool bAnimationStoped = pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimation->GetCurrentClip().m_state == Clip::ClipState::STOP;
+		bool bAnimationBisStoped = pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->GetCurrentClip().m_state == Clip::ClipState::STOP;
+		if(bAnimationStoped && bAnimationBisStoped)
+		{
+			bool bFullPicking = false;
+			if(bFullPicking)
+			{
+				if(pScene->m_pObjectManager->GetCharacters()[i]->m_bSelected)
+				{
+					pColoringRoutine->Enable();
+					pScene->m_pObjectManager->GetCharacters()[i]->Render(pScene->m_pObjectManager->GetCamera(),pColoringRoutine,runningTime);
+				}
+				else
+				{
+					pLightingRoutine->Enable();
+					pScene->m_pObjectManager->GetCharacters()[i]->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
+				}
+			}
+			else
+			{
+				if(pScene->m_pObjectManager->GetCharacters()[i]->m_bSelected)
+				{	
+					for(int j=0;j<pScene->m_pObjectManager->GetCharacters()[i]->m_pMesh->m_entries.size();j++)
+					{
+						Matrix modelMatrix = Matrix::Identity;
+						Character* pCharacter = pScene->m_pObjectManager->GetCharacters()[i];
+
+						modelMatrix.Translate(pCharacter->m_translation);
+						Quaternion qRotate = qRotate.FromEuler(pCharacter->m_rotation.m_fX,pCharacter->m_rotation.m_fY,pCharacter->m_rotation.m_fZ);
+						modelMatrix.Rotate(qRotate);
+						modelMatrix.Scale(pCharacter->m_scale);
+
+						Matrix modelView = pScene->m_pObjectManager->GetCamera()->view * modelMatrix;
+						Matrix viewProjection = pScene->m_pObjectManager->GetCamera()->projection * modelView;
+
+						if(j==(int)Pixel.DrawID)
+						{
+							pColoringRoutine->Enable();
+
+							pColoringRoutine->SetWVP(viewProjection);
+							pColoringRoutine->SetWorldMatrix(modelMatrix);
+
+
+							pCharacter->m_pMesh->PickingRender((int)Pixel.ObjectID,j,(int)Pixel.PrimID);
+						}
+						else
+						{
+							pLightingRoutine->Enable();
+
+							pLightingRoutine->SetWVP(viewProjection);
+							pLightingRoutine->SetWorldMatrix(modelMatrix);
+
+							pCharacter->m_pMesh->PickingRender((int)Pixel.ObjectID,j,(int)Pixel.PrimID);
+						}
+					}
+				}
+				else
+				{
+					pLightingRoutine->Enable();
+					pScene->m_pObjectManager->GetCharacters()[i]->Render(pScene->m_pObjectManager->GetCamera(),pLightingRoutine,runningTime);
+				}
+			}
+		}
+		else
+		{
+			pSkinningRoutine->Enable();
+			pScene->m_pObjectManager->GetCharacters()[i]->Render(pScene->m_pObjectManager->GetCamera(),pSkinningRoutine,runningTime);
+		}
 	}
 }
 
@@ -128,8 +248,6 @@ void Fawrek::KeyboardManager(bool _keys[256])
 {	
 	if (_keys[0x41])//A
 	{
-		//pModel->m_pAnimation->CrossfadeToClip(0);
-		//pModel->m_pAnimationBis->CrossfadeToClip(0);
 		for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
 		{
 			pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimation->CrossfadeToClip(0);
@@ -138,8 +256,6 @@ void Fawrek::KeyboardManager(bool _keys[256])
 	}
 	if (_keys[0x5A])//Z
 	{
-		//pModel->m_pAnimation->CrossfadeToClip(18);
-		//pModel->m_pAnimationBis->CrossfadeToClip(18);
 		for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
 		{
 			pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimation->CrossfadeToClip(18);
@@ -148,9 +264,6 @@ void Fawrek::KeyboardManager(bool _keys[256])
 	}
 	if (_keys[0x45])//E
 	{
-		//pModel->m_pAnimationBis->CrossfadeToClip(2);
-		//pModel->m_pAnimationBis->GetLastClip().Init();
-		//pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
 		for(int i = 0 ; i < pScene->m_pObjectManager->GetCharacters().size() ; i++ )
 		{
 			if(pScene->m_pObjectManager->GetCharacters()[i]->m_pAnimationBis->GetCurrentClip().m_iId != 2)
@@ -160,14 +273,6 @@ void Fawrek::KeyboardManager(bool _keys[256])
 			}
 		}
 	}
-	if (_keys[0x4E])
-	{
-		//pModel->m_pAnimation->CrossfadeToClip(2);
-		//pModel->m_pAnimation->QueueNextClip(&pModel->m_pAnimation->GetLastClip());
-		//pModel->m_pAnimationBis->CrossfadeToClip(2);
-		//pModel->m_pAnimationBis->QueueNextClip(&pModel->m_pAnimationBis->GetLastClip());
-	}
-	
 }
 
 void Fawrek::MouseManager(int _nX,int _nY)

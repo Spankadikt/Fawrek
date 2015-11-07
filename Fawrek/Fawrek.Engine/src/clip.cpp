@@ -2,11 +2,13 @@
 
 Clip::Clip()
 {
+	Stop();
 }
 
 Clip::Clip(Clip&& clip)
 {
 	*this = clip;
+	Stop();
 }
 
 Clip::Clip(Animation* _pAnimation, int _iId, float _fStartTime, float _fEndTime, bool _bLoop,float _fBaseSpeed)
