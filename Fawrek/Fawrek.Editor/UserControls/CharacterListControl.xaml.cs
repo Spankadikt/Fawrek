@@ -21,57 +21,49 @@ namespace Fawrek.Editor.UserControls
     /// </summary>
     public partial class CharacterListControl : UserControl
     {
-        public ObservableCollection<Object> LstCharacterObjects
+        public ObservableCollection<Clip> LstCharacterObjects
         {
-            get { return (ObservableCollection<Object>)GetValue(LstObjectsProperty); }
+            get { return (ObservableCollection<Clip>)GetValue(LstObjectsProperty); }
             set { SetValue(LstObjectsProperty, value); }
         }
-        public static readonly DependencyProperty LstObjectsProperty = DependencyProperty.Register("LstCharacterObjects", typeof(ObservableCollection<Object>), typeof(CharacterListControl), null);
+        public static readonly DependencyProperty LstObjectsProperty = DependencyProperty.Register("LstCharacterObjects", typeof(ObservableCollection<Clip>), typeof(CharacterListControl), null);
 
 
         public CharacterListControl()
         {
             InitializeComponent();
-            LstCharacterObjects = new ObservableCollection<Object>();
+            LstCharacterObjects = new ObservableCollection<Clip>();
             DataContext = this;
             CharacterManager.GetInstance().Changed += BindLstObjects;
         }
 
         private void BindLstObjects()
         {
-            LstCharacterObjects = CharacterManager.GetInstance().CurrentCharacter.LstObjects;
+            LstCharacterObjects = CharacterManager.GetInstance().CurrentCharacter.LstClips;
         }
 
 
         private void AddClip_Click(object sender, RoutedEventArgs e)
         {
             Clip clip = new Clip();
-            LstCharacterObjects.Add(clip);
             CharacterManager.GetInstance().CurrentCharacter.LstClips.Add(clip);
-        }
-
-        private void AddNodePack_Click(object sender, RoutedEventArgs e)
-        {
-            Skeleton.NodePack nodePack = new Skeleton.NodePack();
-            LstCharacterObjects.Add(nodePack);
-            CharacterManager.GetInstance().CurrentCharacter.Skeleton.LstNodePack.Add(nodePack);
         }
 
         private void RemoveObject_Click(object sender, RoutedEventArgs e)
         {
             var frameworkElement = e.OriginalSource as FrameworkElement;
-            var obj = frameworkElement.DataContext as Object;
+            var clip = frameworkElement.DataContext as Clip;
 
-            if (null == obj)
+            if (null == clip)
             {
                 return;
             }
 
-            LstCharacterObjects.Remove(obj);
+            LstCharacterObjects.Remove(clip);
 
-            if (obj.GetType().Name == "Clips")
+            if (clip.GetType().Name == "Clip")
             {
-                CharacterManager.GetInstance().CurrentCharacter.LstClips.Remove((Clip)obj);
+                CharacterManager.GetInstance().CurrentCharacter.LstClips.Remove(clip);
             }
         }
 

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Fawrek.Editor
 {
-    class Clip : Object
+    public class Clip : Object
     {
         public enum BODYPART
         {

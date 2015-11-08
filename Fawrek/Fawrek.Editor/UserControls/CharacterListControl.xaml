@@ -20,7 +20,6 @@
             <ListView.ContextMenu>
                 <ContextMenu>
                     <MenuItem Header="Add Clip" Click="AddClip_Click"/>
-                    <MenuItem Header="Add NodePack" Click="AddNodePack_Click"/>
                 </ContextMenu>
             </ListView.ContextMenu>
         </ListView>
