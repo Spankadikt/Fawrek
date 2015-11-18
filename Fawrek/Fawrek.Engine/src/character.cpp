@@ -71,8 +71,6 @@ bool Character::CharacterInit(const std::string& _sFilename, const std::string& 
 
 void Character::Render(Camera* _pCamera, Shader* _pShader, float _fRunningTime)
 {
-	//_pShader->Enable();
-
 	vector<Matrix> Transforms;
 
     m_pAnimationBis->BoneTransform(_fRunningTime, Transforms);

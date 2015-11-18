@@ -109,7 +109,11 @@ void Animation::LoadBonePack(tinyxml2::XMLNode *_pNode,NodePack *_pNodePack)
 {
 	const char *nodeId = _pNode->ToElement()->Attribute( "nodeId" );
 	if(nodeId)
-		m_pNodePack->AddBoneToPack(nodeId);
+	{
+		const aiAnimation* pAnimation = m_pScene->mAnimations[0];
+		uint iAnimNodeIndex = FindNodeAnimIndex(pAnimation,nodeId);
+		m_pNodePack->AddBoneToPack(nodeId,iAnimNodeIndex);
+	}
 
 	tinyxml2::XMLElement* pNode = _pNode->ToElement();
 	if(pNode)
@@ -141,14 +145,12 @@ void Animation::CrossfadeToClip(int _iNum)
 {
 	if(m_pCurrentClip->m_iId != m_clips[_iNum].m_iId || !m_clips[_iNum].m_bLoop)
 	{
-		//m_pLastClip = new Clip(*m_pCurrentClip);
 		m_pLastClip = &(*m_pCurrentClip);
 
         for(std::size_t i=0;i<m_clips.size();i++)
         {
             if(m_clips[i].m_iId == _iNum)
             {
-                //m_pCurrentClip = new Clip(m_clips[i]);
 				m_pCurrentClip = &m_clips[i];
                 break;
             }
@@ -161,10 +163,9 @@ void Animation::CrossfadeToClip(int _iNum)
 	}
 	else if(m_pCurrentClip == &m_clips[0] && m_pLastClip == &m_clips[0])//first time
 	{
-		//m_pLastClip = new Clip(*m_pCurrentClip);
 		m_pLastClip = &(*m_pCurrentClip);
-		//m_pCurrentClip = new Clip(m_clips[_iNum]);
 		m_pCurrentClip = &m_clips[_iNum];
+
 		InitCrossfade();
 
 		GetCurrentClip().Play();
@@ -176,13 +177,11 @@ void Animation::CrossfadeToClip(Clip *_pClip)
 {
 	if(m_pCurrentClip->m_iId != _pClip->m_iId || !_pClip->m_bLoop)
 	{
-		//m_pLastClip = new Clip(*m_pCurrentClip);
 		m_pLastClip = &(*m_pCurrentClip);
         for(std::size_t i=0;i<m_clips.size();i++)
         {
             if(m_clips[i].m_iId == _pClip->m_iId)
             {
-		        //m_pCurrentClip = new Clip(m_clips[i]);
 				m_pCurrentClip = &(m_clips[i]);
             }
         }
@@ -194,10 +193,9 @@ void Animation::CrossfadeToClip(Clip *_pClip)
 	}
 	else if(*m_pCurrentClip == *_pClip && *m_pLastClip == *_pClip)//first time
 	{
-		//m_pLastClip = new Clip(*m_pCurrentClip);
 		m_pLastClip = &(*m_pCurrentClip);
-		//m_pCurrentClip = new Clip(*_pClip);
 		m_pCurrentClip = &(*_pClip);
+
 		InitCrossfade();
 
 		GetCurrentClip().Play();
@@ -225,7 +223,9 @@ uint Animation::FindPosition(float _fAnimationTime, const aiNodeAnim* _pNodeAnim
 {    
     assert(_pNodeAnim->mNumPositionKeys > 0);
 
-    for (uint i = 0 ; i < _pNodeAnim->mNumPositionKeys - 1 ; i++) {
+	//check all if we didn't find
+    for (uint i = 0 ; i < _pNodeAnim->mNumPositionKeys - 1 ; i++)
+	{
         if (_fAnimationTime < (float)_pNodeAnim->mPositionKeys[i + 1].mTime)
             return i;
     }
@@ -238,6 +238,7 @@ uint Animation::FindRotation(float _fAnimationTime, const aiNodeAnim* _pNodeAnim
 {
     assert(_pNodeAnim->mNumRotationKeys > 0);
 
+	//check all if we didn't find
     for (uint i = 0 ; i < _pNodeAnim->mNumRotationKeys - 1 ; i++)
     {
         if (_fAnimationTime < (float)_pNodeAnim->mRotationKeys[i + 1].mTime)
@@ -252,6 +253,7 @@ uint Animation::FindScaling(float _fAnimationTime, const aiNodeAnim* _pNodeAnim)
 {
     assert(_pNodeAnim->mNumScalingKeys > 0);
     
+	//check all if we didn't find
     for (uint i = 0 ; i < _pNodeAnim->mNumScalingKeys - 1 ; i++)
     {
         if (_fAnimationTime < (float)_pNodeAnim->mScalingKeys[i + 1].mTime)
@@ -270,7 +272,7 @@ void Animation::CalcInterpolatedPosition(aiVector3D& _out, float _fAnimationTime
         return;
     }
             
-    uint PositionIndex = FindPosition(_fAnimationTime, _pNodeAnim);
+	uint PositionIndex = FindPosition(_fAnimationTime, _pNodeAnim);
     uint NextPositionIndex = (PositionIndex + 1);
 
     float DeltaTime = (float)(_pNodeAnim->mPositionKeys[NextPositionIndex].mTime - _pNodeAnim->mPositionKeys[PositionIndex].mTime);
@@ -292,7 +294,7 @@ void Animation::CalcInterpolatedRotation(aiQuaternion& _out, float _fAnimationTi
         return;
     }
     
-    uint RotationIndex = FindRotation(_fAnimationTime, _pNodeAnim);
+	uint RotationIndex = FindRotation(_fAnimationTime, _pNodeAnim);
     uint NextRotationIndex = (RotationIndex + 1);
 
     float DeltaTime = (float)(_pNodeAnim->mRotationKeys[NextRotationIndex].mTime - _pNodeAnim->mRotationKeys[RotationIndex].mTime);
@@ -313,7 +315,7 @@ void Animation::CalcInterpolatedScaling(aiVector3D& _out, float _fAnimationTime,
         return;
     }
 
-    uint ScalingIndex = FindScaling(_fAnimationTime, _pNodeAnim);
+	uint ScalingIndex = FindScaling(_fAnimationTime, _pNodeAnim);
     uint NextScalingIndex = (ScalingIndex + 1);
 
     float DeltaTime = (float)(_pNodeAnim->mScalingKeys[NextScalingIndex].mTime - _pNodeAnim->mScalingKeys[ScalingIndex].mTime);
@@ -386,18 +388,21 @@ void Animation::ReadNodeHierarchy(const aiNode* _pNode, const Matrix& _parentTra
 {    
     Matrix GlobalTransformation = _parentTransform ;
 
+	//TODO : fix this crap
 	for(int i=0;i<m_pNodePack->m_pack.size();i++)
 	{
-		if(strcmp(m_pNodePack->m_pack[i].c_str(),_pNode->mName.C_Str())==0)
+		if(strcmp(m_pNodePack->m_pack[i].first.c_str(),_pNode->mName.C_Str())==0)
 		{
             string NodeName(_pNode->mName.data);
 	
             const aiAnimation* pAnimation = m_pScene->mAnimations[0];
         
             Matrix NodeTransformation(_pNode->mTransformation);
-     
-            const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
-    
+			
+            //const aiNodeAnim* pNodeAnim = FindNodeAnim(pAnimation, NodeName);
+			//+30fps~
+			const aiNodeAnim* pNodeAnim = pAnimation->mChannels[m_pNodePack->m_pack[i].second];
+
             if (pNodeAnim)
                 NodeTransformation = CalcInterpolations(pNodeAnim,_crossFade);
        
@@ -470,6 +475,19 @@ const aiNodeAnim* Animation::FindNodeAnim(const aiAnimation* _pAnimation, const 
         
         if (string(pNodeAnim->mNodeName.data) == _sNodeName)
             return pNodeAnim;
+    }
+    
+    return NULL;
+}
+
+uint Animation::FindNodeAnimIndex(const aiAnimation* _pAnimation, const string _sNodeName)
+{
+    for (uint i = 0 ; i < _pAnimation->mNumChannels ; i++)
+    {
+        const aiNodeAnim* pNodeAnim = _pAnimation->mChannels[i];
+        
+        if (string(pNodeAnim->mNodeName.data) == _sNodeName)
+            return i;
     }
     
     return NULL;

@@ -13,6 +13,10 @@
 
 #define NUM_BONES_PER_VERTEX 4
 
+//string is the node_id, it's name
+//uint is the index of the associated animation node
+typedef std::pair <string, uint> NodePair;
+
 struct FAWREK_API BoneInfo
 {
 	Matrix m_boneOffset;
@@ -49,7 +53,7 @@ struct FAWREK_API NodePack
     int m_iId;
     string m_sName;
     int m_iNbNode;
-    vector<string> m_pack;
+    vector<NodePair> m_pack;
 
     NodePack(int _id,string _name, int _nbNode)
     {
@@ -58,9 +62,9 @@ struct FAWREK_API NodePack
         m_iNbNode = _nbNode;
     }
 
-    void AddBoneToPack(const char *_nodeId)
+    void AddBoneToPack(const char *_nodeId, uint _iAnimNodeIndex)
     {
-        m_pack.push_back(_nodeId);
+        m_pack.push_back(make_pair(_nodeId,_iAnimNodeIndex));
     }
 };
 

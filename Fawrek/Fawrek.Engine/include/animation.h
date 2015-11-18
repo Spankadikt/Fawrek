@@ -40,6 +40,7 @@ public:
     uint FindPosition(float _fAnimationTime, const aiNodeAnim* _pNodeAnim);
 
     const aiNodeAnim* FindNodeAnim(const aiAnimation* _pAnimation, const string _sNodeName);
+	uint FindNodeAnimIndex(const aiAnimation* _pAnimation, const string _sNodeName);
     void ReadNodeHierarchy(const aiNode* _pNode, const Matrix& _parentTransform, bool _crossFade);
 	void BoneTransform(float _fTimeInSeconds, vector<Matrix>& _transforms);
     Matrix CalcInterpolations(const aiNodeAnim* _pNodeAnim, bool _crossFade);

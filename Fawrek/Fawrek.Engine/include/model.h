@@ -30,9 +30,6 @@ public:
 	Matrix m_globalInverseTransform;
     
 	Mesh* m_pMesh;
-	Skeleton* m_pSkeleton;
-	Animation* m_pAnimation;
-    Animation* m_pAnimationBis;
 
 	bool m_bSelected;
 
