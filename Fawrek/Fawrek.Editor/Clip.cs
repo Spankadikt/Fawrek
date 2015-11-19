@@ -10,9 +10,9 @@ namespace Fawrek.Editor
     {
         public enum BODYPART
         {
+            full_body,
             upper_body,
-            lower_body,
-            full_body
+            lower_body
         }
 
         private float startTime = 0.0f;
@@ -23,7 +23,6 @@ namespace Fawrek.Editor
             set
             {
                 startTime = value;
-                //Fawrek.Wrapper.Wrapper.RunCameraSetFOV(FawrekEngine.fawrekPtr, id, fov);
             }
         }
 
@@ -35,7 +34,6 @@ namespace Fawrek.Editor
             set
             {
                 endTime = value;
-                //Fawrek.Wrapper.Wrapper.RunCameraSetFOV(FawrekEngine.fawrekPtr, id, fov);
             }
         }
 
@@ -47,7 +45,6 @@ namespace Fawrek.Editor
             set
             {
                 loop = value;
-                //Fawrek.Wrapper.Wrapper.RunCameraSetFOV(FawrekEngine.fawrekPtr, id, fov);
             }
         }
 
@@ -59,7 +56,6 @@ namespace Fawrek.Editor
             set
             {
                 bodyPart = value;
-                //Fawrek.Wrapper.Wrapper.RunCameraSetFOV(FawrekEngine.fawrekPtr, id, fov);
             }
         }
 
@@ -71,7 +67,6 @@ namespace Fawrek.Editor
             set
             {
                 baseSpeed = value;
-                //Fawrek.Wrapper.Wrapper.RunCameraSetFOV(FawrekEngine.fawrekPtr, id, fov);
             }
         }
 

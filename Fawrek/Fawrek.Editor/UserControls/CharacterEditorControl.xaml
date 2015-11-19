@@ -28,7 +28,7 @@
                 </MenuItem>
             </Menu>
             <GroupBox Grid.Column="0" Grid.Row="1" Width="200" Header="Clips">
-                <uc:CharacterListControl x:Name="CharacterListCtrl_Clips"/>
+                <uc:ClipListControl x:Name="ClipListCtrl_Clips"/>
             </GroupBox>
         </Grid>
     </Grid>

@@ -62,6 +62,8 @@ namespace Fawrek.Wrapper
             [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "LightSetDiffuseIntensity")]
             public static extern void LightSetDiffuseIntensity(IntPtr value, int id, float diffuseIntensity);
 
+            [DllImport(@"Fawrek.Engine.dll", CallingConvention = CallingConvention.StdCall, EntryPoint = "ClipCrossfade")]
+            public static extern void ClipCrossfade(IntPtr value, int characterId, int clipId, int bodyPart);
         }
 
         public static IntPtr RunFawrekCreate(string scenePath)
@@ -263,6 +265,18 @@ namespace Fawrek.Wrapper
             try
             {
                 DllHelper.LightSetDiffuseIntensity(value, id, diffuseIntensity);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
+        public static void RunClipCrossfade(IntPtr value, int characterId, int clipId, int bodyPart)
+        {
+            try
+            {
+                DllHelper.ClipCrossfade(value, characterId, clipId, bodyPart);
             }
             catch (Exception ex)
             {

@@ -123,3 +123,30 @@ void LightSetDiffuseIntensity(Fawrek* _pFawrek, int _nId, float _fValue)
 	_pFawrek->pSkinningRoutine->Enable();
 	_pFawrek->pSkinningRoutine->SetDirectionalLight(_pFawrek->pScene->m_pObjectManager->GetDirectionalLight());
 }
+
+void ClipCrossfade(Fawrek* _pFawrek, int _nCharacterId, int _nClipId, int _nBodyPart)
+{
+	Object* obj = _pFawrek->pScene->m_pObjectManager->GetObjectById(_nCharacterId);
+	Character* character = static_cast<Character*>(obj);
+	
+	if(character != NULL)
+	{
+		Animation::BodyPart eBodyPart = static_cast<Animation::BodyPart>(_nBodyPart);
+
+		switch(eBodyPart)
+		{
+			case Animation::BodyPart::LOWER_BODY :
+				character->m_pAnimation->CrossfadeToClip(_nClipId);
+				break;
+			case Animation::BodyPart::UPPER_BODY :
+				character->m_pAnimationBis->CrossfadeToClip(_nClipId);
+				break;
+			case Animation::BodyPart::FULL_BODY :
+				character->m_pAnimation->CrossfadeToClip(_nClipId);
+				character->m_pAnimationBis->CrossfadeToClip(_nClipId);
+				break;
+			default:
+				break;
+		}
+	}
+}

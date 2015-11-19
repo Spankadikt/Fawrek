@@ -120,8 +120,8 @@
     <Compile Include="Object.cs" />
     <Compile Include="Scene.cs" />
     <Compile Include="SceneManager.cs" />
-    <Compile Include="UserControls\CharacterListControl.xaml.cs">
-      <DependentUpon>CharacterListControl.xaml</DependentUpon>
+    <Compile Include="UserControls\ClipListControl.xaml.cs">
+      <DependentUpon>ClipListControl.xaml</DependentUpon>
     </Compile>
     <Compile Include="UserControls\MenuControl.xaml.cs">
       <DependentUpon>MenuControl.xaml</DependentUpon>
@@ -154,7 +154,7 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="UserControls\CharacterListControl.xaml">
+    <Page Include="UserControls\ClipListControl.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
