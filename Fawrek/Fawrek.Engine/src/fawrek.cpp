@@ -3,8 +3,8 @@
 Fawrek::Fawrek()
 {
 	m_mouseLeftButton._bClicked = false;
-	//m_sSceneFilename = "resources/scene_demo_light_test.xml";
-	m_sSceneFilename = "resources/scene_demo_heavy.xml";
+	m_sSceneFilename = "resources/scene_demo_light_test.xml";
+	//m_sSceneFilename = "resources/scene_demo_heavy.xml";
 }
 
 Fawrek::Fawrek(const std::string& _sSceneFilename)

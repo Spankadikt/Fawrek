@@ -6,44 +6,79 @@
     xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
     xmlns:conv="clr-namespace:MahApps.Metro.Converters;assembly=MahApps.Metro"
     xmlns:xcad="http://schemas.xceed.com/wpf/xaml/avalondock"
-    Title="Fawrek" Height="800" Width="1280" WindowTransitionsEnabled="False">
+    Title="Fawrek" Height="800" Width="1280" WindowTransitionsEnabled="False" GlowBrush="{DynamicResource AccentColorBrush}" ShowWindowCommandsOnTop="True">
     
     <Grid Margin="5">
         <Grid.RowDefinitions>
             <RowDefinition Height="auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <xcad:DockingManager Grid.Row="1">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="220"/>
+        </Grid.ColumnDefinitions>
+        <xcad:DockingManager Grid.Row="1" Grid.Column="0">
             <xcad:LayoutRoot>
                 <xcad:LayoutPanel Orientation="Vertical">
                     <xcad:LayoutPanel>
                         <xcad:LayoutDocumentPane>
                             <xcad:LayoutAnchorable Title="Viewport">
-                                <int:WindowsFormsHost Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
+                                <int:WindowsFormsHost>
                                     <uc:ViewportControl Name="ViewportControl" />
                                 </int:WindowsFormsHost>
                             </xcad:LayoutAnchorable>
                         </xcad:LayoutDocumentPane>
-                        <xcad:LayoutAnchorablePane DockWidth="220">
-                            <xcad:LayoutAnchorable Title="Scene Editor" CanClose="False">
-                                <uc:SceneEditorControl/>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                        <xcad:LayoutAnchorablePane DockWidth="350">
-                            <xcad:LayoutAnchorable Title="Properties">
-                                <uc:PropertyListControl/>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
-                    </xcad:LayoutPanel>
-                    <xcad:LayoutPanel DockHeight="350">
-                        <xcad:LayoutAnchorablePane>
-                            <xcad:LayoutAnchorable Title="Character Editor" CanClose="False">
-                                <uc:CharacterEditorControl/>
-                            </xcad:LayoutAnchorable>
-                        </xcad:LayoutAnchorablePane>
+                        <xcad:LayoutPanel DockWidth="220" Orientation="Vertical">
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable Title="Scene Editor" CanClose="False">
+                                    <uc:SceneEditorControl/>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                            <xcad:LayoutAnchorablePane>
+                                <xcad:LayoutAnchorable Title="Character Editor" CanClose="False">
+                                    <uc:CharacterEditorControl/>
+                                </xcad:LayoutAnchorable>
+                            </xcad:LayoutAnchorablePane>
+                        </xcad:LayoutPanel>
                     </xcad:LayoutPanel>
                 </xcad:LayoutPanel>
             </xcad:LayoutRoot>
         </xcad:DockingManager>
+        <Grid Grid.Column="1" Grid.Row="1" Width="50" Background="ForestGreen" HorizontalAlignment="Right">
+            <StackPanel Margin="5" Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Stretch">
+                <Button Width="40" Height="40" Style="{DynamicResource MetroCircleButtonStyle}" Foreground="White" BorderBrush="White" Click="button_infos_Click">
+                    <Rectangle Width="20" Height="20" Fill="{Binding Path=Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}">
+                        <Rectangle.OpacityMask>
+                            <VisualBrush Stretch="Fill" Visual="{DynamicResource appbar_arrow_left}"/>
+                        </Rectangle.OpacityMask>
+                    </Rectangle>
+                </Button>
+                <TextBlock Text="Infos" HorizontalAlignment="Center" FontSize="20" Margin="5" Foreground="White">
+                    <TextBlock.LayoutTransform>
+                        <RotateTransform Angle="-90"></RotateTransform>
+                    </TextBlock.LayoutTransform>
+                </TextBlock>
+            </StackPanel>
+        </Grid>
     </Grid>
+    <controls:MetroWindow.Flyouts>
+        <controls:FlyoutsControl>
+            <controls:Flyout x:Name="infosFlyout"
+                            Margin="0 0 0 0"
+                            Width="220"
+                            Header="Infos"
+                            Position="Right"
+                            Theme="Accent">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition  Height="*"/>
+                    </Grid.RowDefinitions>
+                    <!--<userControls:ConsoleControl Grid.Row="1" Margin="10,10,10,37" Width="200" HorizontalAlignment="Left" VerticalAlignment="Stretch"/>-->
+                    <uc:PropertyListControl Grid.Row="0"/>
+                </Grid>
+            </controls:Flyout>
+        </controls:FlyoutsControl>
+    </controls:MetroWindow.Flyouts>
+
 </controls:MetroWindow>

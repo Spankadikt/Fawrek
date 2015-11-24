@@ -17,5 +17,10 @@ namespace Fawrek.Editor
 
             System.Threading.Thread.CurrentThread.CurrentCulture = customCulture;
         }
+
+        public void button_infos_Click(object sender, RoutedEventArgs e)
+        {
+            infosFlyout.IsOpen = true;
+        }
     }
 }
